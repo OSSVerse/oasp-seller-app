@@ -1,0 +1,1864 @@
+{
+	"info": {
+		"_postman_id": "e2f3d1d0-03c6-4dc7-aab7-3e4e46499e7a",
+		"name": "Seller-App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7541489"
+	},
+	"item": [
+		{
+			"name": "UEI",
+			"item": [
+				{
+					"name": "Search",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"context\": {\n        \"domain\": \"uei:charging\",\n        \"location\": {\n            \"city\": {\n                \"name\": \"Bangalore\",\n                \"code\": \"std:080\"\n            },\n            \"country\": {\n                \"name\": \"India\",\n                \"code\": \"IND\"\n            }\n        },\n        \"action\": \"search\",\n        \"version\": \"1.1.0\",\n        \"transaction_id\": \"fc24f1e9-6d01-44bf-888c-d5884ca0f66f\",\n        \"message_id\": \"yuyuyuyuy\",\n        \"timestamp\": \"2023-10-09T04:46:28.012Z\"\n        // \"bpp_id\": \"{{bpp_id}}\",\n        // \"bpp_uri\": \"{{bpp_uri}}\",\n        // \"bap_id\": \"{{bap_id}}\",\n        // \"bap_uri\": \"{{bap_uri}}\"\n    },\n    \"message\": {\n        \"intent\": {\n            \"location\": {\n                \"circle\": {\n                    \"gps\": \"12.423423,77.325647\",\n                    \"radius\": {\n                        \"type\": \"CONSTANT\",\n                        \"value\": \"5\",\n                        \"unit\": \"km\"\n                    }\n                }\n            }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}api/v1/client/search",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"v1",
+								"client",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Select",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"context\": {\n        \"domain\": \"989898\",\n        \"location\": {\n            \"city\": {\n                \"name\": \"Bangalore\",\n                \"code\": \"std:080\"\n            },\n            \"country\": {\n                \"name\": \"India\",\n                \"code\": \"IND\"\n            }\n        },\n        \"action\": \"select\",\n        \"version\": \"1.1.0\",\n        \"transaction_id\": \"fc24f1e9-6d01-44bf-888c-d5884ca0f66f\",\n        \"message_id\": \"89898989\",\n        \"timestamp\": \"2023-10-09T04:46:28.012Z\"\n        // \"bpp_id\": \"{{bpp_id}}\",\n        // \"bpp_uri\": \"{{bpp_uri}}\",\n        // \"bap_id\": \"{{bap_id}}\",\n        // \"bap_uri\": \"{{bap_uri}}\"\n    },\n    \"message\": {\n        \"order\": {\n            \"provider\": {\n                \"id\": \"1\"\n            },\n            \"items\": [\n                {\n                    \"id\": \"1\"\n                }\n            ]\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/select",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"select"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Init",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"context\": {\n        \"domain\": \"{{uei}}\",\n        \"location\": {\n            \"city\": {\n                \"name\": \"Bangalore\",\n                \"code\": \"std:080\"\n            },\n            \"country\": {\n                \"name\": \"India\",\n                \"code\": \"IND\"\n            }\n        },\n        \"action\": \"init\",\n        \"version\": \"1.1.0\",\n        \"transaction_id\": \"fc24f1e9-6d01-44bf-888c-d5884ca0f66f\",\n        \"message_id\": \"898989898\",\n        \"timestamp\": \"2023-10-09T04:46:28.012Z\",\n        \"bpp_id\": \"{{bpp_id}}\",\n        \"bpp_uri\": \"{{bpp_uri}}\",\n        \"bap_id\": \"{{bap_id}}\",\n        \"bap_uri\": \"{{bap_uri}}\"\n    },\n    \"message\": {\n        \"order\": {\n            \"provider\": {\n                \"id\": \"1\"\n            },\n            \"items\": [\n                {\n                    \"id\": \"1\"\n                }\n            ],\n            \"billing\": {\n                \"name\": \"Alice Smith\",\n                \"address\": \"Apt 303, Maple Towers, Richmond Road, 560001\",\n                \"state\": {\n                    \"name\": \"Jurong East\"\n                },\n                \"city\": {\n                    \"name\": \"Jurong East\"\n                },\n                \"email\": \"alice.smith@example.com\",\n                \"phone\": \"9886098860\"\n            }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}api/v1/client/Init",
+							"host": [
+								"{{base_url}}api"
+							],
+							"path": [
+								"v1",
+								"client",
+								"Init"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"context\": {\n        \"domain\": \"{{uei}}\",\n        \"location\": {\n            \"city\": {\n                \"name\": \"Bangalore\",\n                \"code\": \"std:080\"\n            },\n            \"country\": {\n                \"name\": \"India\",\n                \"code\": \"IND\"\n            }\n        },\n        \"action\": \"confirm\",\n        \"version\": \"1.1.0\",\n        \"transaction_id\": \"fc24f1e9-6d01-44bf-888c-d5884ca0f66f\",\n        \"message_id\": \"{{$randomUUID}}\",\n        \"timestamp\": \"2023-10-09T04:46:28.012Z\",\n        \"bpp_id\": \"{{bpp_id}}\",\n        \"bpp_uri\": \"{{bpp_uri}}\",\n        \"bap_id\": \"{{bap_id}}\",\n        \"bap_uri\": \"{{bap_uri}}\"\n    },\n    \"message\": {\n        \"order\": {\n            \"items\": [\n                {\n                    \"id\": \"1\"\n                }\n            ],\n            \"fulfillments\": [\n                {\n                    \"id\": \"1\",\n                    \"customer\": {\n                        \"contact\": {\n                            \"email\": \"fox.judie61234@abc.org\",\n                            \"phone\": \"+91-9999999999\"\n                        },\n                        \"person\": {\n                            \"name\": \"Judie Fox6\"\n                        }\n                    }\n                }\n            ],\n            \"billing\": {\n                \"name\": \"Industry buyer\",\n                \"address\": \"B005 aspire heights, Jurong East, SGP, 680230\",\n                \"state\": {\n                    \"name\": \"Jurong East\"\n                },\n                \"city\": {\n                    \"name\": \"Jurong East\"\n                },\n                \"email\": \"nobody@nomail.com\",\n                \"phone\": \"9886098860\"\n            }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/confirm",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"confirm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Status",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"context\": {\n        \"domain\": \"{{uei}}\",\n        \"location\": {\n            \"city\": {\n                \"name\": \"Bangalore\",\n                \"code\": \"std:080\"\n            },\n            \"country\": {\n                \"name\": \"India\",\n                \"code\": \"IND\"\n            }\n        },\n        \"action\": \"status\",\n        \"version\": \"1.1.0\",\n        \"transaction_id\": \"fc24f1e9-6d01-44bf-888c-d5884ca0f66f\",\n        \"message_id\": \"{{$randomUUID}}\",\n        \"timestamp\": \"2023-10-09T04:46:28.012Z\",\n        \"bpp_id\": \"{{bpp_id}}\",\n        \"bpp_uri\": \"{{bpp_uri}}\",\n        \"bap_id\": \"{{bap_id}}\",\n        \"bap_uri\": \"{{bap_uri}}\"\n    },\n    \"message\": {\n        \"order_id\": \"1\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/status",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "seller",
+			"item": [
+				{
+					"name": "authentication",
+					"item": [
+						{
+							"name": "login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"johndoet@example.com\",\r\n    \"password\": \"SecurePassword1234\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{seller_url}}/api/v1/auth/login",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "logout",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/auth/logout",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updatePassword",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/auth/updatePassword",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"updatePassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "resetPassword",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/auth/resetPassword",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"resetPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/auth/mmi/token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/auth/mmi/token",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"mmi",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/auth/grantAccess/:id",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/auth/grantAccess/:id",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"grantAccess",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "forgotPassword",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/auth/forgotPassword",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"forgotPassword"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "organization",
+					"item": [
+						{
+							"name": "organizations",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/organizations",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "signup",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user\": {\r\n        \"email\": \"johndoet@example.com\",\r\n        \"mobile\": \"+1234567890\",\r\n        \"name\": \"John Doe\",\r\n        \"password\": \"SecurePassword1234\"\r\n    },\r\n    \"providerDetails\": {\r\n        \"name\": \"Doe Enterprises\",\r\n        \"address\": \"123 Main Street, Springfield\",\r\n        \"contactEmail\": \"contact@doeenterprises.com\",\r\n        \"contactMobile\": \"+0987654321\",\r\n        \"addressProof\": \"Proof of Address Document URL\",\r\n        \"idProof\": \"ID Proof Document URL\",\r\n        \"bankDetails\": {\r\n            \"accHolderName\": \"John Doe\",\r\n            \"accNumber\": \"1234567890\",\r\n            \"IFSC\": \"IFSC0001234\",\r\n            \"cancelledCheque\": \"Cancelled Cheque Document URL\",\r\n            \"bankName\": \"Bank of Springfield\",\r\n            \"branchName\": \"Main Branch\"\r\n        },\r\n        \"PAN\": {\r\n            \"PAN\": \"ABCDE1234F\",\r\n            \"proof\": \"PAN Proof Document URL\"\r\n        },\r\n        \"GSTN\": {\r\n            \"GSTN\": \"22AAAAA0000A1Z5\",\r\n            \"proof\": \"GSTN Proof Document URL\"\r\n        },\r\n        \"FSSAI\": \"12345678901234\"\r\n    }\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{seller_url}}/api/v1/organizations/signup",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "organizations/:id",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/organizations/:id",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "organizations/:id/storeDetails",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/organizations/:id/storeDetails",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										":id",
+										"storeDetails"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "organizations/:organizationId/storeDetails",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/organizations/:organizationId/storeDetails",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										":organizationId",
+										"storeDetails"
+									],
+									"variable": [
+										{
+											"key": "organizationId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "organizations",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "b716212a84567e1870bba07df14ab55a4b771fed217eb7b25dee9116df58835b11dece5c04555fc0c1c84de2673f0a3db16e4e045c76de9f00b9f6f8a8fbaa60138b7a3ade0a26c1753f96fb25a3faf0aaa0e92ceff4d40fc0a00dd613b5fda11562e40b68954f44355914149c572b60dac8e55742369bf9b0e8e10d13bb4262",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer b716212a84567e1870bba07df14ab55a4b771fed217eb7b25dee9116df58835b11dece5c04555fc0c1c84de2673f0a3db16e4e045c76de9f00b9f6f8a8fbaa60138b7a3ade0a26c1753f96fb25a3faf0aaa0e92ceff4d40fc0a00dd613b5fda11562e40b68954f44355914149c572b60dac8e55742369bf9b0e8e10d13bb4262",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/organizations",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "organizations/:organizationId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/organizations/:organizationId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										":organizationId"
+									],
+									"variable": [
+										{
+											"key": "organizationId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "organizations/:organizationId/ondcGet",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/organizations/:organizationId/ondcGet",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"organizations",
+										":organizationId",
+										"ondcGet"
+									],
+									"variable": [
+										{
+											"key": "organizationId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/users/create",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "invite/admin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/users/invite/admin",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"invite",
+										"admin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/:userId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/users/:userId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										":userId"
+									],
+									"variable": [
+										{
+											"key": "userId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/:userId/enable",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/users/:userId/enable",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										":userId",
+										"enable"
+									],
+									"variable": [
+										{
+											"key": "userId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/users",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "upload/:category",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/upload/:category",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"upload",
+										":category"
+									],
+									"variable": [
+										{
+											"key": "category",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "customization",
+					"item": [
+						{
+							"name": "customizationGroup",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/customizationGroup",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customizationGroup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "customizationGroup",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/customizationGroup",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customizationGroup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "customizationGroup/:groupId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/customizationGroup/:groupId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customizationGroup",
+										":groupId"
+									],
+									"variable": [
+										{
+											"key": "groupId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "customizationGroup/:groupId",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/customizationGroup/:groupId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customizationGroup",
+										":groupId"
+									],
+									"variable": [
+										{
+											"key": "groupId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "customizationGroup/:groupId",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/customizationGroup/:groupId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customizationGroup",
+										":groupId"
+									],
+									"variable": [
+										{
+											"key": "groupId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "order",
+					"item": [
+						{
+							"name": "orders",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/orders",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "orders",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/orders",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "return/request",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/orders/return/request",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										"return",
+										"request"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "orders/:orderId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/orders/:orderId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										":orderId"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/:orderId/status",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/orders/:orderId/status",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										":orderId",
+										"status"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": ":orderId/ondcGet",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/orders/:orderId/ondcGet",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										":orderId",
+										"ondcGet"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": ":orderId/ondcUpdate",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/orders/:orderId/ondcUpdate",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										":orderId",
+										"ondcUpdate"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/:orderId/cancel",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/orders/:orderId/cancel",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										":orderId",
+										"cancel"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/:orderId/cancelOrder",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/orders/:orderId/cancelOrder",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										":orderId",
+										"cancelOrder"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/:orderId/item/cancel",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/orders/:orderId/item/cancel",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										":orderId",
+										"item",
+										"cancel"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/:orderId/item/return",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/app/v1/orders/:orderId/item/return",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"app",
+										"v1",
+										"orders",
+										":orderId",
+										"item",
+										"return"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "customMenu",
+					"item": [
+						{
+							"name": "/menu/:category",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/menu/:category",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"menu",
+										":category"
+									],
+									"variable": [
+										{
+											"key": "category",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/menu/:menuId",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/menu/:menuId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"menu",
+										":menuId"
+									],
+									"variable": [
+										{
+											"key": "menuId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/menu/:menuId",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/menu/:menuId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"menu",
+										":menuId"
+									],
+									"variable": [
+										{
+											"key": "menuId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "menu",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/menu",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"menu"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/menu/:menuId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/menu/:menuId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"menu",
+										":menuId"
+									],
+									"variable": [
+										{
+											"key": "menuId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "menuOrdering",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/menuOrdering",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"menuOrdering"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/menuProducts/:menuId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/menuProducts/:menuId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"menuProducts",
+										":menuId"
+									],
+									"variable": [
+										{
+											"key": "menuId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "product",
+					"item": [
+						{
+							"name": "products",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "access-token",
+										"value": "Bearer {{JWT_Token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"commonDetails\": {\r\n        \"productCode\": \"PROD1234\",\r\n        \"productName\": \"Organic Almonds3\",\r\n        \"HSNCode\": \"080212\",\r\n        \"vegNonVeg\": \"VEG\",\r\n        \"timing\": [\"Morning\", \"Evening\"],\r\n        \"fulfilmentId\": \"FULFILL123\",\r\n        \"fulfillmentOption\": \"Home Delivery\",\r\n        \"GST_Percentage\": 5,\r\n        \"productCategory\": \"Dry Fruits\",\r\n        \"productSubcategory1\": \"Nuts\",\r\n        \"productSubcategory2\": \"Almonds\",\r\n        \"productSubcategory3\": \"Organic\",\r\n        \"maxAllowedQty\": 10,\r\n        \"countryOfOrigin\": \"India\",\r\n        \"packQty\": 1,\r\n        \"UOM\": \"kg\",\r\n        \"UOMValue\": \"1\",\r\n        \"length\": 10,\r\n        \"breadth\": 5,\r\n        \"height\": 15,\r\n        \"weight\": 0.5,\r\n        \"isReturnable\": true,\r\n        \"returnWindow\": \"7 days\",\r\n        \"isVegetarian\": true,\r\n        \"manufacturerName\": \"Healthy Foods Co.\",\r\n        \"manufacturedDate\": \"2024-08-01\",\r\n        \"nutritionalInfo\": \"High in protein and healthy fats\",\r\n        \"additiveInfo\": \"No additives\",\r\n        \"instructions\": \"Store in a cool, dry place\",\r\n        \"isCancellable\": true,\r\n        \"availableOnCod\": true,\r\n        \"longDescription\": \"Premium organic almonds sourced from the best farms.\",\r\n        \"description\": \"Organic Almonds\",\r\n        \"manufacturerOrPackerName\": \"Healthy Foods Co.\",\r\n        \"manufacturerOrPackerAddress\": \"123 Farm Lane, California, USA\",\r\n        \"commonOrGenericNameOfCommodity\": \"Almonds\",\r\n        \"monthYearOfManufacturePackingImport\": \"2024-08\",\r\n        \"importerFSSAILicenseNo\": \"\",\r\n        \"brandOwnerFSSAILicenseNo\": \"\",\r\n        \"varientAttributes\": {},\r\n        \"quantity\": 100,\r\n        \"MRP\": 500,\r\n        \"purchasePrice\": 450,\r\n        \"barcode\": 1234567890123,\r\n        \"images\": [\"image1.jpg\", \"image2.jpg\"],\r\n        // \"type\": \"item\",\r\n        \"customizationGroupId\": \"\",\r\n        \"backImage\": \"\"\r\n    },\r\n    \"commonAttributesValues\": {},\r\n    \"customizationDetails\": {\r\n        \"customizationGroups\": [],\r\n        \"customizations\": []\r\n    }\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "customization",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/product/customization",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"customization"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "customization",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/product/customization",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"customization"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "customization/:customizationId",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/product/customization/:customizationId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"customization",
+										":customizationId"
+									],
+									"variable": [
+										{
+											"key": "customizationId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "customization/:customizationId",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/product/customization/:customizationId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"customization",
+										":customizationId"
+									],
+									"variable": [
+										{
+											"key": "customizationId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "customization/:customizationId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/product/customization/:customizationId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"customization",
+										":customizationId"
+									],
+									"variable": [
+										{
+											"key": "customizationId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/upload/bulk",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products/upload/bulk",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"upload",
+										"bulk"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/upload/bulk/template",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products/upload/bulk/template",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"upload",
+										"bulk",
+										"template"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "categorySubcategoryAttributes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products/categorySubcategoryAttributes",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"categorySubcategoryAttributes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "categories",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products/categories",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "categorySubcategories",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products/categorySubcategories",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"categorySubcategories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "products",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "access-token",
+										"value": "Bearer {{JWT_Token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/:productId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products/:productId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										":productId"
+									],
+									"variable": [
+										{
+											"key": "productId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/:productId/ondcGet",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products/:productId/ondcGet",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										":productId",
+										"ondcGet"
+									],
+									"variable": [
+										{
+											"key": "productId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/:productId/ondcGetForUpdate",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products/:productId/ondcGetForUpdate",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										":productId",
+										"ondcGetForUpdate"
+									],
+									"variable": [
+										{
+											"key": "productId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "search",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products/search",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"search"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/search/increamentalPull/:category",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products/search/increamentalPull/:category",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"search",
+										"increamentalPull",
+										":category"
+									],
+									"variable": [
+										{
+											"key": "category",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "productWithVariant",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/productWithVariant",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"productWithVariant"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "productWithVariant",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/productWithVariant",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"productWithVariant"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/productWithVariant/:productId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/productWithVariant/:productId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"productWithVariant",
+										":productId"
+									],
+									"variable": [
+										{
+											"key": "productId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/:productId",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products/:productId",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										":productId"
+									],
+									"variable": [
+										{
+											"key": "productId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/:productId/publish",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{seller_url}}/api/v1/products/:productId/publish",
+									"host": [
+										"{{seller_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										":productId",
+										"publish"
+									],
+									"variable": [
+										{
+											"key": "productId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "bpp_id",
+			"value": "onix-bpp.becknprotocol.io",
+			"type": "string"
+		},
+		{
+			"key": "bpp_uri",
+			"value": "https://onix-bpp.becknprotocol.io",
+			"type": "string"
+		},
+		{
+			"key": "bap_id",
+			"value": "onix-bap.becknprotocol.io",
+			"type": "string"
+		},
+		{
+			"key": "bap_uri",
+			"value": "https://onix-bap.becknprotocol.io",
+			"type": "string"
+		},
+		{
+			"key": "core_version",
+			"value": "1.1.0",
+			"type": "string"
+		},
+		{
+			"key": "base_url",
+			"value": "http://localhost:3001",
+			"type": "string"
+		},
+		{
+			"key": "seller_url",
+			"value": "http://localhost:3008",
+			"type": "string"
+		},
+		{
+			"key": "JWT_Token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNDUzMjNkOGUtMGM3OS00NGEwLWI0ZDktNjA1ZDQwOTgwYTBjIiwicm9sZSI6eyJfaWQiOiJhMzM0ZmIxNS0zNjM3LTQzYzMtOGJiYi04YzNhZDdkMGVlMjciLCJuYW1lIjoiT3JnYW5pemF0aW9uIEFkbWluIiwiY3JlYXRlZEF0IjoiMjAyNC0wOC0yM1QwODozNDozNS4yMjJaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0yM1QwODozNDozNS4yMjJaIiwiX192IjowfSwib3JnYW5pemF0aW9uIjoiMTE5NmQyNjktMWEwNy00MTAwLWJjYmItYjM2NWIyY2EyZGMyIn0sImxhc3RMb2dpbkF0IjoxNzI0NDAyNTE4NTc5LCJpYXQiOjE3MjQ0MDI1MjQsImV4cCI6MTcyNDc2MjUyNH0.j9GgPuX8GwfaGtV_rN8oH5sAHNRYF3EScmmWF9aDFAE",
+			"type": "string"
+		}
+	]
+}
