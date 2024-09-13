@@ -299,7 +299,7 @@ class OndcService {
 
             let headers = {};
             let httpRequest = new HttpRequest(
-                `http://openfort-oasp.ossverse.com`,
+                `http://openfort-oasp-client.ossverse.com`,
                 `/on_select`,
                 'POST',
                 selectResponse,
