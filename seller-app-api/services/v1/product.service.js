@@ -1,6 +1,6 @@
 import HttpRequest from '../../utils/HttpRequest';
-import {getProducts,getUpdate, getSelect, getInit, getConfirm, getTrack, getSupport,getStatus,getCancel} from "../../utils/v1/schemaMapping";
-import {ConfirmRequest, InitRequest, SelectRequest} from "../../models";
+import { getProducts, getUpdate, getSelect, getInit, getConfirm, getTrack, getSupport, getStatus, getCancel } from "../../utils/v1/schemaMapping";
+import { ConfirmRequest, InitRequest, SelectRequest } from "../../models";
 import logger from "../../lib/logger";
 
 var config = require('../../lib/config');
@@ -28,12 +28,12 @@ class ProductService {
 
     async search(requestQuery) {
 
-        try{
-            logger.log('info', `[Product Service] search product : param :`,requestQuery);
+        try {
+            logger.log('info', `[Product Service] search product : param :`, requestQuery);
 
             //get search criteria
-            const searchProduct = requestQuery.message.intent.item?.descriptor?.name??""
-            const searchCategory = requestQuery.message.intent.category?.descriptor?.id??""
+            const searchProduct = requestQuery.message.intent.item?.descriptor?.name ?? ""
+            const searchCategory = requestQuery.message.intent.category?.descriptor?.id ?? ""
 
             let headers = {};
 
@@ -48,12 +48,12 @@ class ProductService {
 
             logger.log('info', `[Product Service] search product : result :`, result.data);
 
-            const productData = await getProducts({data: result.data, context: requestQuery.context});
+            const productData = await getProducts({ data: result.data, context: requestQuery.context });
 
             logger.log('info', `[Product Service] search product transformed: result :`, productData);
 
             return productData
-        }catch (e) {
+        } catch (e) {
             console.log(e)
         }
 
@@ -90,7 +90,7 @@ class ProductService {
 
                 let price = result?.data?.data?.attributes?.price * item.quantity.count
                 totalPrice += price
-                item.price = {value: price, currency: "INR"}
+                item.price = { value: price, currency: "INR" }
             }
 
             //TODO: check if quantity is available
@@ -119,12 +119,14 @@ class ProductService {
             }
         }
 
-        if (Object.keys(logisticProvider).length === 0  ) {
-            return {context: {...selectData.context,action:'on_select'},message:{
-                "type": "CORE-ERROR",
-                "code": "60001",
-                "message": "Pickup not servicable"
-            }}
+        if (Object.keys(logisticProvider).length === 0) {
+            return {
+                context: { ...selectData.context, action: 'on_select' }, message: {
+                    "type": "CORE-ERROR",
+                    "code": "60001",
+                    "message": "Pickup not servicable"
+                }
+            }
         }
 
         logger.log('info', `[Product Service] logistics provider available  :`, logisticProvider);
@@ -151,18 +153,18 @@ class ProductService {
                 "@ondc/org/TAT": "PT48H",
                 "provider_id": logisticProvider.context.bpp_id,
                 "state":
+                {
+                    "descriptor":
                     {
-                        "descriptor":
-                            {
-                                "name": logisticProvider.message.catalog["bpp/providers"][0].descriptor.name
-                            }
-                    }, end: selectData.message.order.fulfillments[0].end
+                        "name": logisticProvider.message.catalog["bpp/providers"][0].descriptor.name
+                    }
+                }, end: selectData.message.order.fulfillments[0].end
             }]
 
         //update fulfillment
         selectData.message.order.fulfillments = fulfillments
 
-        let totalPriceObj = {value: totalPrice, currency: "INR"}
+        let totalPriceObj = { value: totalPrice, currency: "INR" }
 
         detailedQoute.push(deliveryCharges);
 
@@ -203,7 +205,7 @@ class ProductService {
 
                 let price = result?.data?.data?.attributes?.price * item.quantity.count
                 totalPrice += price
-                item.price = {value: price, currency: "INR"}
+                item.price = { value: price, currency: "INR" }
             }
 
             qouteItemsDetails = {
@@ -229,7 +231,7 @@ class ProductService {
             }
         }
 
-        let totalPriceObj = {value: totalPrice, currency: "INR"}
+        let totalPriceObj = { value: totalPrice, currency: "INR" }
 
         detailedQoute.push(deliveryCharges);
 
@@ -271,7 +273,7 @@ class ProductService {
 
                 let price = result?.data?.data?.attributes?.price * item.quantity.count
                 totalPrice += price
-                item.price = {value: price, currency: "INR"}
+                item.price = { value: price, currency: "INR" }
             }
 
             qouteItemsDetails = {
@@ -297,7 +299,7 @@ class ProductService {
             }
         }
 
-        let totalPriceObj = {value: totalPrice, currency: "INR"}
+        let totalPriceObj = { value: totalPrice, currency: "INR" }
 
         detailedQoute.push(deliveryCharges);
 
@@ -307,19 +309,19 @@ class ProductService {
 
         let orderItems = []
         // let confirmData = requestQuery.message.order
-        for(let item  of confirmData.items){
+        for (let item of confirmData.items) {
 
             let productItems = {
-                product:item.id,
-                status:'Created',
-                qty:item.quantity.count
+                product: item.id,
+                status: 'Created',
+                qty: item.quantity.count
 
             }
             let httpRequest = new HttpRequest(
                 serverUrl,
                 `/api/order-items`,
                 'POST',
-                {data: productItems},
+                { data: productItems },
                 headers
             );
             let result = await httpRequest.send();
@@ -327,7 +329,7 @@ class ProductService {
         }
 
 
-        confirmData["order_items"] =orderItems
+        confirmData["order_items"] = orderItems
         confirmData.order_id = confirmData.id
         delete confirmData.id
 
@@ -337,7 +339,7 @@ class ProductService {
             serverUrl,
             `/api/orders`,
             'POST',
-            {data: confirmData},
+            { data: confirmData },
             headers
         );
 
@@ -359,7 +361,7 @@ class ProductService {
         let headers = {};
         // headers['Authorization'] = `Bearer ${strapiAccessToken}`;
 
-        return 0/3;
+        return 0 / 3;
 
         let httpRequest = new HttpRequest(
             serverUrl,
@@ -380,14 +382,14 @@ class ProductService {
         // headers['Authorization'] = `Bearer ${strapiAccessToken}`;
 
         let httpRequest = new HttpRequest(
-            serverUrl,
+            `http://seller:3008`,
             `/api/v1/products/${id}/ondcGet`,
             'get',
             {},
             headers
         );
-
         let result = await httpRequest.send();
+        console.log('################## getForOndc  #####################', result.data)
 
         return result.data
     }
@@ -398,7 +400,7 @@ class ProductService {
         // headers['Authorization'] = `Bearer ${strapiAccessToken}`;
 
         let httpRequest = new HttpRequest(
-            serverUrl,
+            `http://seller:3008`,
             `/api/v1/organizations/${id}/ondcGet`,
             'get',
             {},
@@ -406,6 +408,7 @@ class ProductService {
         );
 
         let result = await httpRequest.send();
+        console.log('############### getOrgForOndc #############', result.data)
 
         return result.data
     }
@@ -456,7 +459,7 @@ class ProductService {
             serverUrl,
             `/api/products/${id}`,
             'put',
-            {data: data},
+            { data: data },
             headers
         );
 
@@ -476,7 +479,7 @@ class ProductService {
             serverUrl,
             '/api/products',
             'post',
-            {data},
+            { data },
             headers
         );
 
@@ -498,18 +501,18 @@ class ProductService {
         return productData
     }
 
-    async productStatus(requestQuery,statusRequest={},unsoliciated,payload) {
+    async productStatus(requestQuery, statusRequest = {}, unsoliciated, payload) {
 
-        if(!unsoliciated){
+        if (!unsoliciated) {
             console.log("in eif")
             statusRequest = requestQuery.retail_status[0];//select first select request
-        }else{
+        } else {
             console.log("in else")
             statusRequest = payload;
 
         }
 
-        console.log("statusRequest---->",statusRequest.context)
+        console.log("statusRequest---->", statusRequest.context)
 
         const logisticData = requestQuery.logistics_on_status[0]
 
@@ -526,46 +529,46 @@ class ProductService {
 
         let updateOrder = result.data
 
-        if(logisticData.message.order.fulfillments[0].state?.descriptor?.code ==='Pending'){
-            updateOrder.state ='Created'
-        }else{
-            updateOrder.state =logisticData.message.order.state
+        if (logisticData.message.order.fulfillments[0].state?.descriptor?.code === 'Pending') {
+            updateOrder.state = 'Created'
+        } else {
+            updateOrder.state = logisticData.message.order.state
         }
 
         //updateOrder.state =logisticData.message.order.state
 
-        updateOrder.fulfillments[0].state =logisticData.message.order.fulfillments[0].state
+        updateOrder.fulfillments[0].state = logisticData.message.order.fulfillments[0].state
 
         //update order level state
         httpRequest = new HttpRequest(
             serverUrl,
             `/api/v1/orders/${result.data._id}/ondcUpdate`,
             'PUT',
-            {data:updateOrder},
+            { data: updateOrder },
             {}
         );
 
         let updateResult = await httpRequest.send();
 
         //update item level fulfillment status
-        let items = updateOrder.items.map((item)=>{
-            if(item.state=='Cancelled'){
-                item.tags={status:'Cancelled'};
+        let items = updateOrder.items.map((item) => {
+            if (item.state == 'Cancelled') {
+                item.tags = { status: 'Cancelled' };
             }
-           // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
+            // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
             item.fulfillment_id = logisticData.message.order.fulfillments[0].id
             delete item.state
             return item;
         });
 
-        console.log("items----->",items);
-        console.log("items----->",items);
+        console.log("items----->", items);
+        console.log("items----->", items);
         updateOrder.items = items;
         updateOrder.order_id = updateOrder.orderId;
 
         const productData = await getStatus({
             context: statusRequest.context,
-            updateOrder:updateOrder
+            updateOrder: updateOrder
         });
 
         return productData
@@ -590,14 +593,14 @@ class ProductService {
         let updateOrder = result.data
 
         let updatedItems = []
-        for (let item of updateOrder.items){
-            let updateItem = statusRequest.message.order.items.find((itemObj) => {return itemObj.id === item.id});
+        for (let item of updateOrder.items) {
+            let updateItem = statusRequest.message.order.items.find((itemObj) => { return itemObj.id === item.id });
 
-            if(updateItem?.tags?.update_type==='cancel'){
+            if (updateItem?.tags?.update_type === 'cancel') {
                 item.state = "Cancelled";
                 item.reason_code = updateItem.tags.reason_code;
             }
-            if(updateItem?.tags?.update_type==='return'){
+            if (updateItem?.tags?.update_type === 'return') {
                 item.state = "Return_Initiated";
                 item.reason_code = updateItem.tags.reason_code;
                 //item.quantity=updateItem.quantity.count
@@ -605,58 +608,58 @@ class ProductService {
             updatedItems.push(item);
         }
 
-        updateOrder.items =updatedItems;
+        updateOrder.items = updatedItems;
 
-        console.log("updatedItems--->",updatedItems);
+        console.log("updatedItems--->", updatedItems);
 
         //update order level state
         httpRequest = new HttpRequest(
             serverUrl,
             `/api/v1/orders/${result.data.orderId}/ondcUpdate`,
             'PUT',
-            {data:updateOrder},
+            { data: updateOrder },
             {}
         );
 
         let updateResult = await httpRequest.send();
 
         //update item level fulfillment status
-        let items = updateOrder.items.map((item)=>{
+        let items = updateOrder.items.map((item) => {
 
-            if(item.state=='Cancelled'){
-                item.tags={status:'Cancelled'};
+            if (item.state == 'Cancelled') {
+                item.tags = { status: 'Cancelled' };
             }
-            if(item.state=='Return_Initiated'){
-                item.tags={status:'Return_Initiated'};
+            if (item.state == 'Return_Initiated') {
+                item.tags = { status: 'Return_Initiated' };
             }
-           // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
+            // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
             item.fulfillment_id = updateOrder.fulfillments[0].id
             delete item.state
             delete item.reason_code
             return item;
         });
 
-        console.log("items--->",items);
+        console.log("items--->", items);
 
         updateOrder.items = items;
         updateOrder.id = updateOrder.orderId;
 
         const productData = await getUpdate({
             context: statusRequest.context,
-            updateOrder:updateOrder
+            updateOrder: updateOrder
         });
 
         return productData
     }
-    async productUpdateItem(data,requestQuery) {
+    async productUpdateItem(data, requestQuery) {
 
         const statusRequest = requestQuery.retail_update[0]//select first select request
 
 
-        console.log("data-------->",data.items);
-        console.log("data-------->",data);
+        console.log("data-------->", data.items);
+        console.log("data-------->", data);
         let updatedItems = []
-        for (let item of data.message.order.items){
+        for (let item of data.message.order.items) {
 
             //let updateItem = statusRequest.message.order.items.find((itemObj) => {return itemObj.id === item.id});
             //
@@ -669,7 +672,7 @@ class ProductService {
             updatedItems.push(item);
         }
 
-        data.items =updatedItems;
+        data.items = updatedItems;
 
         //update order level state
         // httpRequest = new HttpRequest(
@@ -683,19 +686,19 @@ class ProductService {
         // let updateResult = await httpRequest.send();
 
         //update item level fulfillment status
-        let items = data.message.order.items.map((item)=>{
+        let items = data.message.order.items.map((item) => {
 
-            console.log("item--->",item)
-            if(item.state=='Cancelled'){
-                item.tags={status:'Cancelled'};
+            console.log("item--->", item)
+            if (item.state == 'Cancelled') {
+                item.tags = { status: 'Cancelled' };
             }
-            if(item.state=='Liquidated'){
-                item.tags={status:'Liquidated'};
+            if (item.state == 'Liquidated') {
+                item.tags = { status: 'Liquidated' };
             }
-            if(item.state=='Rejected'){
-                item.tags={status:'Rejected'};
+            if (item.state == 'Rejected') {
+                item.tags = { status: 'Rejected' };
             }
-           // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
+            // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
             item.fulfillment_id = data.message.order.fulfillments[0].id
             delete item.state
             delete item.reason_code
@@ -707,13 +710,13 @@ class ProductService {
 
         const productData = await getUpdate({
             context: data.context,
-            updateOrder:data.message.order
+            updateOrder: data.message.order
         });
 
         return productData
     }
 
-    async productOrderStatus(requestQuery,statusRequest) {
+    async productOrderStatus(requestQuery, statusRequest) {
 
         const logisticData = requestQuery.logistics_on_update[0]
 
@@ -722,14 +725,14 @@ class ProductService {
 
         let updateOrder = statusRequest.message.order
 
-        updateOrder.state =logisticData.message.order.state //set to inprogress
+        updateOrder.state = logisticData.message.order.state //set to inprogress
 
         //update order level state
-       let httpRequest = new HttpRequest(
+        let httpRequest = new HttpRequest(
             serverUrl,
             `/api/v1/orders/${updateOrder.orderId}/ondcUpdate`,
             'PUT',
-            {data:updateOrder},
+            { data: updateOrder },
             {}
         );
 
@@ -738,13 +741,13 @@ class ProductService {
         updateOrder.order_id = updateOrder.orderId;
         delete updateOrder._id
 
-       // updateOrder.fulfillments[0].state =logisticData.message.order.fulfillments[0].state
+        // updateOrder.fulfillments[0].state =logisticData.message.order.fulfillments[0].state
         //update item level fulfillment status
-        let items = updateOrder.items.map((item)=>{
-            if(item.state=='Cancelled'){
-                item.tags={status:'Cancelled'};
+        let items = updateOrder.items.map((item) => {
+            if (item.state == 'Cancelled') {
+                item.tags = { status: 'Cancelled' };
             }
-           // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
+            // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
             item.fulfillment_id = logisticData.message.order.fulfillments[0].id
             delete item.state
             return item;
@@ -754,7 +757,7 @@ class ProductService {
         //updateOrder.id = statusRequest.orderId;
         const productData = await getStatus({
             context: statusRequest.context, //TODO: build status context from confirm request
-            updateOrder:updateOrder
+            updateOrder: updateOrder
         });
 
         return productData
@@ -778,15 +781,15 @@ class ProductService {
 
         let updateOrder = result.data
 
-        updateOrder.state =logisticData.message.order.state
-        updateOrder.cancellation_reason_id =cancelRequest.message.cancellation_reason_id
+        updateOrder.state = logisticData.message.order.state
+        updateOrder.cancellation_reason_id = cancelRequest.message.cancellation_reason_id
 
         //update order level state
         httpRequest = new HttpRequest(
             serverUrl,
             `/api/v1/orders/${result.data.orderId}/ondcUpdate`,
             'PUT',
-            {data:updateOrder},
+            { data: updateOrder },
             {}
         );
 
@@ -803,19 +806,19 @@ class ProductService {
         updateOrder.id = cancelRequest.message.order_id;
         const productData = await getCancel({
             context: cancelRequest.context,
-            updateOrder:updateOrder
+            updateOrder: updateOrder
         });
 
         return productData
     }
 
-    async productSellerCancel(cancelData,requestQuery) {
+    async productSellerCancel(cancelData, requestQuery) {
 
         const cancelRequest = requestQuery.retail_cancel[0]//select first select request
         const logisticData = requestQuery.logistics_on_cancel[0]
 
-        console.log("cancelData----->",cancelData);
-        console.log("logisticData----->",logisticData);
+        console.log("cancelData----->", cancelData);
+        console.log("logisticData----->", logisticData);
 
 
         let confirm = {}
@@ -831,15 +834,15 @@ class ProductService {
 
         let updateOrder = result.data
 
-        updateOrder.state =logisticData.message.order.state
-        updateOrder.cancellation_reason_id =cancelData.message.order.cancellation_reason_id
+        updateOrder.state = logisticData.message.order.state
+        updateOrder.cancellation_reason_id = cancelData.message.order.cancellation_reason_id
 
         //update order level state
         httpRequest = new HttpRequest(
             serverUrl,
             `/api/v1/orders/${result.data.orderId}/ondcUpdate`,
             'PUT',
-            {data:updateOrder},
+            { data: updateOrder },
             {}
         );
 
@@ -857,7 +860,7 @@ class ProductService {
         //updateOrder.id = cancelData.order_id;
         const productData = await getCancel({
             context: cancelData.context,
-            updateOrder:updateOrder
+            updateOrder: updateOrder
         });
 
         return productData
@@ -887,7 +890,7 @@ class ProductService {
         const logisticData = requestQuery.logistics_on_confirm[0]
 
         //let qouteItems = []
-       // let detailedQoute = []
+        // let detailedQoute = []
         let totalPrice = 0
 
         let headers = {};
@@ -895,7 +898,7 @@ class ProductService {
         let confirmData = confirmRequest.message.order
 
         let itemList = []
-        let qouteItems = confirmRequest.message.order.items.map((item)=>{
+        let qouteItems = confirmRequest.message.order.items.map((item) => {
             // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
             item.fulfillment_id = logisticData.message.order.fulfillments[0].id
             delete item.state
@@ -905,46 +908,49 @@ class ProductService {
         let breakup = confirmData.quote.breakup
 
         let updatedBreakup = []
-        for(let item of breakup){
+        for (let item of breakup) {
             // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
-            if(item['@ondc/org/title_type']==='item'){
-               const product =  await this.getForOndc(item['@ondc/org/item_id'])
-                item.item = { price: {
-                    currency: "INR",
+            if (item['@ondc/org/title_type'] === 'item') {
+                const product = await this.getForOndc(item['@ondc/org/item_id'])
+                item.item = {
+                    price: {
+                        currency: "INR",
                         value: `${product.MRP}`
-                }};
+                    }
+                };
             }
             updatedBreakup.push(item);
         };
 
         confirmData.quote.breakup = updatedBreakup;
         confirmRequest.message.order.quote.breakup = updatedBreakup;
-        console.log("qouteItems-->>>>--",qouteItems)
-        console.log("qouteItems-->>>>breakup--",breakup)
+        console.log("qouteItems-->>>>--", qouteItems)
+        console.log("qouteItems-->>>>breakup--", breakup)
         //confirmRequest.message.order.items = qouteItems;
 
-        let org= await this.getOrgForOndc(confirmData.provider.id);
+        let org = await this.getOrgForOndc(confirmData.provider.id);
 
-        let storeLocationEnd ={}
-        if(org.providerDetail.storeDetails){
-            storeLocationEnd =  {
-            "location": {
-                "id": org.providerDetail.storeDetails.location._id,
+        let storeLocationEnd = {}
+        if (org.providerDetail.storeDetails) {
+            storeLocationEnd = {
+                "location": {
+                    "id": org.providerDetail.storeDetails.location._id,
                     "descriptor": {
-                    "name": org.providerDetail.name
-                },
-                "gps": `${org.providerDetail.storeDetails.location.lat},${org.providerDetail.storeDetails.location.long}`,
+                        "name": org.providerDetail.name
+                    },
+                    "gps": `${org.providerDetail.storeDetails.location.lat},${org.providerDetail.storeDetails.location.long}`,
 
-            },
-            "contact": {
-                phone: org.providerDetail.storeDetails.supportDetails.mobile,
+                },
+                "contact": {
+                    phone: org.providerDetail.storeDetails.supportDetails.mobile,
                     email: org.providerDetail.storeDetails.supportDetails.email
+                }
             }
-        }}
+        }
 
         confirmRequest.message.order.fulfillments[0].start = storeLocationEnd
         confirmRequest.message.order.fulfillments[0].tracking = false;
-        confirmRequest.message.order.fulfillments[0].state= {
+        confirmRequest.message.order.fulfillments[0].state = {
             "descriptor": {
                 "code": "Pending"
             }
@@ -952,24 +958,24 @@ class ProductService {
         let today = new Date()
         let tomorrow = new Date()
         let endDate = new Date(tomorrow.setDate(today.getDate() + 1))
-        confirmRequest.message.order.fulfillments[0].start.time=
+        confirmRequest.message.order.fulfillments[0].start.time =
+        {
+            "range":
             {
-                "range":
-                    {
-                        "start":today, //TODO: need to take this from seller time
-                        "end":endDate
-                    }
+                "start": today, //TODO: need to take this from seller time
+                "end": endDate
             }
-        confirmRequest.message.order.fulfillments[0].end.time=
+        }
+        confirmRequest.message.order.fulfillments[0].end.time =
+        {
+            "range":
             {
-                "range":
-                    {
-                        "start":today,
-                        "end":endDate
-                    }
+                "start": today,
+                "end": endDate
             }
-        confirmRequest.message.order.fulfillments[0]["@ondc/org/provider_name"]='LoadShare Delivery' //TODO: hard coded
-        confirmRequest.message.order.payment["@ondc/org/buyer_app_finder_fee_type"]='Percentage' //TODO: hard coded
+        }
+        confirmRequest.message.order.fulfillments[0]["@ondc/org/provider_name"] = 'LoadShare Delivery' //TODO: hard coded
+        confirmRequest.message.order.payment["@ondc/org/buyer_app_finder_fee_type"] = 'Percentage' //TODO: hard coded
 
         let detailedQoute = confirmRequest.message.order.quote
         //confirmData["order_items"] = orderItems
@@ -979,10 +985,10 @@ class ProductService {
         // confirmData.state = confirmData.id
         confirmData.transaction_id = confirmRequest.context.transaction_id
 
-        if(logisticData.message.order.fulfillments[0].state?.descriptor?.code ==='Pending'){
-            confirmData.state ='Created'
-        }else{
-            confirmData.state =logisticData.message.order.state
+        if (logisticData.message.order.fulfillments[0].state?.descriptor?.code === 'Pending') {
+            confirmData.state = 'Created'
+        } else {
+            confirmData.state = logisticData.message.order.state
         }
 
         delete confirmData.id
@@ -992,7 +998,7 @@ class ProductService {
             serverUrl,
             `/api/v1/orders`,
             'POST',
-            {data: confirmData},
+            { data: confirmData },
             headers
         );
 
@@ -1043,23 +1049,23 @@ class ProductService {
         let totalPrice = 0
 
 
-        let org= await this.getOrgForOndc(initData.message.order.provider.id);
+        let org = await this.getOrgForOndc(initData.message.order.provider.id);
 
-        let paymentDetails ={
-                "@ondc/org/buyer_app_finder_fee_type": "Percent", //TODO: for transaction id keep record to track this details
-                "@ondc/org/buyer_app_finder_fee_amount": "3.0",
-                "@ondc/org/settlement_details": [
-                    {
-                        "settlement_counterparty": "seller-app",
-                        "settlement_phase": "sale-amount",
-                        "settlement_type": "neft",
-                        "settlement_bank_account_no": org.providerDetail.bankDetails.accNumber,
-                        "settlement_ifsc_code": org.providerDetail.bankDetails.IFSC,
-                        "beneficiary_name": org.providerDetail.bankDetails.accHolderName,
-                        "bank_name": org.providerDetail.bankDetails.bankName,
-                        "branch_name": org.providerDetail.bankDetails.branchName??"Pune"
-                    }
-                ]
+        let paymentDetails = {
+            "@ondc/org/buyer_app_finder_fee_type": "Percent", //TODO: for transaction id keep record to track this details
+            "@ondc/org/buyer_app_finder_fee_amount": "3.0",
+            "@ondc/org/settlement_details": [
+                {
+                    "settlement_counterparty": "seller-app",
+                    "settlement_phase": "sale-amount",
+                    "settlement_type": "neft",
+                    "settlement_bank_account_no": org.providerDetail.bankDetails.accNumber,
+                    "settlement_ifsc_code": org.providerDetail.bankDetails.IFSC,
+                    "beneficiary_name": org.providerDetail.bankDetails.accHolderName,
+                    "bank_name": org.providerDetail.bankDetails.bankName,
+                    "branch_name": org.providerDetail.bankDetails.branchName ?? "Pune"
+                }
+            ]
 
         }
 
@@ -1093,7 +1099,7 @@ class ProductService {
 
                 let price = result?.data?.MRP * item.quantity.count
                 totalPrice += parseInt(price)
-                item.price = {value: ""+price, currency: "INR"}
+                item.price = { value: "" + price, currency: "INR" }
             }
 
             qouteItemsDetails = {
@@ -1105,18 +1111,18 @@ class ProductService {
                 "@ondc/org/title_type": "item",
                 "price": item.price,
                 "item": {
-                    "price": {value:""+result?.data?.MRP,currency: "INR"}
+                    "price": { value: "" + result?.data?.MRP, currency: "INR" }
                 }
             }
 
-            item.fulfillment_id =  item.fulfillment_id
+            item.fulfillment_id = item.fulfillment_id
             delete item.price
             qouteItems.push(item)
             detailedQoute.push(qouteItemsDetails)
         }
 
         totalPrice = parseInt(logisticData.message.order.quote.price.value) + parseInt(totalPrice)
-        let totalPriceObj = {value: ""+totalPrice, currency: "INR"}
+        let totalPriceObj = { value: "" + totalPrice, currency: "INR" }
 
         detailedQoute.push(deliveryCharges);
 
@@ -1150,45 +1156,49 @@ class ProductService {
 
     async productSelect(requestQuery) {
 
-        try{
-
+        try {
+            logger.log('info', "============ check-point 4 ======================");
             let savedLogistics = new SelectRequest();
 
-            const selectData = JSON.parse(JSON.stringify(requestQuery.retail_select[0]));//select first select request
+            // const selectData = JSON.parse(JSON.stringify(requestQuery.retail_select[0]));//select first select request
 
-            const items = selectData.message.order.items;
-            let logisticData = requestQuery.logistics_on_search;
+            const items = requestQuery.message.order.items;
+            // let logisticData = requestQuery.logistics_on_search;
 
             let qouteItems = []
             let detailedQoute = []
             let totalPrice = 0
 
-            let isQtyAvailable=true
-            let isServiceable=true
+            let isQtyAvailable = true
+            //let isServiceable=true
+            let isServiceable = false
 
             let logisticProvider = {}
 
 
-            const org = await this.getOrgForOndc(selectData.message.order.provider.id);
-            let logisticsToSelect = config.get("sellerConfig").LOGISTICS_BAP_ID
-
-            if(org.providerDetail.storeDetails.logisticsBppId){
-                logisticsToSelect = org.providerDetail.storeDetails.logisticsBppId
-            }
-
-            console.log({logisticsToSelect});
-            console.log(org.providerDetail.storeDetails);
-
-            for (let logisticData1 of logisticData) {
-                if (logisticData1.message) {
-                    if (logisticData1.context.bpp_id === logisticsToSelect) {//TODO: move to env
-                        if(logisticData1.message){
-                            logisticProvider = logisticData1
+            const org = await this.getOrgForOndc(requestQuery.message.order.provider.id);
+            logger.log('info', "============ check-point 5 ======================");
+            // let logisticsToSelect = config.get("sellerConfig").LOGISTICS_BAP_ID
+            /*
+                        if(org.providerDetail.storeDetails.logisticsBppId){
+                            logisticsToSelect = org.providerDetail.storeDetails.logisticsBppId
                         }
-                    }
-                }
-            }
-
+            */
+            /*
+                        console.log({logisticsToSelect});
+                        console.log(org.providerDetail.storeDetails);
+            */
+            /*
+                        for (let logisticData1 of logisticData) {
+                            if (logisticData1.message) {
+                                if (logisticData1.context.bpp_id === logisticsToSelect) {//TODO: move to env
+                                    if(logisticData1.message){
+                                        logisticProvider = logisticData1
+                                    }
+                                }
+                            }
+                        }
+            */
             //TODO: uncomment to allow lookup for other providers
             // if (Object.keys(logisticProvider).length === 0) {
             //     for (let logisticData1 of logisticData) { //check if any logistics available who is serviceable
@@ -1197,51 +1207,59 @@ class ProductService {
             //         }
             //     }
             // }
-
-            if (Object.keys(logisticProvider).length === 0) {
-                isServiceable=false
-            }
+            /*
+                        if (Object.keys(logisticProvider).length === 0) {
+                            isServiceable=false
+                        }
+            */
             let deliveryType = ''
             for (let item of items) {
                 let headers = {};
-                let itemObj =item
+                let itemObj = item
                 let itemLevelQtyStatus = true
                 let qouteItemsDetails = {}
                 let httpRequest = new HttpRequest(
-                    serverUrl,
+                    `http://seller:3008`,
                     `/api/v1/products/${item.id}/ondcGet`,
                     'get',
                     {},
                     headers
                 );
 
+                logger.log('info', "============ check-point 6 ======================");
                 let result = await httpRequest.send();
 
                 if (result?.data) {
                     let price
 
-                    if(result?.data?.quantity > result?.data?.maxAllowedQty){
+                    if (result?.data?.quantity > result?.data?.maxAllowedQty) {
                         result.data.quantity = result?.data?.maxAllowedQty //this is per user available qty
                     }
-                    if(result?.data?.quantity < item.quantity.count){
-                        isQtyAvailable=false
-                        itemLevelQtyStatus=false
-                        //add qty check
-                        price= result?.data?.MRP * result?.data?.quantity
-                        totalPrice += price //as item is not in qty
-                    }else{
-                        //add qty check
-                        price= result?.data?.MRP * item.quantity.count
-                        totalPrice += price
-                    }
-
-                    item.price = {value: ""+price, currency: "INR"}
+                    logger.log("info", "===== result.data.quantity ====", result?.data?.quantity)
+                    logger.log("info", "===== result.data.MRP ====", result?.data?.MRP)
+                    price = result?.data?.MRP
+                    totalPrice += price
+                    // ========== item.quantity.count is not available
+                    /*                   if (result?.data?.quantity < item.quantity.count) {
+                                           isQtyAvailable = false
+                                           itemLevelQtyStatus = false
+                                           //add qty check
+                                           price = result?.data?.MRP * result?.data?.quantity
+                                           totalPrice += price //as item is not in qty
+                                       } else {
+                                           //add qty check
+                                           price = result?.data?.MRP * item.quantity.count
+                                           totalPrice += price
+                                       }
+                   */
+                    item.price = { value: "" + price, currency: "INR" }
                 }
 
+                logger.log('info', "============ check-point 7 ======================");
                 qouteItemsDetails = {
                     "@ondc/org/item_id": item.id,
                     "@ondc/org/item_quantity": {
-                        "count": itemLevelQtyStatus?item.quantity.count:result?.data?.quantity
+                        "count": itemLevelQtyStatus ? item?.quantity?.count : result?.data?.quantity
                     },
                     "title": result?.data?.productName,
                     "@ondc/org/title_type": "item",
@@ -1262,12 +1280,13 @@ class ProductService {
                     }
                 }
 
-                if(isServiceable){
+                logger.log('info', "============ check-point 8 ======================");
+                if (isServiceable) {
                     itemObj.fulfillment_id = logisticProvider.message.catalog["bpp/providers"][0].items[0].fulfillment_id //TODO: revisit for item level status
 
-                    deliveryType = logisticProvider.message.catalog["bpp/providers"][0].items.find((element)=>{return element.category_id === config.get("sellerConfig").LOGISTICS_DELIVERY_TYPE});
+                    deliveryType = logisticProvider.message.catalog["bpp/providers"][0].items.find((element) => { return element.category_id === config.get("sellerConfig").LOGISTICS_DELIVERY_TYPE });
 
-                }else{
+                } else {
                     itemObj.fulfillment_id = '1'
                 }
                 delete itemObj.quantity;
@@ -1277,15 +1296,15 @@ class ProductService {
                 detailedQoute.push(qouteItemsDetails)
             }
 
-            let deliveryCharges ={}
-            let fulfillments =[]
+            let deliveryCharges = {}
+            let fulfillments = []
 
-            if(isServiceable && deliveryType ){
+            if (isServiceable && deliveryType) {
                 //select logistic based on criteria-> for now first one will be picked up
                 deliveryCharges = {
                     "title": "Delivery charges",
                     "@ondc/org/title_type": "delivery",
-                    "@ondc/org/item_id":deliveryType.fulfillment_id,
+                    "@ondc/org/item_id": deliveryType.fulfillment_id,
                     "price": {
                         "currency": '' + deliveryType.price.currency,
                         "value": '' + deliveryType.price.value
@@ -1297,11 +1316,11 @@ class ProductService {
 
                 let categories = logisticProvider.message.catalog["bpp/providers"][0].categories
                 let duration = ''
-                if(deliveryType?.time?.duration){
+                if (deliveryType?.time?.duration) {
                     duration = deliveryType.time.duration
-                }else{
-                    let category = categories.find((cat)=>{
-                        return deliveryType.category_id===cat.id
+                } else {
+                    let category = categories.find((cat) => {
+                        return deliveryType.category_id === cat.id
                     });
                     duration = category.time.duration
                 }
@@ -1315,17 +1334,17 @@ class ProductService {
                         "@ondc/org/category": deliveryType.category_id,
                         "@ondc/org/TAT": duration,
                         "state":
+                        {
+                            "descriptor":
                             {
-                                "descriptor":
-                                    {
-                                        "code": "Serviceable"//Hard coded
-                                    }
+                                "code": "Serviceable"//Hard coded
                             }
+                        }
                     }]
-            }else{
+            } else {
 
                 //get org name from provider id
-
+                logger.log('info', "============ check-point 9 ======================");
                 deliveryCharges = {
                     "title": "Delivery charges",
                     "@ondc/org/title_type": "delivery",
@@ -1340,53 +1359,59 @@ class ProductService {
                         "id": '1',
                         "@ondc/org/provider_name": org.providerDetail.name,//TODO: merchant name
                         "tracking": false, //Hard coded
-                        "@ondc/org/category":config.get("sellerConfig").LOGISTICS_DELIVERY_TYPE ,
-                        "@ondc/org/TAT":"P1D",
-                        "provider_id": selectData.message.order.provider.id,
-                        "type":"Delivery",
+                        // "@ondc/org/category":config.get("sellerConfig").LOGISTICS_DELIVERY_TYPE ,
+                        "@ondc/org/category": "Logistic type - dummy",
+                        "@ondc/org/TAT": "P1D",
+                        "provider_id": requestQuery.message.order.provider.id,
+                        "type": "Delivery",
                         "state":
+                        {
+                            "descriptor":
                             {
-                                "descriptor":
-                                    {
-                                        "code": "Non-serviceable"//Hard coded
-                                    }
-                            }, end: selectData.message.order.fulfillments[0].end
+                                "code": "Non-serviceable"//Hard coded
+                            }
+                        }, end: requestQuery.message.order.fulfillments && requestQuery.message.order.fulfillments[0]
+                            ? requestQuery.message.order.fulfillments[0].end
+                            : 'fulfilment-end'
                     }]
             }
 
             //update fulfillment
-            selectData.message.order.fulfillments = fulfillments
+            requestQuery.message.order.fulfillments = fulfillments
 
-            let totalPriceObj = {value: ""+totalPrice, currency: "INR"}
+            let totalPriceObj = { value: "" + totalPrice, currency: "INR" }
 
             detailedQoute.push(deliveryCharges);
 
             const productData = await getSelect({
                 qouteItems: qouteItems,
-                order: selectData.message.order,
+                order: requestQuery.message.order,
                 totalPrice: totalPriceObj,
                 detailedQoute: detailedQoute,
-                context: selectData.context,
+                context: requestQuery.context,
                 isQtyAvailable,
                 isServiceable
             });
-
-            savedLogistics.transactionId = selectData.context.transaction_id;
-            savedLogistics.logisticsTransactionId = logisticProvider?.context?.transaction_id;
+            logger.log('info', "============ check-point 10 ======== product data", productData);
+            savedLogistics.transactionId = requestQuery.context.transaction_id;
+            //savedLogistics.logisticsTransactionId = logisticProvider?.context?.transaction_id;
+            savedLogistics.logisticsTransactionId = "default-logisticsTransactionId";
             savedLogistics.packaging = "default"//TODO: select packaging option;
-            savedLogistics.providerId = selectData.message.order.provider.id;
-            savedLogistics.selectedLogistics = logisticProvider;
-            savedLogistics.selectRequest = requestQuery.retail_select[0];
+            savedLogistics.providerId = requestQuery.message.order.provider.id;
+            //savedLogistics.selectedLogistics = logisticProvider;
+            savedLogistics.selectedLogistics = "default - selectedLogistics";
+            savedLogistics.selectRequest = "default - selectRequest";
             savedLogistics.onSelectResponse = productData;
 
             await savedLogistics.save();
+            logger.log('info', "============ check-point 11 ===========================");
 
             return productData;
 
-        }catch (e){
+        } catch (e) {
             console.log(e)
         }
-       }
+    }
 
 }
 

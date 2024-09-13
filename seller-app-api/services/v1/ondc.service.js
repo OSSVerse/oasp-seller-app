@@ -84,14 +84,15 @@ class OndcService {
             // const order = payload.message.order;
             const selectMessageId = payload.context.message_id;
             const logisticsMessageId = uuidv4();
-
+            logger.log('info', "============ check-point 1 ======================");
             let storeLocationEnd = {}
             let totalProductValue = 0
             for (let items of payload.message.order.items) {
                 const product = await productService.getForOndc(items.id)
                 totalProductValue += product.MRP
             }
-
+            logger.log('info', "============ check-point 2 ======================");
+/*
             let org = await productService.getOrgForOndc(payload.message.order.provider.id);
 
             if (org.providerDetail.storeDetails) {
@@ -102,10 +103,11 @@ class OndcService {
                     }
                 }
             }
-
+*/
+/*
             const searchRequest = {
                 "context": {
-                    "domain": "nic2004:60232",
+                    "domain": "Software Assurance",
                     "country": "IND",
                     "city": "std:080",
                     "action": "search",
@@ -152,26 +154,27 @@ class OndcService {
                     }
                 }
             }
-
+*/
             //process select request and send it to protocol layer
-            this.postSelectRequest(searchRequest, logisticsMessageId, selectMessageId)
+          //  this.postSelectRequest(searchRequest, logisticsMessageId, selectMessageId)
+            this.postSelectRequest(payload, logisticsMessageId, selectMessageId)
 
-            return searchRequest
+            return payload
         } catch (err) {
             logger.error('error', `[Ondc Service] search logistics payload - search logistics payload : param :`, err);
             throw err;
         }
     }
 
-    async postSelectRequest(searchRequest, logisticsMessageId, selectMessageId) {
+    async postSelectRequest(payload, logisticsMessageId, selectMessageId) {
 
         try {
             //1. post http to protocol/logistics/v1/search
-
+/*
             try {
                 let headers = {};
                 let httpRequest = new HttpRequest(
-                    config.get("sellerConfig").BPP_URI,
+                    'http://openfort-oasp.ossverse.com',
                     `/protocol/logistics/v1/search`,
                     'POST',
                     searchRequest,
@@ -185,13 +188,14 @@ class OndcService {
                 logger.error('error', `[Ondc Service] post http select response : `, e);
                 return e
             }
-
+*/
             //2. wait async to fetch logistics responses
 
             //async post request
             setTimeout(() => {
-                logger.log('info', `[Ondc Service] search logistics payload - timeout : param :`, searchRequest);
-                this.buildSelectRequest(logisticsMessageId, selectMessageId)
+                logger.log('info', `[Ondc Service] search logistics payload - timeout : param :`, payload);
+                logger.log('info', "============ check-point 3 ======================");
+                this.buildSelectRequest(payload,logisticsMessageId, selectMessageId)
             }, 10000); //TODO move to config
         } catch (e) {
             logger.error('error', `[Ondc Service] post http select response : `, e);
@@ -199,15 +203,17 @@ class OndcService {
         }
     }
 
-    async buildSelectRequest(logisticsMessageId, selectMessageId) {
+    async buildSelectRequest(payload, logisticsMessageId, selectMessageId) {
 
         try {
             logger.log('info', `[Ondc Service] search logistics payload - build select request : param :`, { logisticsMessageId, selectMessageId });
             //1. look up for logistics
-            let logisticsResponse = await this.getLogistics(logisticsMessageId, selectMessageId, 'select')
+            //let logisticsResponse = await this.getLogistics(logisticsMessageId, selectMessageId, 'select')
             //2. if data present then build select response
-            let selectResponse = await productService.productSelect(logisticsResponse)
+            let selectResponse = await productService.productSelect(payload)
             //3. post to protocol layer
+
+            logger.log('info', "============ check-point end ======================");
             await this.postSelectResponse(selectResponse);
 
         } catch (e) {
@@ -321,7 +327,7 @@ class OndcService {
             let httpRequest = new HttpRequest(
                 // config.get("sellerConfig").BPP_URI,
                 'http://openfort-oasp-client.ossverse.com',
-                `/on_search`,
+                `/protocol/v1/on_search`,
                 'POST',
                 searchResponse,
                 headers
