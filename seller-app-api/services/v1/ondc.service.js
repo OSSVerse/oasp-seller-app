@@ -299,8 +299,8 @@ class OndcService {
 
             let headers = {};
             let httpRequest = new HttpRequest(
-                config.get("sellerConfig").BPP_URI,
-                `/protocol/v1/on_select`,
+                `http://openfort-oasp.ossverse.com`,
+                `/on_select`,
                 'POST',
                 selectResponse,
                 headers
@@ -327,7 +327,7 @@ class OndcService {
             let httpRequest = new HttpRequest(
                 // config.get("sellerConfig").BPP_URI,
                 'http://openfort-oasp-client.ossverse.com',
-                `/protocol/v1/on_search`,
+                `/on_search`,
                 'POST',
                 searchResponse,
                 headers
