@@ -1228,6 +1228,7 @@ class ProductService {
 
                 logger.log('info', "============ check-point 6 ======================");
                 let result = await httpRequest.send();
+                let itemPrice = 0;
 
 
                 if (result?.data) {
@@ -1255,6 +1256,7 @@ class ProductService {
                     // logger.log("info", "===== result.data.quantity ====", result?.data?.quantity)
                     // logger.log("info", "===== result.data.MRP ====", result?.data?.MRP)
                     price = itemMrp
+                    itemPrice = itemMrp
                     totalPrice += price
 
                     //  price = 50000
@@ -1288,7 +1290,7 @@ class ProductService {
                         "price": {
                             "currency": "INR",
                             //"value": `${result?.data?.MRP}`
-                            "value": `${item.price}`
+                            "value": "" + itemPrice
                         },
                         "quantity": {
                             "available": {
@@ -1296,7 +1298,7 @@ class ProductService {
                                 "count": 1
                             },
                             "maximum": {
-                               // "count": `${result?.data?.maxAllowedQty}`
+                                // "count": `${result?.data?.maxAllowedQty}`
                                 "count": 1
                             }
                         }
