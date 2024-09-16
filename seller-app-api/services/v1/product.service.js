@@ -1229,16 +1229,36 @@ class ProductService {
                 logger.log('info', "============ check-point 6 ======================");
                 let result = await httpRequest.send();
 
+
                 if (result?.data) {
                     let price
+                    let itemMrp = 0
+
+                    // Check if MRP exists
+                    if (result.data && result.data.commonDetails && result.data.commonDetails.MRP !== undefined) {
+                        const mrpValue = result.data.commonDetails.MRP;
+                        const purchaseValue = result.data.commonDetails.purchasePrice;
+                        itemMrp = mrpValue;
+                        console.log("====MRP value=====", mrpValue);
+                        //logger.log("info", "Common Details: ", JSON.stringify(result.data.commonDetails, null, 2));
+
+                    } else {
+                        logger.log("warn", "MRP does not exist in commonDetails - undefined");
+                    }
+
+
+
 
                     if (result?.data?.quantity > result?.data?.maxAllowedQty) {
                         result.data.quantity = result?.data?.maxAllowedQty //this is per user available qty
                     }
-                    logger.log("info", "===== result.data.quantity ====", result?.data?.quantity)
-                    logger.log("info", "===== result.data.MRP ====", result?.data?.MRP)
-                    price = result?.data?.MRP
+                    // logger.log("info", "===== result.data.quantity ====", result?.data?.quantity)
+                    // logger.log("info", "===== result.data.MRP ====", result?.data?.MRP)
+                    price = itemMrp
                     totalPrice += price
+
+                    //  price = 50000
+                    //totalPrice += price
                     // ========== item.quantity.count is not available
                     /*                   if (result?.data?.quantity < item.quantity.count) {
                                            isQtyAvailable = false
@@ -1261,13 +1281,14 @@ class ProductService {
                     "@ondc/org/item_quantity": {
                         "count": itemLevelQtyStatus ? item?.quantity?.count : result?.data?.quantity
                     },
-                    "title": result?.data?.productName,
+                    "title": result?.data?.commonDetails?.productName,
                     "@ondc/org/title_type": "item",
                     "price": item.price,//itemLevelQtyStatus?item.price:{value: "0", currency: "INR"},
                     "item": {
                         "price": {
                             "currency": "INR",
-                            "value": `${result?.data?.MRP}`
+                            //"value": `${result?.data?.MRP}`
+                            "value": item.price
                         },
                         "quantity": {
                             "available": {
