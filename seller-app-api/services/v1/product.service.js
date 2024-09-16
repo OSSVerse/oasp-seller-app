@@ -1288,14 +1288,16 @@ class ProductService {
                         "price": {
                             "currency": "INR",
                             //"value": `${result?.data?.MRP}`
-                            "value": item.price
+                            "value": `${item.price}`
                         },
                         "quantity": {
                             "available": {
-                                "count": `${result?.data?.quantity}`
+                                //"count": `${result?.data?.quantity}`
+                                "count": 1
                             },
                             "maximum": {
-                                "count": `${result?.data?.maxAllowedQty}`
+                               // "count": `${result?.data?.maxAllowedQty}`
+                                "count": 1
                             }
                         }
                     }
