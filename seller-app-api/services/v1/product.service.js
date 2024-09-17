@@ -2,6 +2,7 @@ import HttpRequest from '../../utils/HttpRequest';
 import { getProducts, getUpdate, getSelect, getInit, getConfirm, getTrack, getSupport, getStatus, getCancel } from "../../utils/v1/schemaMapping";
 import { ConfirmRequest, InitRequest, SelectRequest } from "../../models";
 import logger from "../../lib/logger";
+import { v4 as uuidv4 } from 'uuid';
 
 var config = require('../../lib/config');
 const serverUrl = config.get("seller").serverUrl
@@ -1035,122 +1036,155 @@ class ProductService {
     }
 
 
+    // Init starts here
     async productInit(requestQuery) {
+        try {
+            //get search criteria
+            // const items = requestQuery.message.order.items
 
-        //get search criteria
-        // const items = requestQuery.message.order.items
+            // const initData = JSON.parse(JSON.stringify(requestQuery.retail_init[0]))//select first select request
+            const items = requestQuery.message.order.items
+            //const logisticData = requestQuery.logistics_on_init[0]
 
-        const initData = JSON.parse(JSON.stringify(requestQuery.retail_init[0]))//select first select request
-        const items = initData.message.order.items
-        const logisticData = requestQuery.logistics_on_init[0]
+            let qouteItems = []
+            let detailedQoute = []
+            let totalPrice = 0
 
-        let qouteItems = []
-        let detailedQoute = []
-        let totalPrice = 0
+            logger.log('info', "============ check-point 7 ======================");
+            let org = await this.getOrgForOndc(requestQuery.message.order.provider.id);
 
+            let paymentDetails = {
+                "@ondc/org/buyer_app_finder_fee_type": "Percent", //TODO: for transaction id keep record to track this details
+                "@ondc/org/buyer_app_finder_fee_amount": "3.0",
+                "@ondc/org/settlement_details": [
+                    {
+                        "settlement_counterparty": "seller-app",
+                        "settlement_phase": "sale-amount",
+                        "settlement_type": "neft",
+                        "settlement_bank_account_no": org.providerDetail.bankDetails.accNumber,
+                        "settlement_ifsc_code": org.providerDetail.bankDetails.IFSC,
+                        "beneficiary_name": org.providerDetail.bankDetails.accHolderName,
+                        "bank_name": org.providerDetail.bankDetails.bankName,
+                        "branch_name": org.providerDetail.bankDetails.branchName ?? "Pune"
+                    }
+                ]
 
-        let org = await this.getOrgForOndc(initData.message.order.provider.id);
+            }
 
-        let paymentDetails = {
-            "@ondc/org/buyer_app_finder_fee_type": "Percent", //TODO: for transaction id keep record to track this details
-            "@ondc/org/buyer_app_finder_fee_amount": "3.0",
-            "@ondc/org/settlement_details": [
-                {
-                    "settlement_counterparty": "seller-app",
-                    "settlement_phase": "sale-amount",
-                    "settlement_type": "neft",
-                    "settlement_bank_account_no": org.providerDetail.bankDetails.accNumber,
-                    "settlement_ifsc_code": org.providerDetail.bankDetails.IFSC,
-                    "beneficiary_name": org.providerDetail.bankDetails.accHolderName,
-                    "bank_name": org.providerDetail.bankDetails.bankName,
-                    "branch_name": org.providerDetail.bankDetails.branchName ?? "Pune"
+            logger.log('info', "============ check-point 8  ======================");
+            //select logistic based on criteria-> for now first one will be picked up
+            let deliveryCharges = {
+                "title": "Delivery charges",
+                "@ondc/org/title_type": "delivery",
+                // "@ondc/org/item_id": items[0].fulfillment_id,
+                "@ondc/org/item_id": "fullfillment_id_0",
+                "price": {
+                    // "currency": '' + logisticData.message.order.quote.price.currency,
+                    // "value": '' + logisticData.message.order.quote.price.value
+
+                    "currency": '' + "INR",
+                    "value": '' + "0"
                 }
-            ]
-
-        }
-
-        //select logistic based on criteria-> for now first one will be picked up
-        let deliveryCharges = {
-            "title": "Delivery charges",
-            "@ondc/org/title_type": "delivery",
-            "@ondc/org/item_id": items[0].fulfillment_id,
-            "price": {
-                "currency": '' + logisticData.message.order.quote.price.currency,
-                "value": '' + logisticData.message.order.quote.price.value
-            }
-        }//TODO: need to map all items in the catalog to find out delivery charges
+            }//TODO: need to map all items in the catalog to find out delivery charges
 
 
-        for (let item of items) {
-            let headers = {};
+            for (let item of items) {
+                let headers = {};
 
-            let qouteItemsDetails = {}
-            let httpRequest = new HttpRequest(
-                serverUrl,
-                `/api/v1/products/${item.id}/ondcGet`,
-                'get',
-                {},
-                headers
-            );
+                let qouteItemsDetails = {}
+                let httpRequest = new HttpRequest(
+                    `http://seller:3008`,
+                    `/api/v1/products/${item.id}/ondcGet`,
+                    'get',
+                    {},
+                    headers
+                );
 
-            let result = await httpRequest.send();
+                let result = await httpRequest.send();
+                logger.log('info', "============ check-point 9 ======================");
+                if (result?.data) {
 
-            if (result?.data) {
+                    let price
+                    let mrpVal = 0;
 
-                let price = result?.data?.MRP * item.quantity.count
-                totalPrice += parseInt(price)
-                item.price = { value: "" + price, currency: "INR" }
-            }
+                    // Check if MRP exists
+                    if (result.data && result.data.commonDetails && result.data.commonDetails.MRP !== undefined) {
+                        const mrpValue = result.data.commonDetails.MRP;
+                        mrpVal = mrpValue;
+                        const purchaseValue = result.data.commonDetails.purchasePrice;
+                        console.log("====MRP value=====", mrpValue);
+                        //logger.log("info", "Common Details: ", JSON.stringify(result.data.commonDetails, null, 2));
 
-            qouteItemsDetails = {
-                "@ondc/org/item_id": item.id,
-                "@ondc/org/item_quantity": {
-                    "count": item.quantity.count
-                },
-                "title": result?.data?.productName,
-                "@ondc/org/title_type": "item",
-                "price": item.price,
-                "item": {
-                    "price": { value: "" + result?.data?.MRP, currency: "INR" }
+                    } else {
+                        logger.log("warn", "MRP does not exist in commonDetails - undefined");
+                    }
+
+                    price = mrpVal
+                    totalPrice += price
+
+
+                    item.price = { value: "" + price, currency: "INR" }
+
                 }
+
+                logger.log('info', "============ check-point 10 ======================");
+                qouteItemsDetails = {
+                    "@ondc/org/item_id": item.id,
+                    "@ondc/org/item_quantity": {
+                        "count": 1
+                    },
+                    "title": result?.data?.commonDetails?.productName,
+                    "@ondc/org/title_type": "item",
+                    "price": item.price,
+                    "item": {
+                        "price": { value: "" + item.price.value, currency: "INR" }
+                    }
+                }
+
+                logger.log('info', "============ check-point 11 -item ===========", item);
+                item.fulfillment_id = result.data.commonDetails?.fulfilmentId
+                delete item.price
+                qouteItems.push(item)
+                detailedQoute.push(qouteItemsDetails)
             }
 
-            item.fulfillment_id = item.fulfillment_id
-            delete item.price
-            qouteItems.push(item)
-            detailedQoute.push(qouteItemsDetails)
+            logger.log('info', "============ check-point 12  ===========");
+            // totalPrice = parseInt(logisticData.message.order.quote.price.value) + parseInt(totalPrice)
+            totalPrice = parseInt(totalPrice)
+            let totalPriceObj = { value: "" + totalPrice, currency: "INR" }
+
+            detailedQoute.push(deliveryCharges);
+
+
+
+            requestQuery.message.order.payment = paymentDetails;
+            logger.log('info', "============ check-point 13  ===========");
+            const productData = await getInit({
+                qouteItems: qouteItems,
+                totalPrice: totalPriceObj,
+                detailedQoute: detailedQoute,
+                context: requestQuery.context,
+                message: requestQuery.message,
+                logisticData: {}
+            });
+
+            logger.log('info', "============ check-point 14  ===========");
+            let savedLogistics = new InitRequest()
+
+            savedLogistics.transactionId = requestQuery.context.transaction_id
+            savedLogistics.packaging = "0"//TODO: select packaging option
+            savedLogistics.providerId = requestQuery.message.order.provider.id
+            savedLogistics.selectedLogistics = {}
+            savedLogistics.logisticsTransactionId = uuidv4()
+            savedLogistics.initRequest = requestQuery
+            savedLogistics.onInitResponse = productData
+
+            await savedLogistics.save();
+            logger.log('info', "============ check-point 15  ===========");
+            return productData
+        } catch (e) {
+            console.log(e)
         }
-
-        totalPrice = parseInt(logisticData.message.order.quote.price.value) + parseInt(totalPrice)
-        let totalPriceObj = { value: "" + totalPrice, currency: "INR" }
-
-        detailedQoute.push(deliveryCharges);
-
-
-
-        initData.message.order.payment = paymentDetails;
-        const productData = await getInit({
-            qouteItems: qouteItems,
-            totalPrice: totalPriceObj,
-            detailedQoute: detailedQoute,
-            context: initData.context,
-            message: initData.message,
-            logisticData: initData.logisticData
-        });
-
-        let savedLogistics = new InitRequest()
-
-        savedLogistics.transactionId = initData.context.transaction_id
-        savedLogistics.packaging = "0"//TODO: select packaging option
-        savedLogistics.providerId = initData.message.order.provider.id
-        savedLogistics.selectedLogistics = logisticData
-        savedLogistics.logisticsTransactionId = logisticData.context.transaction_id
-        savedLogistics.initRequest = requestQuery.retail_init[0]
-        savedLogistics.onInitResponse = productData
-
-        await savedLogistics.save();
-
-        return productData
     }
 
 
@@ -1420,12 +1454,12 @@ class ProductService {
             logger.log('info', "============ check-point 10 ======== product data", productData);
             savedLogistics.transactionId = requestQuery.context.transaction_id;
             //savedLogistics.logisticsTransactionId = logisticProvider?.context?.transaction_id;
-            savedLogistics.logisticsTransactionId = "default-logisticsTransactionId";
+            savedLogistics.logisticsTransactionId = uuidv4();
             savedLogistics.packaging = "default"//TODO: select packaging option;
             savedLogistics.providerId = requestQuery.message.order.provider.id;
             //savedLogistics.selectedLogistics = logisticProvider;
             savedLogistics.selectedLogistics = "default - selectedLogistics";
-            savedLogistics.selectRequest = "default - selectRequest";
+            savedLogistics.selectRequest = requestQuery;
             savedLogistics.onSelectResponse = productData;
 
             await savedLogistics.save();

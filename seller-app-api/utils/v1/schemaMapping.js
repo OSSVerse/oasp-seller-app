@@ -7,17 +7,17 @@ const BPP_URI = config.get("sellerConfig").BPP_URI
 exports.getProducts = async (data) => {
 
     data.context.timestamp = new Date();
-    let bppDetails ={}
-    let bppProviders =[]
-    for(const org of data?.data){
-        let tags =[]
+    let bppDetails = {}
+    let bppProviders = []
+    for (const org of data?.data) {
+        let tags = []
         let productAvailable = []
-       // org.storeDetails.address.street = org.storeDetails.address.locality
-       // delete org.storeDetails.address.locality
-       // delete org.storeDetails.address.building
-       // delete org.storeDetails.address.country
-        for(let items of org.items){
-            let item =  {
+        // org.storeDetails.address.street = org.storeDetails.address.locality
+        // delete org.storeDetails.address.locality
+        // delete org.storeDetails.address.building
+        // delete org.storeDetails.address.country
+        for (let items of org.items) {
+            let item = {
                 "id": items._id,
                 "descriptor": {
                     "name": items.productName,
@@ -28,23 +28,23 @@ exports.getProducts = async (data) => {
                 },
                 "price": {
                     "currency": "INR",
-                    "value":  items.MRP+"",
-                    "maximum_value": items.MRP+""
+                    "value": items.MRP + "",
+                    "maximum_value": items.MRP + ""
                 },
                 "quantity": {
                     "available": {
                         "count": `${items.quantity}`
                     },
                     "maximum": {
-                        "count": (items.quantity<=items.maxAllowedQty)?`${items.quantity}`:`${items.maxAllowedQty}`
+                        "count": (items.quantity <= items.maxAllowedQty) ? `${items.quantity}` : `${items.maxAllowedQty}`
                     }
                 },
-                "category_id": items.productSubcategory1??"NA",
+                "category_id": items.productSubcategory1 ?? "NA",
                 // "location_id": org.storeDetails?.location._id??"0",
                 "fulfillment_id": '1',//Delivery
                 "matched": true,
-                "@ondc/org/returnable":  items.isReturnable??false,
-                "@ondc/org/cancellable":  items.isCancellable??false,
+                "@ondc/org/returnable": items.isReturnable ?? false,
+                "@ondc/org/cancellable": items.isCancellable ?? false,
                 "@ondc/org/available_on_cod": items.availableOnCod,
                 "@ondc/org/time_to_ship": "PT1H", //TODO: hard coded
                 "@ondc/org/seller_pickup_return": true,
@@ -54,168 +54,168 @@ exports.getProducts = async (data) => {
                     "net_quantity": items.packQty
                 },
                 "@ondc/org/statutory_reqs_packaged_commodities":
-                    {
-                        "manufacturer_or_packer_name":items.manufacturerName,
-                        "manufacturer_or_packer_address":items.manufacturerOrPackerAddress,
-                            "common_or_generic_name_of_commodity":items.productName,
-                            "net_quantity_or_measure_of_commodity_in_pkg":items.packQty,
-                        "month_year_of_manufacture_packing_import":items.manufacturedDate
-                    },
+                {
+                    "manufacturer_or_packer_name": items.manufacturerName,
+                    "manufacturer_or_packer_address": items.manufacturerOrPackerAddress,
+                    "common_or_generic_name_of_commodity": items.productName,
+                    "net_quantity_or_measure_of_commodity_in_pkg": items.packQty,
+                    "month_year_of_manufacture_packing_import": items.manufacturedDate
+                },
                 "@ondc/org/statutory_reqs_prepackaged_food":
-                    {
-                        "nutritional_info":items.nutritionalInfo,
-                        "additives_info":items.additiveInfo,
-                        "brand_owner_FSSAI_license_no":items.brandOwnerFSSAILicenseNo??"NA",
-                        "other_FSSAI_license_no":items.importerFSSAILicenseNo??"NA",
-                        "importer_FSSAI_license_no":items.importerFSSAILicenseNo??"NA"
-                    },
+                {
+                    "nutritional_info": items.nutritionalInfo,
+                    "additives_info": items.additiveInfo,
+                    "brand_owner_FSSAI_license_no": items.brandOwnerFSSAILicenseNo ?? "NA",
+                    "other_FSSAI_license_no": items.importerFSSAILicenseNo ?? "NA",
+                    "importer_FSSAI_license_no": items.importerFSSAILicenseNo ?? "NA"
+                },
                 "tags":
-                    {
-                        "veg":items.isVegetarian?'yes':'no',
-                        "non_veg":items.isVegetarian?'no':'yes'
-                    }
+                {
+                    "veg": items.isVegetarian ? 'yes' : 'no',
+                    "non_veg": items.isVegetarian ? 'no' : 'yes'
+                }
 
-        }
+            }
 
-               tags.push(
+            tags.push(
                 {
                     "code": "serviceability",
                     "list": "",
-                  /*  "list": [
-                        {
-                            "code": "location",
-                            "value": org.storeDetails?.location._id??"0"
-                        },
-                        {
-                            "code": "category",
-                            "value": items.productSubcategory1??"NA"
-                        },
-                        {
-                            "code": "type",
-                            "value": "12" //Enums are "10" - hyperlocal, "11" - intercity, "12" - pan-India
-
-                        },
-                        {
-                            "code": "val",
-                            "value": "IND"
-                        },
-                        {
-                            "code": "unit",
-                            "value": "country"
-                        }
-                    ]
-                        */
+                    /*  "list": [
+                          {
+                              "code": "location",
+                              "value": org.storeDetails?.location._id??"0"
+                          },
+                          {
+                              "code": "category",
+                              "value": items.productSubcategory1??"NA"
+                          },
+                          {
+                              "code": "type",
+                              "value": "12" //Enums are "10" - hyperlocal, "11" - intercity, "12" - pan-India
+  
+                          },
+                          {
+                              "code": "val",
+                              "value": "IND"
+                          },
+                          {
+                              "code": "unit",
+                              "value": "country"
+                          }
+                      ]
+                          */
                 })
             productAvailable.push(item)
         }
 
         bppDetails = {
             "name": org.name,
-                "symbol": org.storeDetails.logo,
-                "short_desc": "", //TODO: mark this for development
-                "long_desc": "",
-                "images": [
-                    org.storeDetails.logo
+            "symbol": org.storeDetails.logo,
+            "short_desc": "", //TODO: mark this for development
+            "long_desc": "",
+            "images": [
+                org.storeDetails.logo
             ]
         },
-        bppProviders.push(            {
-            "id": org._id,
-            "descriptor": {
-                "name": org.name,
-                "symbol": org.storeDetails.logo,
-                "short_desc": "",
-                "long_desc": "",
-                "images": [
-                    org.storeDetails.logo
-                ]
-            },
-            "time":
-                {
-                    "label":"enable",
-                    "timestamp":data.context.timestamp
+            bppProviders.push({
+                "id": org._id,
+                "descriptor": {
+                    "name": org.name,
+                    "symbol": org.storeDetails.logo,
+                    "short_desc": "",
+                    "long_desc": "",
+                    "images": [
+                        org.storeDetails.logo
+                    ]
                 },
-            "locations": [
+                "time":
                 {
-                    //"id": org.storeDetails?.location._id??"0", //org.storeDetails.location._id
-                    "id": "123-123",
-                    "gps": `${org.storeDetails?.location?.lat??"0"},${org.storeDetails?.location?.long??"0"}`,
-                    "address":{
-                        "city": org.storeDetails?.address?.city??"NA",
-                        "state": org.storeDetails?.address?.state??"NA",
-                        "area_code": org.storeDetails?.address?.area_code??"NA",
-                        "street": org.storeDetails?.address?.street??"NA",
-                        "locality":org.storeDetails?.address?.locality??"NA"
-                    },
-                    "time":
+                    "label": "enable",
+                    "timestamp": data.context.timestamp
+                },
+                "locations": [
+                    {
+                        //"id": org.storeDetails?.location._id??"0", //org.storeDetails.location._id
+                        "id": "123-123",
+                        "gps": `${org.storeDetails?.location?.lat ?? "0"},${org.storeDetails?.location?.long ?? "0"}`,
+                        "address": {
+                            "city": org.storeDetails?.address?.city ?? "NA",
+                            "state": org.storeDetails?.address?.state ?? "NA",
+                            "area_code": org.storeDetails?.address?.area_code ?? "NA",
+                            "street": org.storeDetails?.address?.street ?? "NA",
+                            "locality": org.storeDetails?.address?.locality ?? "NA"
+                        },
+                        "time":
                         {
-                            "days":org.storeDetails?.storeTiming?.days?.join(",")??
+                            "days": org.storeDetails?.storeTiming?.days?.join(",") ??
                                 "1,2,3,4,5,6,7",
                             "schedule": {
-                                "holidays": org.storeDetails?.storeTiming?.schedule?.holidays?? [],
-                                "frequency": org.storeDetails?.storeTiming?.schedule?.frequency??"",
-                                "times": org.storeDetails?.storeTiming?.schedule?.times?.map((str)=>{
-                                    return str.replace(':','')
-                                })??[]
+                                "holidays": org.storeDetails?.storeTiming?.schedule?.holidays ?? [],
+                                "frequency": org.storeDetails?.storeTiming?.schedule?.frequency ?? "",
+                                "times": org.storeDetails?.storeTiming?.schedule?.times?.map((str) => {
+                                    return str.replace(':', '')
+                                }) ?? []
                             },
                             "range": {
-                                "start": org.storeDetails?.storeTiming?.range?.start?.replace(':','')??"0000",
-                                "end": org.storeDetails?.storeTiming?.range?.end?.replace(':','')??"2300"
+                                "start": org.storeDetails?.storeTiming?.range?.start?.replace(':', '') ?? "0000",
+                                "end": org.storeDetails?.storeTiming?.range?.end?.replace(':', '') ?? "2300"
                             }
-                    },
-                    "circle":
+                        },
+                        "circle":
                         {
-                            "gps":`${org.storeDetails?.location?.lat??"0"},${org.storeDetails?.location?.long??"0"}`,
-                            "radius":org.storeDetails?.radius??
-                                {
-                                    "unit":"km",
-                                    "value":"3"
-                                }
-                        }
-                }
-            ],
-            "ttl": "PT24H",
-            "items": productAvailable,
-            "fulfillments":
-                [
-                    {
-                        "contact":
+                            "gps": `${org.storeDetails?.location?.lat ?? "0"},${org.storeDetails?.location?.long ?? "0"}`,
+                            "radius": org.storeDetails?.radius ??
                             {
-                                 //"phone":org.storeDetails.supportDetails.mobile,
-                                 "phone":"8197511885",
-                                 // "email":org.storeDetails.supportDetails.email
-                                 "email":"neeraj.kumar@gmail.com"
+                                "unit": "km",
+                                "value": "3"
                             }
+                        }
                     }
                 ],
-            "tags":tags,
-            "@ondc/org/fssai_license_no": org.FSSAI
-        })
+                "ttl": "PT24H",
+                "items": productAvailable,
+                "fulfillments":
+                    [
+                        {
+                            "contact":
+                            {
+                                //"phone":org.storeDetails.supportDetails.mobile,
+                                "phone": "8197511885",
+                                // "email":org.storeDetails.supportDetails.email
+                                "email": "neeraj.kumar@gmail.com"
+                            }
+                        }
+                    ],
+                "tags": tags,
+                "@ondc/org/fssai_license_no": org.FSSAI
+            })
 
     }
 
     //set product items to schema
 
     let context = data.context
-    context.bpp_id =BPP_ID
-    context.bpp_uri =BPP_URI
-    context.action ='on_search'
+    context.bpp_id = BPP_ID
+    context.bpp_uri = BPP_URI
+    context.action = 'on_search'
     const schema = {
-        "context": {...context},
+        "context": { ...context },
         "message": {
             "catalog": {
                 "bpp/fulfillments"://TODO: mark this for development- set provider level
                     [
                         {
-                            "id":"1",
-                            "type":"Delivery"
+                            "id": "1",
+                            "type": "Delivery"
                         },
                         {
-                            "id":"2",
-                            "type":"Self-Pickup"
+                            "id": "2",
+                            "type": "Self-Pickup"
                         },
                         {
-                            "id":"3",
-                            "type":"Delivery and Self-Pickup"
+                            "id": "3",
+                            "type": "Delivery and Self-Pickup"
                         }
                     ],
                 "bpp/descriptor": bppDetails,
@@ -236,43 +236,45 @@ exports.getProducts = async (data) => {
 
 exports.getSelect = async (data) => {
 
-    try{
+    try {
         logger.log('info', `[Schema mapping ] build retail select request from :`, data);
 
         let productAvailable = []
         //set product items to schema
 
         let context = data.context
-        context.bpp_id =BPP_ID
-        context.bpp_uri =BPP_URI
-        context.action ='on_select'
+        //context.bpp_id = BPP_ID
+        //context.bpp_uri = BPP_URI
+        context.action = 'on_select'
         let error
-        if(!data.isQtyAvailable){
+        if (!data.isQtyAvailable) {
             error = {
                 error:
-                    {
-                        type:"DOMAIN-ERROR",
-                        code:"40002"
-                    }}
+                {
+                    type: "DOMAIN-ERROR",
+                    code: "40002"
+                }
+            }
 
         }
-        if(!data.isServiceable){
-            error = {
-                error:
-                    {
-                        type:"DOMAIN-ERROR",
-                        code:"30009"
-                    }}
-
-        }
+        /* if (!data.isServiceable) {
+             error = {
+                 error:
+                 {
+                     type: "DOMAIN-ERROR",
+                     code: "30009"
+                 }
+             }
+ 
+         }*/
         const schema = {
-            "context": {...context,timestamp: new Date()},
+            "context": { ...context, timestamp: new Date() },
             "message": {
                 "order": {
-                    "provider":data.order.provider,
-                    "fulfillments":data.order.fulfillments,
+                    "provider": data.order.provider,
+                    "fulfillments": data.order.fulfillments,
                     "quote": {
-                        "price":data.totalPrice,
+                        "price": data.totalPrice,
                         "breakup": data.detailedQoute,
                         "ttl": "P1D"
                     },
@@ -280,14 +282,14 @@ exports.getSelect = async (data) => {
                 }
             }
         }
-        if(error){
+        if (error) {
             schema.error = error.error
         }
 
         logger.log('info', `[Schema mapping ] after build retail select request :`, schema);
 
         return schema
-    }catch (e) {
+    } catch (e) {
         console.log(e)
     }
 
@@ -299,26 +301,28 @@ exports.getInit = async (data) => {
     let productAvailable = []
     //set product items to schema
 
-    console.log("data.message.order.provider",data.message.order)
-    console.log("data.message.order.provider_location",data.message.order.provider_location)
-    console.log("data.message.order.billing",data.message.order.billing)
-    console.log("data.message.order.fulfillments",data.message.order.fulfillments)
-    console.log("data.message.order.payment",data.message.order.payment)
+    console.log("data.message.order.provider", data.message.order)
+    console.log("data.message.order.provider_location", data?.message?.order?.provider_location || "provider location")
+    console.log("data.message.order.billing", data.message.order.billing)
+    console.log("data.message.order.fulfillments", data.message.order.fulfillments || [])
+    console.log("data.message.order.payment", data.message.order.payment)
     let context = data.context
-    context.bpp_id =BPP_ID
-    context.bpp_uri =BPP_URI
-    context.action ='on_init'
+    // context.bpp_id = BPP_ID
+    // context.bpp_uri = BPP_URI
+    context.action = 'on_init'
     const schema = {
-        "context": {...context,timestamp:new Date()},
-        "message":  {
+        "context": { ...context, timestamp: new Date() },
+        "message": {
             "order": {
-                "provider":data.message.order.provider,
-                "provider_location": {id:data.message.order.provider.locations[0].id},
+                "provider": data.message.order.provider,
+                // "provider_location": {id:data.message.order.provider.locations[0].id},
+                "provider_location": {},
                 "items": data.qouteItems,
                 "billing": data.message.order.billing,
-                "fulfillments": data.message.order.fulfillments,
-                "quote":{
-                    "price":data.totalPrice,
+                //"fulfillments": data.message.order.fulfillments,
+                "fulfillments": data?.message?.order?.fulfillments || [],
+                "quote": {
+                    "price": data.totalPrice,
                     "breakup": data.detailedQoute,
                     "ttl": "P1D"
                 },
@@ -344,31 +348,32 @@ exports.getStatus = async (data) => {
     // console.log("data.message.order.fulfillments",data.message.order.fulfillments)
     // console.log("data.message.order.payment",data.message.order.payment)
     let context = data.context
-    context.bpp_id =BPP_ID
-    context.bpp_uri =BPP_URI
-    context.action ='on_status'
+    context.bpp_id = BPP_ID
+    context.bpp_uri = BPP_URI
+    context.action = 'on_status'
 
-    console.log("status------context>",context)
+    console.log("status------context>", context)
     const schema = {
-        "context": {...context,timestamp:new Date()},
-        "message":  {
+        "context": { ...context, timestamp: new Date() },
+        "message": {
             "order": {
-                "provider":{"id":data.updateOrder.organization,        "locations":
+                "provider": {
+                    "id": data.updateOrder.organization, "locations":
                         [
                             {
-                                "id":"641599b84d433a4fbf8f40bb" //TODO: Hard coded
+                                "id": "641599b84d433a4fbf8f40bb" //TODO: Hard coded
                             }
                         ]
                 },
-                "state":data.updateOrder.state,
+                "state": data.updateOrder.state,
                 "items": data.updateOrder.items,
                 "billing": data.updateOrder.billing,
                 "fulfillments": data.updateOrder.fulfillments,
-                "quote":  data.updateOrder.quote,
+                "quote": data.updateOrder.quote,
                 "payment": data.updateOrder.payment,
-                 "id" :  data.updateOrder.order_id,
-                 "created_at":context.timestamp,
-                 "updated_at":context.timestamp,
+                "id": data.updateOrder.order_id,
+                "created_at": context.timestamp,
+                "updated_at": context.timestamp,
             }
         }
     }
@@ -390,21 +395,21 @@ exports.getUpdate = async (data) => {
     // console.log("data.message.order.fulfillments",data.message.order.fulfillments)
     // console.log("data.message.order.payment",data.message.order.payment)
     let context = data.context
-    context.bpp_id =BPP_ID
-    context.bpp_uri =BPP_URI
-    context.action ='on_update'
+    context.bpp_id = BPP_ID
+    context.bpp_uri = BPP_URI
+    context.action = 'on_update'
     const schema = {
-        "context": {...context,timestamp:new Date()},
-        "message":  {
+        "context": { ...context, timestamp: new Date() },
+        "message": {
             "order": {
-                "provider":{"id":data.updateOrder.organization},
-                "state":data.updateOrder.state,
+                "provider": { "id": data.updateOrder.organization },
+                "state": data.updateOrder.state,
                 "items": data.updateOrder.items,
                 "billing": data.updateOrder.billing,
                 "fulfillments": data.updateOrder.fulfillments,
-                "quote":  data.updateOrder.quote,
+                "quote": data.updateOrder.quote,
                 "payment": data.updateOrder.payment,
-                 "id" :  data.updateOrder.id
+                "id": data.updateOrder.id
             }
         }
     }
@@ -426,16 +431,16 @@ exports.getCancel = async (data) => {
     // console.log("data.message.order.fulfillments",data.message.order.fulfillments)
     // console.log("data.message.order.payment",data.message.order.payment)
     let context = data.context
-    context.bpp_id =BPP_ID
-    context.bpp_uri =BPP_URI
-    context.action ='on_cancel'
+    context.bpp_id = BPP_ID
+    context.bpp_uri = BPP_URI
+    context.action = 'on_cancel'
     const schema = {
-        "context": {...context,timestamp:new Date()},
-        "message":  {
+        "context": { ...context, timestamp: new Date() },
+        "message": {
             "order": {
-                "state":data.updateOrder.state,
-                "id" :  data.updateOrder.id,
-                "tags":{cancellation_reason_id:data.updateOrder.cancellation_reason_id}
+                "state": data.updateOrder.state,
+                "id": data.updateOrder.id,
+                "tags": { cancellation_reason_id: data.updateOrder.cancellation_reason_id }
             }
         }
     }
@@ -452,14 +457,14 @@ exports.getTrack = async (data) => {
     //set product items to schema
 
     let context = data.context
-    context.bpp_id =BPP_ID
-    context.bpp_uri =BPP_URI
-    context.action ='on_track'
+    context.bpp_id = BPP_ID
+    context.bpp_uri = BPP_URI
+    context.action = 'on_track'
     const schema = {
-        "context": {...context,timestamp:new Date()},
-        "message":  {
+        "context": { ...context, timestamp: new Date() },
+        "message": {
             "tracking":
-                    data.logisticData.message.tracking
+                data.logisticData.message.tracking
 
         }
     }
@@ -472,12 +477,12 @@ exports.getSupport = async (data) => {
     //set product items to schema
 
     let context = data.context
-    context.bpp_id =BPP_ID
-    context.bpp_uri =BPP_URI
-    context.action ='on_support'
+    context.bpp_id = BPP_ID
+    context.bpp_uri = BPP_URI
+    context.action = 'on_support'
     const schema = {
-        "context": {...context,timestamp:new Date()},
-        "message":  data.logisticData.message
+        "context": { ...context, timestamp: new Date() },
+        "message": data.logisticData.message
 
     }
     return schema
@@ -488,24 +493,24 @@ exports.getConfirm = async (data) => {
     let productAvailable = []
     //set product items to schema
     let context = data.context
-    context.timestamp=new Date()
-    context.bpp_id =BPP_ID
-    context.bpp_uri =BPP_URI
-    context.action ='on_confirm'
+    context.timestamp = new Date()
+    context.bpp_id = BPP_ID
+    context.bpp_uri = BPP_URI
+    context.action = 'on_confirm'
     const schema = {
-        "context": {...context},
-        "message":  {
+        "context": { ...context },
+        "message": {
             "order": {
-                "id":data.message.order.order_id,
-                "state":"Created",
+                "id": data.message.order.order_id,
+                "state": "Created",
                 "provider": data.message.order.provider,
                 "items": data.qouteItems,
                 "billing": data.message.order.billing,
                 "fulfillments": data.message.order.fulfillments,
-                "quote":data.message.order.quote,
+                "quote": data.message.order.quote,
                 "payment": data.message.order.payment,
-                "created_at":data.message.order.created_at, //TODO: this needs to be persisted
-                "updated_at":data.message.order.created_at
+                "created_at": data.message.order.created_at, //TODO: this needs to be persisted
+                "updated_at": data.message.order.created_at
             }
         }
     }
