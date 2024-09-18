@@ -726,8 +726,8 @@ class OndcService {
                         "billing": {
                             ...payload.message.order.billing,
                             "tax_number": org.providerDetail.GSTN.GSTN ?? "27ACTPC1936E2ZN", //FIXME: take GSTN no
-                            "phone": org?.providerDetail?.storeDetails?.supportDetails?.mobile || "OASP support mobile", //FIXME: take provider details
-                            "email": org?.providerDetail?.storeDetails?.supportDetails?.email || "OASP support email", //FIXME: take provider details
+                            "phone": org?.providerDetail?.contactMobile, //FIXME: take provider details
+                            "email": org?.providerDetail?.contactEmail, //FIXME: take provider details
                             "created_at": contextTimestamp,
                             "updated_at": contextTimestamp
                         }, //TODO: pass valid GST number from seller
@@ -738,7 +738,7 @@ class OndcService {
                 }
 
             }
-            logger.log("info", "========= check-point - 2  ==========");
+            logger.log("info", "========= check-point - 2 confirmRequest ==========", confirmRequest);
             logger.info('info', `[Ondc Service] post init request :confirmRequestconfirmRequestconfirmRequestconfirmRequestconfirmRequestconfirmRequest`, confirmRequest);
             this.postConfirmRequest(confirmRequest, logisticsMessageId, selectMessageId)
             //}, 10000); //TODO move to config
