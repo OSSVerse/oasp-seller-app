@@ -514,7 +514,7 @@ class OndcService {
             // let logisticsResponse = await this.getLogistics(logisticsMessageId, initMessageId, 'init')
 
             //2. if data present then build select response
-           // logger.log('info', `[Ondc Service] build init request - get logistics response :`, logisticsResponse);
+            // logger.log('info', `[Ondc Service] build init request - get logistics response :`, logisticsResponse);
             let selectResponse = await productService.productInit(selectRequest)
 
             //3. post to protocol layer
@@ -558,6 +558,14 @@ class OndcService {
         try {
             //const {criteria = {}, payment = {}} = req || {};
 
+            const bcrypt = require('bcryptjs');
+
+            const orderData = JSON.stringify(payload.message.order);
+            const hash = await bcrypt.hash(orderData, 10); // Adjust the salt rounds as needed
+
+            const orderID = `order-${hash}`;
+            console.log("=========orderID-hash===========", orderID);
+
             const selectRequest = await SelectRequest.findOne({
                 where: {
                     transactionId: payload.context.transaction_id,
@@ -567,6 +575,7 @@ class OndcService {
                     ['createdAt', 'DESC'],
                 ]
             })
+
 
             const initRequest = await InitRequest.findOne({
                 where: {
@@ -578,7 +587,8 @@ class OndcService {
                 ]
             })
 
-            const logistics = selectRequest.selectedLogistics;
+
+            //  const logistics = selectRequest.selectedLogistics;
             const order = payload.message.order;
             const selectMessageId = payload.context.message_id;
             const logisticsMessageId = uuidv4(); //TODO: in future this is going to be array as packaging for single select request can be more than one
@@ -587,7 +597,7 @@ class OndcService {
 
             console.log("org details ---", org)
             let storeLocationEnd = {}
-            if (org.providerDetail.storeDetails) {
+            if (org?.providerDetail?.storeDetails?.location) {
                 storeLocationEnd = {
                     location: {
                         gps: `${org.providerDetail.storeDetails.location.lat},${org.providerDetail.storeDetails.location.long}`,
@@ -615,29 +625,29 @@ class OndcService {
 
             // const logisticsOrderId = uuidv4();
 
-            let end = { ...order.fulfillments[0].end }
+            // let end = { ...order.fulfillments[0].end }
 
-            end.location.address.locality = end.location.address.locality ?? end.location.address.street
-            end.person = { name: end.location.address.name }
+            // end.location.address.locality = end.location.address.locality ?? end.location.address.street
+            // end.person = { name: end.location.address.name }
 
             //const isInvalidItem =false
             let itemDetails = []
             for (const items of payload.message.order.items) {
                 let item = await productService.getForOndc(items.id)
-
+                logger.log("info", "========= check-point - 1 item details =====", item);
                 let details = {
                     "descriptor": {
-                        "name": item.productName
+                        "name": item.commonDetails.productName
                     },
                     "price": {
                         "currency": "INR",
-                        "value": "" + item.MRP
+                        "value": "" + item.commonDetails.MRP
                     },
-                    "category_id": item.productCategory,
+                    "category_id": item.commonDetails.productCategory,
                     "quantity": {
-                        "count": items.quantity.count,
+                        "count": 1,
                         "measure": { //TODO: hard coded
-                            "unit": "Kilogram",
+                            "unit": "Unit-count",
                             "value": 1
                         }
                     }
@@ -646,22 +656,23 @@ class OndcService {
             }
 
 
-            let deliveryType = selectRequest.selectedLogistics.message.catalog['bpp/providers'][0].items.find((element) => { return element.category_id === config.get("sellerConfig").LOGISTICS_DELIVERY_TYPE });
-
+            // let deliveryType = selectRequest.selectedLogistics.message.catalog['bpp/providers'][0].items.find((element) => { return element.category_id === config.get("sellerConfig").LOGISTICS_DELIVERY_TYPE });
+            logger.log("info", "========= check-point - 1.1 order ================", order);
             const contextTimestamp = new Date()
+            //const orderID = uuidv4();
             const confirmRequest = {
                 "context": {
-                    "domain": "nic2004:60232",
-                    "action": "confirm",
+                    "domain": payload.context.domain,
+                    "action": payload.context.action,
                     "core_version": "1.1.0",
-                    "bap_id": config.get("sellerConfig").BPP_ID,
-                    "bap_uri": config.get("sellerConfig").BPP_URI,
-                    "bpp_id": logistics.context.bpp_id,//STORED OBJECT
-                    "bpp_uri": logistics.context.bpp_uri, //STORED OBJECT
-                    "transaction_id": initRequest.logisticsTransactionId,
-                    "message_id": logisticsMessageId,
-                    "city": "std:080",
-                    "country": "IND",
+                    "bap_id": payload.context.bap_id,
+                    "bap_uri": payload.context.bap_uri,
+                    "bpp_id": payload.context.bpp_id,//STORED OBJECT
+                    "bpp_uri": payload.context.bpp_uri, //STORED OBJECT
+                    "transaction_id": payload.context.transaction_id,
+                    "message_id": payload.context.message_id,
+                    "city": payload.context.location.city.code,
+                    "country": payload.context.location.country.code,
                     "timestamp": contextTimestamp
                 },
                 "message": {
@@ -673,27 +684,29 @@ class OndcService {
                                     name: org.providerDetail.name
                                 },
                                 "address": {
-                                    area_code: org.providerDetail.storeDetails.address.area_code,
+                                    area_code: org?.providerDetail?.storeDetails?.address?.area_code || "OASP area_code",
                                     name: org.providerDetail.name,
-                                    building: org.providerDetail.storeDetails.address.building,
-                                    locality: org.providerDetail.storeDetails.address.locality,
-                                    city: org.providerDetail.storeDetails.address.city,
-                                    state: org.providerDetail.storeDetails.address.state,
-                                    country: org.providerDetail.storeDetails.address.country
+                                    building: org?.providerDetail?.storeDetails?.address?.building || "OASP building",
+                                    locality: org?.providerDetail?.storeDetails?.address?.locality || "OASP locality",
+                                    city: org?.providerDetail?.storeDetails?.address?.city || "OASP city",
+                                    state: org?.providerDetail?.storeDetails?.address?.state || "OASP state",
+                                    country: org?.providerDetail?.storeDetails?.address?.country || "OASP country"
                                 }
                             },
                             "order": {
-                                "id": order.id,
+                                //"id": order?.id || "order-id-dummy",
+                                "id": orderID,
                                 "weight": {//TODO: hard coded
-                                    "unit": "Kilogram",
-                                    "value": 10
+                                    "unit": "N/A",
+                                    "value": 0
                                 }
                             }
                         },
-                        "id": order.id,
-                        "items": [deliveryType], //TODO: fix this map to right item id from select request
-                        "provider": initRequest.selectedLogistics.message.order.provider,
-                        "fulfillments": [{
+                        "id": orderID,
+                        "items": itemDetails, //TODO: fix this map to right item id from select request
+                        "provider": initRequest.dataValues.onInitResponse.message.order.provider,
+                        "fulfillments": [],
+                        /*"fulfillments": [{
                             "id": order.fulfillments[0].id,
                             "type": "Prepaid",
                             "start": storeLocationEnd,
@@ -701,18 +714,20 @@ class OndcService {
                             "tags": {
                                 "@ondc/org/order_ready_to_ship": "no" //TODO: hard coded
                             }
-                        }],
-                        "quote": initRequest.selectedLogistics.message.order.quote,
-                        "payment": { //TODO: hard coded
-                            "type": "ON-ORDER",
-                            "collected_by": "BAP",
-                            "@ondc/org/settlement_details": []
-                        },
+                        }],*/
+                        //"quote": initRequest.selectedLogistics.message.order.quote,
+                        "quote": initRequest.dataValues.onInitResponse.message.order.quote,
+                        /* "payment": { //TODO: hard coded
+                             "type": "ON-ORDER",
+                             "collected_by": "BAP",
+                             "@ondc/org/settlement_details": []
+                         },*/
+                        "payment": initRequest.dataValues.onInitResponse.message.order.payment,
                         "billing": {
                             ...payload.message.order.billing,
                             "tax_number": org.providerDetail.GSTN.GSTN ?? "27ACTPC1936E2ZN", //FIXME: take GSTN no
-                            "phone": org.providerDetail.storeDetails.supportDetails.mobile, //FIXME: take provider details
-                            "email": org.providerDetail.storeDetails.supportDetails.email, //FIXME: take provider details
+                            "phone": org?.providerDetail?.storeDetails?.supportDetails?.mobile || "OASP support mobile", //FIXME: take provider details
+                            "email": org?.providerDetail?.storeDetails?.supportDetails?.email || "OASP support email", //FIXME: take provider details
                             "created_at": contextTimestamp,
                             "updated_at": contextTimestamp
                         }, //TODO: pass valid GST number from seller
@@ -723,12 +738,15 @@ class OndcService {
                 }
 
             }
+            logger.log("info", "========= check-point - 2  ==========");
             logger.info('info', `[Ondc Service] post init request :confirmRequestconfirmRequestconfirmRequestconfirmRequestconfirmRequestconfirmRequest`, confirmRequest);
             this.postConfirmRequest(confirmRequest, logisticsMessageId, selectMessageId)
             //}, 10000); //TODO move to config
 
             return { status: "ACK" }
         } catch (err) {
+            console.log(err);
+            console.error("Line number:", err.lineNumber);
             throw err;
         }
     }
@@ -738,31 +756,32 @@ class OndcService {
 
         try {
             //1. post http to protocol/logistics/v1/search
-
-            try {
-
-                let headers = {};
-                let httpRequest = new HttpRequest(
-                    config.get("sellerConfig").BPP_URI,
-                    `/protocol/logistics/v1/confirm`,
-                    'POST',
-                    searchRequest,
-                    headers
-                );
-
-                await httpRequest.send();
-
-            } catch (e) {
-                logger.error('error', `[Ondc Service] post http select response : `, e);
-                return e
-            }
-
+            /*
+                        try {
+            
+                            let headers = {};
+                            let httpRequest = new HttpRequest(
+                                config.get("sellerConfig").BPP_URI,
+                                `/protocol/logistics/v1/confirm`,
+                                'POST',
+                                searchRequest,
+                                headers
+                            );
+            
+                            await httpRequest.send();
+            
+                        } catch (e) {
+                            logger.error('error', `[Ondc Service] post http select response : `, e);
+                            return e
+                        }
+            */
             //2. wait async to fetch logistics responses
 
             //async post request
             setTimeout(() => {
                 logger.log('info', `[Ondc Service] search logistics payload - timeout : param :`, searchRequest);
-                this.buildConfirmRequest(logisticsMessageId, selectMessageId)
+                logger.log("info", "========= check-point - 3  ==========");
+                this.buildConfirmRequest(searchRequest, logisticsMessageId, selectMessageId)
             }, 10000); //TODO move to config
         } catch (e) {
             logger.error('error', `[Ondc Service] post http select response : `, e);
@@ -771,27 +790,29 @@ class OndcService {
     }
 
 
-    async buildConfirmRequest(logisticsMessageId, initMessageId) {
+    async buildConfirmRequest(searchRequest, logisticsMessageId, initMessageId) {
 
         try {
             //1. look up for logistics
-            let logisticsResponse = await this.getLogistics(logisticsMessageId, initMessageId, 'confirm')
+            //let logisticsResponse = await this.getLogistics(logisticsMessageId, initMessageId, 'confirm')
             //2. if data present then build select response
 
-            let selectResponse = await productService.productConfirm(logisticsResponse)
+            logger.log("info", "========= check-point - 4  ==========");
+            let selectResponse = await productService.productConfirm(searchRequest)
 
+            logger.log("info", "========= check-point - N  ==========");
             //3. post to protocol layer
             await this.postConfirmResponse(selectResponse);
 
 
             //4. trigger on_status call to BAP
-            const confirmRequest = logisticsResponse.retail_confirm[0]//select first select request
-            const context = { ...selectResponse.context, action: 'on_status', timestamp: new Date(), message_id: uuidv4() }
-            const orderId = confirmRequest.message.order.order_id
-
-            console.log("context--->", context)
-            await this.triggerOnStatus(context, orderId);
-
+            /* const confirmRequest = logisticsResponse.retail_confirm[0]//select first select request
+                        const context = { ...selectResponse.context, action: 'on_status', timestamp: new Date(), message_id: uuidv4() }
+                        const orderId = confirmRequest.message.order.order_id
+            
+                        console.log("context--->", context)
+                        await this.triggerOnStatus(context, orderId);
+            */
         } catch (e) {
             console.log(e)
             return e
@@ -819,14 +840,16 @@ class OndcService {
 
             let headers = {};
             let httpRequest = new HttpRequest(
-                config.get("sellerConfig").BPP_URI,
-                `/protocol/v1/on_confirm`,
+                //config.get("sellerConfig").BPP_URI,
+                `http://openfort-oasp-client.ossverse.com`,
+                `/on_confirm`,
                 'POST',
                 confirmResponse,
                 headers
             );
 
             console.log(httpRequest)
+            console.log("==========on_confirm response======", confirmResponse)
 
             let result = await httpRequest.send();
 

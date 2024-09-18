@@ -886,9 +886,10 @@ class ProductService {
         //get search criteria
         // const items = requestQuery.message.order.items
 
-        let confirmRequest = JSON.parse(JSON.stringify(requestQuery.retail_confirm[0]))//select first select request
+
+        let confirmRequest = JSON.parse(JSON.stringify(requestQuery))//select first select request
         const items = confirmRequest.message.order.items
-        const logisticData = requestQuery.logistics_on_confirm[0]
+        //const logisticData = requestQuery.logistics_on_confirm[0]
 
         //let qouteItems = []
         // let detailedQoute = []
@@ -898,18 +899,19 @@ class ProductService {
 
         let confirmData = confirmRequest.message.order
 
+        logger.log("info", "========= check-point - 5  ==========");
         let itemList = []
         let qouteItems = confirmRequest.message.order.items.map((item) => {
             // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
-            item.fulfillment_id = logisticData.message.order.fulfillments[0].id
+            //  item.fulfillment_id = logisticData.message.order.fulfillments[0].id
             delete item.state
             return item;
         });
 
         let breakup = confirmData.quote.breakup
 
-        let updatedBreakup = []
-        for (let item of breakup) {
+        let updatedBreakup = breakup
+        /*for (let item of breakup) {
             // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
             if (item['@ondc/org/title_type'] === 'item') {
                 const product = await this.getForOndc(item['@ondc/org/item_id'])
@@ -921,7 +923,7 @@ class ProductService {
                 };
             }
             updatedBreakup.push(item);
-        };
+        };*/
 
         confirmData.quote.breakup = updatedBreakup;
         confirmRequest.message.order.quote.breakup = updatedBreakup;
@@ -929,10 +931,11 @@ class ProductService {
         console.log("qouteItems-->>>>breakup--", breakup)
         //confirmRequest.message.order.items = qouteItems;
 
+        logger.log("info", "========= check-point - 6  ==========");
         let org = await this.getOrgForOndc(confirmData.provider.id);
 
         let storeLocationEnd = {}
-        if (org.providerDetail.storeDetails) {
+        /*if (org.providerDetail.storeDetails) {
             storeLocationEnd = {
                 "location": {
                     "id": org.providerDetail.storeDetails.location._id,
@@ -947,37 +950,39 @@ class ProductService {
                     email: org.providerDetail.storeDetails.supportDetails.email
                 }
             }
-        }
+        }*/
 
-        confirmRequest.message.order.fulfillments[0].start = storeLocationEnd
-        confirmRequest.message.order.fulfillments[0].tracking = false;
-        confirmRequest.message.order.fulfillments[0].state = {
-            "descriptor": {
-                "code": "Pending"
-            }
-        }
-        let today = new Date()
-        let tomorrow = new Date()
-        let endDate = new Date(tomorrow.setDate(today.getDate() + 1))
-        confirmRequest.message.order.fulfillments[0].start.time =
-        {
-            "range":
-            {
-                "start": today, //TODO: need to take this from seller time
-                "end": endDate
-            }
-        }
-        confirmRequest.message.order.fulfillments[0].end.time =
-        {
-            "range":
-            {
-                "start": today,
-                "end": endDate
-            }
-        }
-        confirmRequest.message.order.fulfillments[0]["@ondc/org/provider_name"] = 'LoadShare Delivery' //TODO: hard coded
-        confirmRequest.message.order.payment["@ondc/org/buyer_app_finder_fee_type"] = 'Percentage' //TODO: hard coded
+        //confirmRequest.message.order.fulfillments[0].start = storeLocationEnd
+        // confirmRequest.message.order.fulfillments[0].tracking = false;
+        // confirmRequest.message.order.fulfillments[0].state = {
+        //     "descriptor": {
+        //         "code": "Pending"
+        //     }
+        //  }
+        /* let today = new Date()
+         let tomorrow = new Date()
+         let endDate = new Date(tomorrow.setDate(today.getDate() + 1))
+         confirmRequest?.message?.order?.fulfillments[0]?.start?.time =
+         {
+             "range":
+             {
+                 "start": today, //TODO: need to take this from seller time
+                 "end": endDate
+             }
+         }
+         confirmRequest?.message?.order?.fulfillments[0]?.end?.time =
+         {
+             "range":
+             {
+                 "start": today,
+                 "end": endDate
+             }
+         }
+         */
+        // confirmRequest.message.order.fulfillments[0]["@ondc/org/provider_name"] = 'Dummy logistic provider' //TODO: hard coded
+        // confirmRequest.message.order.payment["@ondc/org/buyer_app_finder_fee_type"] = 'Percentage' //TODO: hard coded
 
+        logger.log("info", "========= check-point - 7  ==========");
         let detailedQoute = confirmRequest.message.order.quote
         //confirmData["order_items"] = orderItems
         confirmData.items = qouteItems;
@@ -986,17 +991,18 @@ class ProductService {
         // confirmData.state = confirmData.id
         confirmData.transaction_id = confirmRequest.context.transaction_id
 
-        if (logisticData.message.order.fulfillments[0].state?.descriptor?.code === 'Pending') {
-            confirmData.state = 'Created'
-        } else {
-            confirmData.state = logisticData.message.order.state
-        }
-
+        /*  if (logisticData.message.order.fulfillments[0].state?.descriptor?.code === 'Pending') {
+              confirmData.state = 'Created'
+          } else {
+              confirmData.state = logisticData.message.order.state
+          }
+        */
         delete confirmData.id
 
+        logger.log("info", "========= check-point - 8  ==========");
         let confirm = {}
         let httpRequest = new HttpRequest(
-            serverUrl,
+            `http://seller:3008`,
             `/api/v1/orders`,
             'POST',
             { data: confirmData },
@@ -1005,6 +1011,7 @@ class ProductService {
 
         let result = await httpRequest.send();
 
+        logger.log("info", "========= check-point - 9  ==========");
 
 
 
@@ -1015,22 +1022,26 @@ class ProductService {
             detailedQoute: detailedQoute,
             context: confirmRequest.context,
             message: confirmRequest.message,
-            logisticData: logisticData
+            logisticData: "logisticData  - N/A"
         });
 
+        logger.log("info", "========= check-point - 10 - productData  ==========");
         let savedLogistics = new ConfirmRequest()
 
         savedLogistics.transactionId = confirmRequest.context.transaction_id
         savedLogistics.packaging = "0"//TODO: select packaging option
         savedLogistics.providerId = confirmRequest.message.order.provider.id//TODO: select from items provider id
         savedLogistics.retailOrderId = confirmData.order_id
-        savedLogistics.orderId = logisticData.message.order.id
-        savedLogistics.selectedLogistics = logisticData
-        savedLogistics.confirmRequest = requestQuery.retail_confirm[0]
+        //savedLogistics.orderId = logisticData.message.order.id
+        savedLogistics.orderId = confirmData.order_id
+        savedLogistics.selectedLogistics = "logisticData"
+        savedLogistics.confirmRequest = requestQuery
+        savedLogistics.onConfirmResponse = productData
         savedLogistics.onConfirmRequest = productData
-        savedLogistics.logisticsTransactionId = logisticData.context.transaction_id
+        savedLogistics.logisticsTransactionId = uuidv4()
 
         await savedLogistics.save();
+        logger.log("info", "========= check-point - 11 - savedLogistics to DB  ==========");
 
         return productData
     }
