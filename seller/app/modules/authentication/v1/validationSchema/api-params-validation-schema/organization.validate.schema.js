@@ -6,7 +6,8 @@ module.exports = {
             user: {
                 email: Joi.string(),
                 mobile: Joi.string(),
-                name: Joi.string()
+                name: Joi.string(),
+                password:Joi.string()
             },
             providerDetails: {
                 name: Joi.string(),

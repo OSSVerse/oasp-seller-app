@@ -11,8 +11,9 @@ const users = (env === 'development') ? [
         'gender': 'Male',
         'nationality': 'Indian',
         'dateOfBirth': '1990-01-08',
-        'mobile': '+918796105046'
-        
+        'mobile': '+918796105046',
+        'password': 'Super@123'
+
     }
 ] : [
     {
@@ -24,8 +25,9 @@ const users = (env === 'development') ? [
         'gender': 'Male',
         'nationality': 'Indian',
         'dateOfBirth': '1990-01-08',
-        'mobile': '+918796105046'
-      
+        'mobile': '+918796105046',
+        'password': 'Super@123'
+
     }
 ];
 
