@@ -80,7 +80,7 @@ class OrderService {
             }
             data.data.createdOn = data.data.created_at;
 
-            console.log('data---->', data);
+            console.log('data.data---->', data.data);
             // data.data.organization=data.data.provider.id;
             let order = new Order(data.data);
             let savedOrder = await order.save();
@@ -157,14 +157,19 @@ class OrderService {
     async list(params) {
         try {
             let query = {};
+
+            console.log("=========== checkpoint - 1 query-params: =========", params);
             if (params.organization) {
+                console.log("======== checkpoint - 2 if params.org: =========");
                 query.organization = params.organization;
             }
+            console.log("======== checkpoint - 3 query : =========", query);
             const data = await Order.find(query).populate([{
                 path: 'organization',
                 select: ['name', '_id', 'storeDetails']
             }]).sort({ createdAt: -1 }).skip(params.offset * params.limit).limit(params.limit).lean();
 
+            console.log("======== checkpoint - 4 data : =========", data);
             for (const order of data) {
 
                 console.log('ordre----->', order);
@@ -183,7 +188,7 @@ class OrderService {
                 order.items = items;
                 console.log('items-----', items);
             }
-            console.log('data.items---->', data.items);
+            //console.log('data.items---->', data.items);
             const count = await Order.count(query);
             let orders = {
                 count,
@@ -196,12 +201,27 @@ class OrderService {
         }
     }
 
+    // get by orderID - hash value
+    async getONDC(orderId) {
+        try {
+            let order = await Order.findOne({ orderId: orderId }).lean();
+            console.log("===========orderId: ==============", orderId)
+            console.log("===========order: ==============", order)
+            return order;
 
+        } catch (err) {
+            console.log('[OrganizationService] [get] Error in getting organization by id -}', err);
+            throw err;
+        }
+    }
+
+    // get by _id of order - uuidv4
     async get(orderId) {
         try {
             let order = await Order.findOne({ _id: orderId }).lean();
-
-            console.log('order---->', order);
+            console.log("===========order_id: ==============", orderId)
+            console.log("===========order: ==============", order)
+            //console.log('order---->', order);
             let items = [];
             for (const itemDetails of order.items) {
 
@@ -1002,17 +1022,7 @@ class OrderService {
         }
     }
 
-    async getONDC(orderId) {
-        try {
-            let order = await Order.findOne({ orderId: orderId }).lean();
 
-            return order;
-
-        } catch (err) {
-            console.log('[OrganizationService] [get] Error in getting organization by id -}', err);
-            throw err;
-        }
-    }
 
     async update(orderId, data) {
         try {

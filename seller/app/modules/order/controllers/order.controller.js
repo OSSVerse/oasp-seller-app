@@ -13,15 +13,15 @@ class OrderController {
         } catch (error) {
             console.log('[OrderController] [create] Error -', error);
             next(error);
-        }     
+        }
     }
 
 
     async list(req, res, next) {
         try {
             const query = req.query;
-            query.offset = parseInt(query.offset??0);
-            query.limit = parseInt(query.limit??100);
+            query.offset = parseInt(query.offset ?? 0);
+            query.limit = parseInt(query.limit ?? 100);
             query.organization = req.user.organization;
             const products = await orderService.list(query);
             return res.send(products);
@@ -35,8 +35,8 @@ class OrderController {
     async listReturnRequests(req, res, next) {
         try {
             const query = req.query;
-            query.offset = parseInt(query.offset??0);
-            query.limit = parseInt(query.limit??100);
+            query.offset = parseInt(query.offset ?? 0);
+            query.limit = parseInt(query.limit ?? 100);
             query.organization = req.user.organization;
             const products = await orderService.listReturnRequests(query);
             return res.send(products);
@@ -48,6 +48,17 @@ class OrderController {
     }
 
 
+    async getONDC(req, res, next) {
+        try {
+            const params = req.params;
+            const product = await orderService.getONDC(params.orderId);
+            return res.send(product);
+
+        } catch (error) {
+            console.log('[OrderController] [get] Error -', error);
+            next(error);
+        }
+    }
     async get(req, res, next) {
         try {
             const params = req.params;
@@ -63,7 +74,7 @@ class OrderController {
     async updateOrderStatus(req, res, next) {
         try {
             const params = req.params;
-            const product = await orderService.updateOrderStatus(params.orderId,req.body);
+            const product = await orderService.updateOrderStatus(params.orderId, req.body);
             return res.send(product);
 
         } catch (error) {
@@ -71,21 +82,11 @@ class OrderController {
             next(error);
         }
     }
-    async getONDC(req, res, next) {
-        try {
-            const params = req.params;
-            const product = await orderService.getONDC(params.orderId);
-            return res.send(product);
 
-        } catch (error) {
-            console.log('[OrderController] [get] Error -', error);
-            next(error);
-        }
-    }
     async update(req, res, next) {
         try {
             const params = req.params;
-            const product = await orderService.update(params.orderId,req.body);
+            const product = await orderService.update(params.orderId, req.body);
             return res.send(product);
 
         } catch (error) {
@@ -97,7 +98,7 @@ class OrderController {
     async ondcUpdate(req, res, next) {
         try {
             const params = req.params;
-            const product = await orderService.OndcUpdate(params.orderId,req.body);
+            const product = await orderService.OndcUpdate(params.orderId, req.body);
             return res.send(product);
 
         } catch (error) {
@@ -108,7 +109,7 @@ class OrderController {
     async cancel(req, res, next) {
         try {
             const params = req.params;
-            const product = await orderService.cancel(params.orderId,req.body);
+            const product = await orderService.cancel(params.orderId, req.body);
             return res.send(product);
 
         } catch (error) {
@@ -119,7 +120,7 @@ class OrderController {
     async cancelOrder(req, res, next) {
         try {
             const params = req.params;
-            const product = await orderService.cancelOrder(params.orderId,req.body);
+            const product = await orderService.cancelOrder(params.orderId, req.body);
             return res.send(product);
 
         } catch (error) {
@@ -131,7 +132,7 @@ class OrderController {
         try {
             try {
                 const params = req.params;
-                const product = await orderService.cancelItems(params.orderId,req.body);
+                const product = await orderService.cancelItems(params.orderId, req.body);
                 return res.send(product);
 
             } catch (error) {
@@ -148,7 +149,7 @@ class OrderController {
         try {
             try {
                 const params = req.params;
-                const product = await orderService.updateReturnItem(params.orderId,req.body);
+                const product = await orderService.updateReturnItem(params.orderId, req.body);
                 return res.send(product);
 
             } catch (error) {

@@ -990,6 +990,8 @@ class ProductService {
         confirmData.orderId = confirmData.id
         // confirmData.state = confirmData.id
         confirmData.transaction_id = confirmRequest.context.transaction_id
+        // added organization - so, get orders can work with search by org/ provider
+        confirmData.organization=confirmData.provider.id
 
         /*  if (logisticData.message.order.fulfillments[0].state?.descriptor?.code === 'Pending') {
               confirmData.state = 'Created'
@@ -999,7 +1001,7 @@ class ProductService {
         */
         delete confirmData.id
 
-        logger.log("info", "========= check-point - 8  ==========");
+        logger.log("info", "========= check-point - 8 confirmData ==========", confirmData);
         let confirm = {}
         let httpRequest = new HttpRequest(
             `http://seller:3008`,
