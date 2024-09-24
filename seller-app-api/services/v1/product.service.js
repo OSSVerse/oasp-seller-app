@@ -584,7 +584,8 @@ class ProductService {
             updateOrder: updateOrder
         });
 
-        console.log("info", "======== checkpoint-5-productData======", productData);
+        console.log("info", "======== checkpoint-5-productData======", JSON.stringify(productData));
+        console.log("info", "======== checkpoint-5-productData======", productData.message.order.provider.locations);
         return productData
     }
 

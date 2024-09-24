@@ -359,7 +359,7 @@ exports.getStatus = async (data) => {
             "order": {
                 "provider": {
                     "id": data.updateOrder.organization,
-                    "locations": context.location,
+                    "locations": [context.location],
                 },
                 "state": data.updateOrder.state,
                 "items": data.updateOrder.items,
