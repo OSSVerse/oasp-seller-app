@@ -1,0 +1,608 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "oasp-seller-app",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://${OPENFORT_SELLER_APP}"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "noauthAuth": {
+        "type": "http",
+        "scheme": "noauth"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "oasp-apis"
+    },
+    {
+      "name": "oasp-apis > organization"
+    },
+    {
+      "name": "oasp-apis > authentication"
+    },
+    {
+      "name": "oasp-apis > product"
+    },
+    {
+      "name": "oasp-apis > order"
+    }
+  ],
+  "paths": {
+    "/api/v1/organizations": {
+      "post": {
+        "tags": [
+          "oasp-apis > organization"
+        ],
+        "summary": "organizations",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "user": {
+                    "email": "openfort@gmail.com",
+                    "mobile": "9000000002",
+                    "name": "openfort",
+                    "password": "Openfort@123"
+                  },
+                  "providerDetails": {
+                    "name": "Openfort",
+                    "address": "123 Example Street, Example City, Country",
+                    "contactEmail": "openfort@example.com",
+                    "contactMobile": "0987654321",
+                    "addressProof": "Example Address Proof",
+                    "idProof": "74ffec96-98bd-4275-b1cc-68834405c9ea",
+                    "bankDetails": {
+                      "accHolderName": "openfort",
+                      "accNumber": "1234567890",
+                      "IFSC": "IFSC0001234",
+                      "cancelledCheque": "Cancelled Cheque Document URL",
+                      "bankName": "Bank of Springfield",
+                      "branchName": "Main Branch"
+                    },
+                    "PAN": {
+                      "PAN": "ABCDE1234F",
+                      "proof": "Example PAN Proof"
+                    },
+                    "GSTN": {
+                      "GSTN": "22AAAAA0000A1Z5",
+                      "proof": "Example GSTN Proof"
+                    },
+                    "FSSAI": "12345678901234"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "oasp-apis > organization"
+        ],
+        "summary": "organizations",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{id}": {
+      "put": {
+        "tags": [
+          "oasp-apis > organization"
+        ],
+        "summary": "organizations/:id",
+        "requestBody": {
+          "content": {}
+        },
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{organizationId}": {
+      "get": {
+        "tags": [
+          "oasp-apis > organization"
+        ],
+        "summary": "organizations/:organizationId",
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          },
+          {
+            "name": "organizationId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "oasp-apis > authentication"
+        ],
+        "summary": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "email": "openfort@gmail.com",
+                  "password": "Openfort@123"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "oasp-apis > authentication"
+        ],
+        "summary": "logout",
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/updatePassword": {
+      "post": {
+        "tags": [
+          "oasp-apis > authentication"
+        ],
+        "summary": "updatePassword",
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/resetPassword": {
+      "post": {
+        "tags": [
+          "oasp-apis > authentication"
+        ],
+        "summary": "resetPassword",
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/forgotPassword": {
+      "post": {
+        "tags": [
+          "oasp-apis > authentication"
+        ],
+        "summary": "forgotPassword",
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products": {
+      "post": {
+        "tags": [
+          "oasp-apis > product"
+        ],
+        "summary": "products",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "commonDetails": {
+                    "productCode": "PC005",
+                    "productName": "beep",
+                    "MRP": 11000,
+                    "purchasePrice": 9000,
+                    "productCategory": "OSS Project",
+                    "productSubcategory1": "Assurance & Assessment Service",
+                    "longDescription": "Assurance & Assessment Service",
+                    "description": "Assurance & Assessment Service",
+                    "type": "item"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "noauthAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "oasp-apis > product"
+        ],
+        "summary": "products",
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/{productId}": {
+      "get": {
+        "tags": [
+          "oasp-apis > product"
+        ],
+        "summary": "/:productId",
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "oasp-apis > product"
+        ],
+        "summary": "/:productId",
+        "requestBody": {
+          "content": {}
+        },
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/upload/bulk": {
+      "post": {
+        "tags": [
+          "oasp-apis > product"
+        ],
+        "summary": "/upload/bulk",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": ""
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders": {
+      "get": {
+        "tags": [
+          "oasp-apis > order"
+        ],
+        "summary": "orders",
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{orderId}": {
+      "get": {
+        "tags": [
+          "oasp-apis > order"
+        ],
+        "summary": "orders/:orderId",
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          },
+          {
+            "name": "orderId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{orderId}/ondcGet": {
+      "get": {
+        "tags": [
+          "oasp-apis > order"
+        ],
+        "summary": ":orderId/ondcGet",
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          },
+          {
+            "name": "orderId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
