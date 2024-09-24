@@ -993,10 +993,12 @@ class OndcService {
 
     }
 
-    async orderStatus(payload = {}, req = {}, unsoliciated = false) {
+    // order status
+    async orderStatus(payload = {}, req = {}, unsoliciated = true) {
         try {
             //const {criteria = {}, payment = {}} = req || {};
 
+            console.log("info", "======== check-point 1 ======");
             const confirmRequest = await ConfirmRequest.findOne({
                 where: {
                     transactionId: payload.context.transaction_id,
@@ -1004,7 +1006,8 @@ class OndcService {
                 }
             })
 
-            const logistics = confirmRequest.selectedLogistics;
+            console.log("info", "======== check-point 2 confirmRequest:  ======", confirmRequest);
+            // const logistics = confirmRequest.selectedLogistics;
 
             //const order = payload.message.order;
             const selectMessageId = payload.context.message_id;
@@ -1012,17 +1015,17 @@ class OndcService {
 
             const statusRequest = {
                 "context": {
-                    "domain": "nic2004:60232",
+                    "domain": "Software Assurance",
                     "action": "status",
                     "core_version": "1.1.0",
-                    "bap_id": config.get("sellerConfig").BPP_ID,
-                    "bap_uri": config.get("sellerConfig").BPP_URI,
-                    "bpp_id": logistics.context.bpp_id,//STORED OBJECT
-                    "bpp_uri": logistics.context.bpp_uri, //STORED OBJECT
-                    "transaction_id": confirmRequest.logisticsTransactionId,
-                    "message_id": logisticsMessageId,
-                    "city": "std:080",
-                    "country": "IND",
+                    "bap_id": payload.context.bap_id,
+                    "bap_uri": payload.context.bap_uri,
+                    "bpp_id": payload.context.bpp_id,//STORED OBJECT
+                    "bpp_uri": payload.context.bpp_uri, //STORED OBJECT
+                    "transaction_id": payload.context.transaction_id,
+                    "message_id": payload.context.message_id,
+                    "city": payload?.context?.location?.city?.code || "std:080",
+                    "country": payload?.context?.location?.country?.code || "IND",
                     "timestamp": new Date()
                 },
                 "message":
@@ -1032,7 +1035,7 @@ class OndcService {
 
             }
 
-
+            console.log("info", "======== check-point 3 ======");
             // setTimeout(this.getLogistics(logisticsMessageId,selectMessageId),3000)
             //setTimeout(() => {
             this.postStatusRequest(statusRequest, logisticsMessageId, selectMessageId, unsoliciated, payload)
@@ -1353,26 +1356,26 @@ class OndcService {
 
         try {
             //1. post http to protocol/logistics/v1/search
-
-            try {
-
-                let headers = {};
-                let httpRequest = new HttpRequest(
-                    config.get("sellerConfig").BPP_URI,
-                    `/protocol/logistics/v1/status`,
-                    'POST',
-                    statusRequest,
-                    headers
-                );
-
-
-                await httpRequest.send();
-
-            } catch (e) {
-                logger.error('error', `[Ondc Service] post http select response : `, e);
-                return e
-            }
-
+            /*
+                        try {
+            
+                            let headers = {};
+                            let httpRequest = new HttpRequest(
+                                config.get("sellerConfig").BPP_URI,
+                                `/protocol/logistics/v1/status`,
+                                'POST',
+                                statusRequest,
+                                headers
+                            );
+            
+            
+                            await httpRequest.send();
+            
+                        } catch (e) {
+                            logger.error('error', `[Ondc Service] post http select response : `, e);
+                            return e
+                        }
+            */
             //2. wait async to fetch logistics responses
 
             //async post request
@@ -1668,12 +1671,14 @@ class OndcService {
 
         try {
             //1. look up for logistics
-            let logisticsResponse = await this.getLogistics(logisticsMessageId, initMessageId, 'status')
+            // let logisticsResponse = await this.getLogistics(logisticsMessageId, initMessageId, 'status')
             //2. if data present then build select response
 
             console.log("statusRequest-----build>", statusRequest);
-            let statusResponse = await productService.productStatus(logisticsResponse, statusRequest, unsoliciated, payload)
+            //let statusResponse = await productService.productStatus(logisticsResponse, statusRequest, unsoliciated, payload)
+            let statusResponse = await productService.productStatus("requestQuery-dummy", statusRequest, unsoliciated, payload)
 
+            console.log("info", "======== check-point-N-statusResponse:  ======", statusResponse);
             //3. post to protocol layer
             await this.postStatusResponse(statusResponse);
 
@@ -1780,8 +1785,9 @@ class OndcService {
 
             let headers = {};
             let httpRequest = new HttpRequest(
-                config.get("sellerConfig").BPP_URI,
-                `/protocol/v1/on_status`,
+                //config.get("sellerConfig").BPP_URI,
+                `http://openfort-oasp-client.ossverse.com`,
+                `/on_status`,
                 'POST',
                 statusResponse,
                 headers
@@ -1791,6 +1797,7 @@ class OndcService {
 
             let result = await httpRequest.send();
 
+            console.log("info", "======== checkpoint-last-result ======", result);
             return result.data
 
         } catch (e) {

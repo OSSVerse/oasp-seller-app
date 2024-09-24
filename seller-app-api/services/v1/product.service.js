@@ -508,6 +508,7 @@ class ProductService {
             console.log("in eif")
             statusRequest = requestQuery.retail_status[0];//select first select request
         } else {
+            console.log("info", "======== checkpoint-4-unsoliciated-true======", unsoliciated);
             console.log("in else")
             statusRequest = payload;
 
@@ -515,31 +516,40 @@ class ProductService {
 
         console.log("statusRequest---->", statusRequest.context)
 
-        const logisticData = requestQuery.logistics_on_status[0]
+        //const logisticData = requestQuery.logistics_on_status[0]
 
         let confirm = {}
+        let order_id = statusRequest.message.order_id;
+        order_id = order_id.replace(/\//g, '%2F');
         let httpRequest = new HttpRequest(
-            serverUrl,
-            `/api/v1/orders/${statusRequest.message.order_id}/ondcGet`,
+            // serverUrl,
+            `http://seller:3008`,
+            `/api/v1/orders/${order_id}/ondcGet`,
             'GET',
             {},
             {}
         );
 
+        console.log("info", "======= httpRequest - getOrder by hash =========", httpRequest);
+
         let result = await httpRequest.send();
 
+        console.log("info", "======= result : =======", result);
+
         let updateOrder = result.data
-
-        if (logisticData.message.order.fulfillments[0].state?.descriptor?.code === 'Pending') {
-            updateOrder.state = 'Created'
-        } else {
-            updateOrder.state = logisticData.message.order.state
-        }
-
+        /*
+                if (logisticData.message.order.fulfillments[0].state?.descriptor?.code === 'Pending') {
+                    updateOrder.state = 'Created'
+                } else {
+                    updateOrder.state = logisticData.message.order.state
+                }
+        */
         //updateOrder.state =logisticData.message.order.state
 
-        updateOrder.fulfillments[0].state = logisticData.message.order.fulfillments[0].state
+        // temp commented
+        // updateOrder.fulfillments[0].state = logisticData.message.order.fulfillments[0].state
 
+        /*
         //update order level state
         httpRequest = new HttpRequest(
             serverUrl,
@@ -550,21 +560,23 @@ class ProductService {
         );
 
         let updateResult = await httpRequest.send();
+        */
 
         //update item level fulfillment status
-        let items = updateOrder.items.map((item) => {
-            if (item.state == 'Cancelled') {
-                item.tags = { status: 'Cancelled' };
-            }
-            // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
-            item.fulfillment_id = logisticData.message.order.fulfillments[0].id
-            delete item.state
-            return item;
-        });
+        let items = updateOrder.items;
+        /* let items = updateOrder.items.map((item) => {
+             if (item?.state == 'Cancelled') {
+                 item.tags = { status: 'Cancelled' };
+             }
+             // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
+             // item.fulfillment_id = logisticData.message.order.fulfillments[0].id
+             delete item.state
+             return item;
+         });*/
 
         console.log("items----->", items);
-        console.log("items----->", items);
-        updateOrder.items = items;
+        // console.log("items----->", items);
+        //updateOrder.items = items;
         updateOrder.order_id = updateOrder.orderId;
 
         const productData = await getStatus({
@@ -572,6 +584,7 @@ class ProductService {
             updateOrder: updateOrder
         });
 
+        console.log("info", "======== checkpoint-5-productData======", productData);
         return productData
     }
 
@@ -991,7 +1004,7 @@ class ProductService {
         // confirmData.state = confirmData.id
         confirmData.transaction_id = confirmRequest.context.transaction_id
         // added organization - so, get orders can work with search by org/ provider
-        confirmData.organization=confirmData.provider.id
+        confirmData.organization = confirmData.provider.id
 
         /*  if (logisticData.message.order.fulfillments[0].state?.descriptor?.code === 'Pending') {
               confirmData.state = 'Created'
@@ -1013,7 +1026,7 @@ class ProductService {
 
         let result = await httpRequest.send();
 
-        logger.log("info", "========= check-point - 9  ==========");
+        logger.log("info", "========= check-point - 9 result: ==========", result);
 
 
 
@@ -1418,13 +1431,13 @@ class ProductService {
                 //get org name from provider id
                 logger.log('info', "============ check-point 9 ======================");
                 deliveryCharges = {
-                    "title": "Delivery charges",
-                    "@ondc/org/title_type": "delivery",
-                    "@ondc/org/item_id": '1',
-                    "price": {
-                        "currency": 'INR',
-                        "value": '0'
-                    }
+                    /* "title": "Delivery charges",
+                     "@ondc/org/title_type": "delivery",
+                     "@ondc/org/item_id": '1',
+                     "price": {
+                         "currency": 'INR',
+                         "value": '0'
+                     }*/
                 }
                 fulfillments = [
                     {

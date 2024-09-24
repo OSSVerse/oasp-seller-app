@@ -348,8 +348,8 @@ exports.getStatus = async (data) => {
     // console.log("data.message.order.fulfillments",data.message.order.fulfillments)
     // console.log("data.message.order.payment",data.message.order.payment)
     let context = data.context
-    context.bpp_id = BPP_ID
-    context.bpp_uri = BPP_URI
+    //context.bpp_id = BPP_ID
+    //context.bpp_uri = BPP_URI
     context.action = 'on_status'
 
     console.log("status------context>", context)
@@ -358,12 +358,8 @@ exports.getStatus = async (data) => {
         "message": {
             "order": {
                 "provider": {
-                    "id": data.updateOrder.organization, "locations":
-                        [
-                            {
-                                "id": "641599b84d433a4fbf8f40bb" //TODO: Hard coded
-                            }
-                        ]
+                    "id": data.updateOrder.organization,
+                    "locations": context.location,
                 },
                 "state": data.updateOrder.state,
                 "items": data.updateOrder.items,
