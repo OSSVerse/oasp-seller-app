@@ -6,14 +6,23 @@
   },
   "servers": [
     {
-      "url": "http://${OPENFORT_SELLER_APP}"
+      "url": "http://{{openfort-seller-app}}"
+    },
+    {
+      "url": "http://{{seller_url}}"
     }
   ],
   "components": {
     "securitySchemes": {
+      "accessTokenAuth": {
+        "type": "apiKey",
+        "name": "access-token",
+        "in": "header"
+      },
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       },
       "noauthAuth": {
         "type": "http",
@@ -114,6 +123,9 @@
         "security": [
           {
             "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
           }
         ],
         "parameters": [
@@ -341,14 +353,12 @@
                 "type": "object",
                 "example": {
                   "commonDetails": {
-                    "productCode": "PC005",
+                    "productCode": "PC0024",
                     "productName": "beep",
                     "MRP": 11000,
                     "purchasePrice": 9000,
                     "productCategory": "OSS Project",
-                    "productSubcategory1": "Assurance & Assessment Service",
-                    "longDescription": "Assurance & Assessment Service",
-                    "description": "Assurance & Assessment Service",
+                    "productSubcategory1": "TAVOSS Version & Certification Service",
                     "type": "item"
                   }
                 }
@@ -587,6 +597,98 @@
           },
           {
             "name": "orderId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{order_id}/status": {
+      "post": {
+        "tags": [
+          "oasp-apis > order"
+        ],
+        "summary": "/:order_Id/status",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "status": "Confirmed"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          },
+          {
+            "name": "order_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{orderid}/ondcUpdate": {
+      "put": {
+        "tags": [
+          "oasp-apis > order"
+        ],
+        "summary": ":orderId_hashValue/ondcUpdate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "status": "Fulfilled"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          },
+          {
+            "name": "orderid",
             "in": "path",
             "schema": {
               "type": "string"
