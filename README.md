@@ -64,7 +64,7 @@ The Docker installation package available in the official Ubuntu repository may 
 
 
 
-#### Step 2 —  Installing Docker Compose
+### Step 2 —  Installing Docker Compose
 
 To make sure you obtain the most updated stable version of Docker Compose, you’ll download this software from its official Github repository.
 
