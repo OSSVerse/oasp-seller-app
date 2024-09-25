@@ -243,12 +243,13 @@ class OrderService {
 
     async updateOrderStatus(orderId, data) {
         try {
-            let order = await Order.findOne({ _id: orderId }).lean();
+            let order = await Order.findOne({ _id: orderId });
 
             //update order state
             order.state = data.status;
 
             //notify client to update order status ready to ship to logistics
+            /*
             let httpRequest = new HttpRequest(
                 mergedEnvironmentConfig.intraServiceApiEndpoints.client,
                 '/api/v2/client/status/updateOrder',
@@ -257,7 +258,9 @@ class OrderService {
                 {}
             );
             await httpRequest.send();
+            */
 
+            await order.save();
             return order;
 
         } catch (err) {
@@ -1043,9 +1046,10 @@ class OrderService {
     async OndcUpdate(orderId, data) {
         try {
 
-            let oldOrder = await Order.findOne({ orderId: orderId }).lean();
+            let order = await Order.findOne({ orderId: orderId });
 
-            console.log('oldOrder--->', orderId, oldOrder);
+            console.log('oldOrder--->', orderId, order);
+            /*
             delete data.data._id;
 
             for (let fl of data.data.fulfillments) {
@@ -1091,6 +1095,10 @@ class OrderService {
 
             let order = await Order.findOneAndUpdate({ orderId: orderId }, data.data);
 
+            */
+            //update order state
+            order.state = data.status;
+            await order.save();
             return order;
 
         } catch (err) {
