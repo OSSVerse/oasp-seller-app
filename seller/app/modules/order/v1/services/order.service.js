@@ -246,7 +246,13 @@ class OrderService {
             let order = await Order.findOne({ _id: orderId });
 
             //update order state
-            order.state = data.status;
+            if (data?.status && data.status.length > 0)
+                order.state = data.status;
+
+            if (data.fulfillments && Array.isArray(data.fulfillments) && data.fulfillments.length > 0) {
+                // Push data.fulfillments to order.fulfillments
+                order.fulfillments = data.fulfillments;
+            }
 
             //notify client to update order status ready to ship to logistics
             /*
@@ -260,8 +266,9 @@ class OrderService {
             await httpRequest.send();
             */
 
-            await order.save();
-            return order;
+            const dbOrder = await order.save();
+            console.log("=============dbOrder=================", dbOrder);
+            return dbOrder;
 
         } catch (err) {
             console.log('[OrganizationService] [get] Error in getting organization by id -}', err);
