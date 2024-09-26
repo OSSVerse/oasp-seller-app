@@ -626,7 +626,13 @@
               "schema": {
                 "type": "object",
                 "example": {
-                  "status": "Confirmed"
+                  "status": "Confirmed",
+                  "fulfillments": [
+                    {
+                      "name": "",
+                      "link": ""
+                    }
+                  ]
                 }
               }
             }
