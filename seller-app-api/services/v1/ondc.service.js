@@ -62,6 +62,7 @@ class OndcService {
         try {
 
             logger.log('info', `[Ondc Service] search logistics payload : param >>:`, payload);
+            logger.log('info', `========== search payload=============`, JSON.stringify(payload));
 
             const order = payload;
             const selectMessageId = payload.context.message_id;
