@@ -41,8 +41,11 @@ exports.getProducts = async (data) => {
                     }
                 },
                 */
+                "code": items.productCode ?? "NA",
                 "category_id": items.productCategory ?? "NA",
                 "sub_category_id": items.productSubcategory1 ?? "NA",
+                "description": items.description ?? "NA",
+                "longDescription": items.longDescription ?? "NA",
                 // "location_id": org.storeDetails?.location._id??"0",
                 //"fulfillment_id": '1',//Delivery
                 //"matched": true,
