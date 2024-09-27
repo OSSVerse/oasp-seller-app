@@ -36,6 +36,15 @@ class ProductService {
             const searchProduct = requestQuery.message.intent.item?.descriptor?.name ?? ""
             const searchCategory = requestQuery.message.intent.category?.descriptor?.id ?? ""
 
+            const searchCategoryName = requestQuery.message.intent.category?.descriptor?.name ?? ""
+
+            if (searchCategory.length <= 0 && searchCategoryName.length > 0)
+                searchCategory = searchCategoryName;
+
+            console.log("=========info======== name, catId, catName", searchProduct, searchCategory, searchCategoryName)
+
+
+
             let headers = {};
 
             let httpRequest = new HttpRequest(

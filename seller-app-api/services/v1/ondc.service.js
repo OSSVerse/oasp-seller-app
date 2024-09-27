@@ -62,7 +62,9 @@ class OndcService {
         try {
 
             logger.log('info', `[Ondc Service] search logistics payload : param >>:`, payload);
-            logger.log('info', `========== search payload=============`, JSON.stringify(payload));
+            logger.log('info', `========== search payload=============`, payload.message.intent);
+            logger.log('info', `========== search payload cat id=============`, payload?.message?.intent?.category?.descriptor?.id || "no id");
+            logger.log('info', `========== search payload cat name=============`, payload?.message?.intent?.category?.descriptor?.name || "no name");
 
             const order = payload;
             const selectMessageId = payload.context.message_id;
