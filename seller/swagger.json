@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "oasp-seller-app",
-    "version": "1.0.0"
+    "version": "0.0.1"
   },
   "servers": [
     {
@@ -50,6 +50,14 @@
   "paths": {
     "/api/v1/organizations": {
       "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
         "tags": [
           "oasp-apis > organization"
         ],
@@ -166,6 +174,14 @@
     },
     "/api/v1/organizations/{id}": {
       "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
         "tags": [
           "oasp-apis > organization"
         ],
@@ -203,6 +219,14 @@
     },
     "/api/v1/organizations/{organizationId}": {
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
         "tags": [
           "oasp-apis > organization"
         ],
@@ -368,7 +392,10 @@
         },
         "security": [
           {
-            "noauthAuth": []
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
           }
         ],
         "parameters": [
@@ -391,6 +418,14 @@
         }
       },
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
         "tags": [
           "oasp-apis > product"
         ],
@@ -417,6 +452,14 @@
     },
     "/api/v1/products/{productId}": {
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
         "tags": [
           "oasp-apis > product"
         ],
@@ -449,6 +492,14 @@
         }
       },
       "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
         "tags": [
           "oasp-apis > product"
         ],
@@ -486,6 +537,14 @@
     },
     "/api/v1/products/upload/bulk": {
       "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
         "tags": [
           "oasp-apis > product"
         ],
@@ -522,6 +581,14 @@
     },
     "/api/v1/orders": {
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
         "tags": [
           "oasp-apis > order"
         ],
@@ -548,6 +615,14 @@
     },
     "/api/v1/orders/{orderId}": {
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
         "tags": [
           "oasp-apis > order"
         ],
@@ -582,6 +657,14 @@
     },
     "/api/v1/orders/{orderId}/ondcGet": {
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
         "tags": [
           "oasp-apis > order"
         ],
@@ -616,6 +699,14 @@
     },
     "/api/v1/orders/{order_id}/status": {
       "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
         "tags": [
           "oasp-apis > order"
         ],
@@ -668,6 +759,14 @@
     },
     "/api/v1/orders/{orderid}/ondcUpdate": {
       "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
         "tags": [
           "oasp-apis > order"
         ],
