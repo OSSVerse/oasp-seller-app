@@ -39,7 +39,8 @@ exports.getProducts = async (data) => {
                         "count": (items.quantity <= items.maxAllowedQty) ? `${items.quantity}` : `${items.maxAllowedQty}`
                     }
                 },
-                "category_id": items.productSubcategory1 ?? "NA",
+                "category_id": items.productCategory ?? "NA",
+                "productSubcategory1": items.productSubcategory1 ?? "NA",
                 // "location_id": org.storeDetails?.location._id??"0",
                 "fulfillment_id": '1',//Delivery
                 "matched": true,
