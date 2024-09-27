@@ -31,7 +31,8 @@ exports.getProducts = async (data) => {
                     "value": items.MRP + "",
                     "maximum_value": items.MRP + ""
                 },
-                "quantity": {
+                // 25
+                /*"quantity": {
                     "available": {
                         "count": `${items.quantity}`
                     },
@@ -39,22 +40,27 @@ exports.getProducts = async (data) => {
                         "count": (items.quantity <= items.maxAllowedQty) ? `${items.quantity}` : `${items.maxAllowedQty}`
                     }
                 },
+                */
+                "code": items.productCode ?? "NA",
                 "category_id": items.productCategory ?? "NA",
-                "productSubcategory1": items.productSubcategory1 ?? "NA",
+                "sub_category_id": items.productSubcategory1 ?? "NA",
+                "description": items.description ?? "NA",
+                "longDescription": items.longDescription ?? "NA",
                 // "location_id": org.storeDetails?.location._id??"0",
-                "fulfillment_id": '1',//Delivery
-                "matched": true,
-                "@ondc/org/returnable": items.isReturnable ?? false,
-                "@ondc/org/cancellable": items.isCancellable ?? false,
-                "@ondc/org/available_on_cod": items.availableOnCod,
-                "@ondc/org/time_to_ship": "PT1H", //TODO: hard coded
-                "@ondc/org/seller_pickup_return": true,
-                "@ondc/org/return_window": items.returnWindow,
+                //"fulfillment_id": '1',//Delivery
+                //"matched": true,
+                //"@ondc/org/returnable": items.isReturnable ?? false,
+                //"@ondc/org/cancellable": items.isCancellable ?? false,
+                // "@ondc/org/available_on_cod": items.availableOnCod,
+                // "@ondc/org/time_to_ship": "PT1H", //TODO: hard coded
+                //"@ondc/org/seller_pickup_return": true,
+                //"@ondc/org/return_window": items.returnWindow,
                 //"@ondc/org/contact_details_consumer_care": `${org.name},${org.storeDetails.supportDetails.email},${org.storeDetails.supportDetails.mobile}`,
-                "@ondc/org/mandatory_reqs_veggies_fruits": {
-                    "net_quantity": items.packQty
-                },
-                "@ondc/org/statutory_reqs_packaged_commodities":
+                /* "@ondc/org/mandatory_reqs_veggies_fruits": {
+                     "net_quantity": items.packQty
+                 },
+                 */
+                /*"@ondc/org/statutory_reqs_packaged_commodities":
                 {
                     "manufacturer_or_packer_name": items.manufacturerName,
                     "manufacturer_or_packer_address": items.manufacturerOrPackerAddress,
@@ -62,6 +68,7 @@ exports.getProducts = async (data) => {
                     "net_quantity_or_measure_of_commodity_in_pkg": items.packQty,
                     "month_year_of_manufacture_packing_import": items.manufacturedDate
                 },
+                
                 "@ondc/org/statutory_reqs_prepackaged_food":
                 {
                     "nutritional_info": items.nutritionalInfo,
@@ -75,38 +82,40 @@ exports.getProducts = async (data) => {
                     "veg": items.isVegetarian ? 'yes' : 'no',
                     "non_veg": items.isVegetarian ? 'no' : 'yes'
                 }
+                */
 
             }
 
-            tags.push(
-                {
-                    "code": "serviceability",
-                    "list": "",
-                    /*  "list": [
-                          {
-                              "code": "location",
-                              "value": org.storeDetails?.location._id??"0"
-                          },
-                          {
-                              "code": "category",
-                              "value": items.productSubcategory1??"NA"
-                          },
-                          {
-                              "code": "type",
-                              "value": "12" //Enums are "10" - hyperlocal, "11" - intercity, "12" - pan-India
-  
-                          },
-                          {
-                              "code": "val",
-                              "value": "IND"
-                          },
-                          {
-                              "code": "unit",
-                              "value": "country"
-                          }
-                      ]
-                          */
-                })
+            // tags.push(
+            //     {
+            //         "code": "serviceability",
+            //         "list": "",
+            //         /*  "list": [
+            //               {
+            //                   "code": "location",
+            //                   "value": org.storeDetails?.location._id??"0"
+            //               },
+            //               {
+            //                   "code": "category",
+            //                   "value": items.productSubcategory1??"NA"
+            //               },
+            //               {
+            //                   "code": "type",
+            //                   "value": "12" //Enums are "10" - hyperlocal, "11" - intercity, "12" - pan-India
+
+            //               },
+            //               {
+            //                   "code": "val",
+            //                   "value": "IND"
+            //               },
+            //               {
+            //                   "code": "unit",
+            //                   "value": "country"
+            //               }
+            //           ]
+            //               */
+            //     })
+
             productAvailable.push(item)
         }
 
@@ -130,11 +139,13 @@ exports.getProducts = async (data) => {
                         org.storeDetails.logo
                     ]
                 },
+                /*
                 "time":
                 {
                     "label": "enable",
                     "timestamp": data.context.timestamp
                 },
+                
                 "locations": [
                     {
                         //"id": org.storeDetails?.location._id??"0", //org.storeDetails.location._id
@@ -174,7 +185,9 @@ exports.getProducts = async (data) => {
                         }
                     }
                 ],
+                
                 "ttl": "PT24H",
+                */
                 "items": productAvailable,
                 "fulfillments":
                     [
@@ -182,9 +195,9 @@ exports.getProducts = async (data) => {
                             "contact":
                             {
                                 //"phone":org.storeDetails.supportDetails.mobile,
-                                "phone": "8197511885",
+                                "phone": org?.contactMobile || "N/A",
                                 // "email":org.storeDetails.supportDetails.email
-                                "email": "neeraj.kumar@gmail.com"
+                                "email": org?.contactEmail || "N/A"
                             }
                         }
                     ],
@@ -197,8 +210,8 @@ exports.getProducts = async (data) => {
     //set product items to schema
 
     let context = data.context
-    context.bpp_id = BPP_ID
-    context.bpp_uri = BPP_URI
+    //context.bpp_id = BPP_ID
+    //context.bpp_uri = BPP_URI
     context.action = 'on_search'
     const schema = {
         "context": { ...context },
@@ -208,8 +221,9 @@ exports.getProducts = async (data) => {
                     [
                         {
                             "id": "1",
-                            "type": "Delivery"
-                        },
+                            "type": "OASP Service Delivery"
+                        }
+                        /*,
                         {
                             "id": "2",
                             "type": "Self-Pickup"
@@ -218,6 +232,7 @@ exports.getProducts = async (data) => {
                             "id": "3",
                             "type": "Delivery and Self-Pickup"
                         }
+                        */
                     ],
                 "bpp/descriptor": bppDetails,
                 "bpp/providers": bppProviders
