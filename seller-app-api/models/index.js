@@ -16,7 +16,7 @@ const sequelize = new Sequelize(dbConfig.name, dbConfig.username, dbConfig.passw
     timezone: '+05:30',
     charset: 'utf8',
     collate: 'utf8_general_ci',
-    logging: true
+    logging:true
 });
 
 // Or you can simply use a connection uri
@@ -27,8 +27,7 @@ fs.readdirSync(__dirname)
         return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
     })
     .forEach(file => {
-        //var model = sequelize['import'](path.join(__dirname, file));
-        var model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes)
+        var model = sequelize['import'](path.join(__dirname, file));
         db[model.name] = model;
     });
 
@@ -42,7 +41,7 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 //
 sequelize
-    .sync({ alter: true })
+    .sync({alter: true})
     .then(() => console.log('Completed!'))
 
 

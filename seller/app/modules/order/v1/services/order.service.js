@@ -1055,17 +1055,58 @@ class OrderService {
 
             let order = await Order.findOne({ orderId: orderId });
 
-            //update order state
-            if (data?.status && data.status.length > 0)
-                order.state = data.status;
+            console.log('oldOrder--->', orderId, order);
+            /*
+            delete data.data._id;
 
-            if (data.fulfillments && Array.isArray(data.fulfillments) && data.fulfillments.length > 0) {
-                // Push data.fulfillments to order.fulfillments
-                order.fulfillments = data.fulfillments;
+            for (let fl of data.data.fulfillments) {
+
+                //create fl if not exist
+                let fulfilment = await Fulfillment.findOne({ id: fl.id, orderId: orderId });
+
+                if (!fulfilment) { //create new
+                    let newFl = new Fulfillment();
+                    newFl.id = fl.id;
+                    newFl.orderId = orderId;
+                    newFl.request = fl;
+                    newFl.organization = oldOrder.organization;
+                    newFl.order = oldOrder._id;
+                    await newFl.save();
+                }
+
+                // if(item.state=='Return_Initiated'){ //check if old item state
+                //     //reduce item quantity
+                //     // let product = await Product.findOne({_id:item.id});
+                //     // product.quantity = product.quantity-item.quantity.count;
+                //     // if(product.quantity<0){
+                //     //     throw new ConflictError();
+                //     // }
+                //     // await product.save();
+                //
+                //     //step 1. add item to return model
+                //     let returnData = {
+                //         itemId: item.id,
+                //         orderId:orderId,
+                //         state:item.state,
+                //         qty:item.quantity.count,
+                //         organization:oldOrder.organization,
+                //         reason:item.reason_code
+                //     };
+                //
+                //     let returnItem = await ReturnItem.findOne({orderId:orderId,itemId:item.id});
+                //     if(!returnItem){
+                //         await new ReturnItem(returnData).save();
+                //     }
+                // }
             }
 
-            const dbOrder = await order.save();
-            return dbOrder;
+            let order = await Order.findOneAndUpdate({ orderId: orderId }, data.data);
+
+            */
+            //update order state
+            order.state = data.status;
+            await order.save();
+            return order;
 
         } catch (err) {
             console.log('[OrganizationService] [get] Error in getting organization by id -}', err);
