@@ -777,7 +777,13 @@
               "schema": {
                 "type": "object",
                 "example": {
-                  "status": "Fulfilled"
+                  "status": "Fulfilled",
+                  "fulfillments": [
+                    {
+                      "name": "",
+                      "link": ""
+                    }
+                  ]
                 }
               }
             }
