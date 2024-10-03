@@ -925,10 +925,10 @@
     "@babel/parser" "^7.16.7"
     "@babel/types" "^7.16.7"
 
-"@babel/traverse@^7.13.0", "@babel/traverse@^7.16.7", "@babel/traverse@^7.16.8", "@babel/traverse@^7.18.0":
+"@babel/traverse@^7.13.0", "@babel/traverse@^7.16.7", "@babel/traverse@^7.16.8", "@babel/traverse@^7.18.0", "@babel/traverse@^7.23.2":
   "integrity" "sha512-oNOO4vaoIQoGjDQ84LgtF/IAlxlyqL4TUuoQ7xLkQETFaHkY1F7yazhB4Kt3VcZGL0ZF/jhrEpnXqUb0M7V3sw=="
-  "resolved" "https://registry.npmjs.org/@babel/traverse/-/traverse-7.18.0.tgz"
-  "version" "7.18.0"
+  "resolved" "https://registry.npmjs.org/@babel/traverse/-/traverse-7.23.2.tgz"
+  "version" "7.23.2"
   dependencies:
     "@babel/code-frame" "^7.16.7"
     "@babel/generator" "^7.18.0"
@@ -941,10 +941,10 @@
     "debug" "^4.1.0"
     "globals" "^11.1.0"
 
-"@babel/traverse@7.12.9":
+"@babel/traverse@7.23.2":
   "integrity" "sha512-iX9ajqnLdoU1s1nHt36JDI9KG4k+vmI8WgjK5d+aDTwQbL2fUnzedNedssA645Ede3PM2ma1n8Q4h2ohwXgMXw=="
-  "resolved" "https://registry.npmjs.org/@babel/traverse/-/traverse-7.12.9.tgz"
-  "version" "7.12.9"
+  "resolved" "https://registry.npmjs.org/@babel/traverse/-/traverse-7.23.2.tgz"
+  "version" "7.23.2"
   dependencies:
     "@babel/code-frame" "^7.10.4"
     "@babel/generator" "^7.12.5"
@@ -5185,8 +5185,8 @@
 
 "mongoose@^6.11.3":
   "integrity" "sha512-UP0azyGMdY+2YNbJUHeHhnVw5vPzCqs4GQDUwHkilif/rwmSZktUQhQWMp1pUgRNeF2JC30vWGLrInZxD7K/Qw=="
-  "resolved" "https://registry.npmjs.org/mongoose/-/mongoose-6.4.6.tgz"
-  "version" "6.4.6"
+  "resolved" "https://registry.npmjs.org/mongoose/-/mongoose-6.11.3.tgz"
+  "version" "6.11.3"
   dependencies:
     "bson" "^4.6.2"
     "kareem" "2.3.5"
