@@ -383,6 +383,8 @@
                     "purchasePrice": 9000,
                     "productCategory": "OSS Project",
                     "productSubcategory1": "TAVOSS Version & Certification Service",
+                    "longDescription": "long-desc",
+                    "description": "desc",
                     "type": "item"
                   }
                 }
