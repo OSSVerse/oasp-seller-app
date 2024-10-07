@@ -1,0 +1,270 @@
+{
+    "_id": "16b00fea-a06c-413b-b3af-6522b3c8b973",
+    "billing": {
+        "tax_number": "22AAAAA0000A1Z5",
+        "phone": "0987654321",
+        "email": "Tokomo@example.com",
+        "created_at": "2024-10-07T11:34:29.859Z",
+        "updated_at": "2024-10-07T11:34:29.859Z"
+    },
+    "items": [
+        {
+            "descriptor": {
+                "name": "open-adas"
+            },
+            "price": {
+                "currency": "INR",
+                "value": "11000"
+            },
+            "category_id": "OSS Project",
+            "quantity": {
+                "count": 1,
+                "measure": {
+                    "unit": "Unit-count",
+                    "value": 1
+                }
+            },
+            "details": null
+        },
+        {
+            "descriptor": {
+                "name": "open-adas"
+            },
+            "price": {
+                "currency": "INR",
+                "value": "11000"
+            },
+            "category_id": "OSS Project",
+            "quantity": {
+                "count": 1,
+                "measure": {
+                    "unit": "Unit-count",
+                    "value": 1
+                }
+            },
+            "details": null
+        },
+        {
+            "descriptor": {
+                "name": "open-adas"
+            },
+            "price": {
+                "currency": "INR",
+                "value": "11000"
+            },
+            "category_id": "OSS Project",
+            "quantity": {
+                "count": 1,
+                "measure": {
+                    "unit": "Unit-count",
+                    "value": 1
+                }
+            },
+            "details": null
+        },
+        {
+            "descriptor": {
+                "name": "open-adas"
+            },
+            "price": {
+                "currency": "INR",
+                "value": "11000"
+            },
+            "category_id": "OSS Project",
+            "quantity": {
+                "count": 1,
+                "measure": {
+                    "unit": "Unit-count",
+                    "value": 1
+                }
+            },
+            "details": null
+        },
+        {
+            "descriptor": {
+                "name": "open-adas"
+            },
+            "price": {
+                "currency": "INR",
+                "value": "11000"
+            },
+            "category_id": "OSS Project",
+            "quantity": {
+                "count": 1,
+                "measure": {
+                    "unit": "Unit-count",
+                    "value": 1
+                }
+            },
+            "details": null
+        },
+        {
+            "descriptor": {
+                "name": "open-adas"
+            },
+            "price": {
+                "currency": "INR",
+                "value": "11000"
+            },
+            "category_id": "OSS Project",
+            "quantity": {
+                "count": 1,
+                "measure": {
+                    "unit": "Unit-count",
+                    "value": 1
+                }
+            },
+            "details": null
+        }
+    ],
+    "quote": {
+        "ttl": "P1D",
+        "price": {
+            "value": "66000",
+            "currency": "INR"
+        },
+        "breakup": [
+            {
+                "item": {
+                    "price": {
+                        "value": "11000",
+                        "currency": "INR"
+                    }
+                },
+                "price": {
+                    "value": "11000",
+                    "currency": "INR"
+                },
+                "title": "open-adas",
+                "@ondc/org/item_id": "84d9e936-8231-4ce5-b91e-de7565afe9b1",
+                "@ondc/org/title_type": "item",
+                "@ondc/org/item_quantity": {
+                    "count": 1
+                }
+            },
+            {
+                "item": {
+                    "price": {
+                        "value": "11000",
+                        "currency": "INR"
+                    }
+                },
+                "price": {
+                    "value": "11000",
+                    "currency": "INR"
+                },
+                "title": "open-adas",
+                "@ondc/org/item_id": "df038e21-ad49-410d-a623-4a5728fd0c1f",
+                "@ondc/org/title_type": "item",
+                "@ondc/org/item_quantity": {
+                    "count": 1
+                }
+            },
+            {
+                "item": {
+                    "price": {
+                        "value": "11000",
+                        "currency": "INR"
+                    }
+                },
+                "price": {
+                    "value": "11000",
+                    "currency": "INR"
+                },
+                "title": "open-adas",
+                "@ondc/org/item_id": "17f19bb5-480a-4d0b-bce2-22fcefdb969b",
+                "@ondc/org/title_type": "item",
+                "@ondc/org/item_quantity": {
+                    "count": 1
+                }
+            },
+            {
+                "item": {
+                    "price": {
+                        "value": "11000",
+                        "currency": "INR"
+                    }
+                },
+                "price": {
+                    "value": "11000",
+                    "currency": "INR"
+                },
+                "title": "open-adas",
+                "@ondc/org/item_id": "3e8f0c3e-9606-4f64-8f68-eaee8d07836f",
+                "@ondc/org/title_type": "item",
+                "@ondc/org/item_quantity": {
+                    "count": 1
+                }
+            },
+            {
+                "item": {
+                    "price": {
+                        "value": "11000",
+                        "currency": "INR"
+                    }
+                },
+                "price": {
+                    "value": "11000",
+                    "currency": "INR"
+                },
+                "title": "open-adas",
+                "@ondc/org/item_id": "2d28ae46-75bf-4c8e-8ed4-91ef6aa7f543",
+                "@ondc/org/title_type": "item",
+                "@ondc/org/item_quantity": {
+                    "count": 1
+                }
+            },
+            {
+                "item": {
+                    "price": {
+                        "value": "11000",
+                        "currency": "INR"
+                    }
+                },
+                "price": {
+                    "value": "11000",
+                    "currency": "INR"
+                },
+                "title": "open-adas",
+                "@ondc/org/item_id": "1970f4e0-9c51-44df-a4ae-7944d3287377",
+                "@ondc/org/title_type": "item",
+                "@ondc/org/item_quantity": {
+                    "count": 1
+                }
+            },
+            {
+                "price": {
+                    "value": "0",
+                    "currency": "INR"
+                },
+                "title": "Delivery charges",
+                "@ondc/org/item_id": "fullfillment_id_0",
+                "@ondc/org/title_type": "delivery"
+            }
+        ]
+    },
+    "fulfillments": [],
+    "payment": {
+        "@ondc/org/settlement_details": [
+            {
+                "bank_name": "Bank of Springfield",
+                "branch_name": "Main Branch",
+                "settlement_type": "neft",
+                "beneficiary_name": "Tokomo",
+                "settlement_phase": "sale-amount",
+                "settlement_ifsc_code": "IFSC0001234",
+                "settlement_counterparty": "seller-app",
+                "settlement_bank_account_no": "1234567890"
+            }
+        ],
+        "@ondc/org/buyer_app_finder_fee_type": "Percent",
+        "@ondc/org/buyer_app_finder_fee_amount": "3.0"
+    },
+    "state": "Created",
+    "orderId": "order-$2a$10$nz.prTRAuH5dAGpTqwA0n.V2Utbpc/qRdHVJ1t3A2oZTy8E4SZ1ha",
+    "createdOn": "2024-10-07T11:34:29.859Z",
+    "organization": "c09226c0-3cb9-47d8-aca9-24fb6e8aa866",
+    "createdAt": "2024-10-07T11:34:39.877Z",
+    "updatedAt": "2024-10-07T11:34:39.877Z",
+    "__v": 0
+}

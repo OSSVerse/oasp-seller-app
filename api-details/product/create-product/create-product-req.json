@@ -1,0 +1,13 @@
+{
+    "commonDetails": {
+    "productCode": "PC00100",
+    "productName": "open-adas",
+    "MRP": 11000,
+    "purchasePrice": 9000,
+    "productCategory": "OSS Project",
+    "productSubcategory1": "Assurance & Assessment Service",
+    "longDescription": "Assurance & Assessment Service",
+    "description": "Assurance & Assessment Service",
+    "type":"item"
+  }
+}

@@ -1,0 +1,25 @@
+{
+    "commonDetails": {
+        "_id": "1970f4e0-9c51-44df-a4ae-7944d3287377",
+        "type": "item",
+        "productCode": "PC00105",
+        "productName": "open-adas",
+        "MRP": 11000,
+        "purchasePrice": 9000,
+        "timing": [],
+        "productCategory": "OSS Project",
+        "productSubcategory1": "TAVOSS Version & Certification Service",
+        "longDescription": "long-desc",
+        "description": "desc",
+        "images": [],
+        "published": true,
+        "createdBy": "b8cc3d0d-4eb6-4e47-9e4d-754f267a93a9",
+        "organization": "c09226c0-3cb9-47d8-aca9-24fb6e8aa866",
+        "createdAt": "2024-10-07T11:09:44.717Z",
+        "updatedAt": "2024-10-07T11:09:44.717Z",
+        "__v": 0,
+        "backImage": ""
+    },
+    "commonAttributesValues": {},
+    "customizationDetails": {}
+}
