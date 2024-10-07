@@ -1,0 +1,23 @@
+{
+    "data": {
+        "user": {
+            "_id": "cc74b11f-3c9b-4b68-b5e2-03a3b316a65d",
+            "enabled": true,
+            "isSystemGeneratedPassword": true,
+            "name": "Abhinandan",
+            "mobile": "+918796105046",
+            "email": "sa@mailinator.com",
+            "role": {
+                "_id": "445c4f62-bb48-4738-b29d-735f390bcbbb",
+                "name": "Super Admin",
+                "createdAt": "2024-10-03T12:15:50.849Z",
+                "updatedAt": "2024-10-03T12:15:50.849Z",
+                "__v": 0
+            },
+            "createdAt": "2024-10-03T12:15:51.959Z",
+            "updatedAt": "2024-10-03T12:15:51.959Z",
+            "__v": 0
+        },
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiY2M3NGIxMWYtM2M5Yi00YjY4LWI1ZTItMDNhM2IzMTZhNjVkIiwicm9sZSI6eyJfaWQiOiI0NDVjNGY2Mi1iYjQ4LTQ3MzgtYjI5ZC03MzVmMzkwYmNiYmIiLCJuYW1lIjoiU3VwZXIgQWRtaW4iLCJjcmVhdGVkQXQiOiIyMDI0LTEwLTAzVDEyOjE1OjUwLjg0OVoiLCJ1cGRhdGVkQXQiOiIyMDI0LTEwLTAzVDEyOjE1OjUwLjg0OVoiLCJfX3YiOjB9fSwibGFzdExvZ2luQXQiOjE3MjgyOTczMTc0MjksImlhdCI6MTcyODI5NzMxNywiZXhwIjoxNzI4NjU3MzE3fQ.ANAMpcGs5--Dfovlq0lJUh7VcE6HRpsi1_XUCfwLF6g"
+    }
+}

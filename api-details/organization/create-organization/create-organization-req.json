@@ -1,0 +1,33 @@
+{
+    "user": {
+        "email": "Tokomo@gmail.com",
+        "mobile": "9000000002",
+        "name": "Tokomo",
+        "password": "XXXXXXXXXX"
+    },
+    "providerDetails": {
+            "name": "Tokomo",
+            "address": "123 Example Street, Example City, Country",
+            "contactEmail": "Tokomo@example.com",
+            "contactMobile": "0987654321",
+            "addressProof": "Example Address Proof",
+            "idProof": "74ffec96-98bd-4275-b1cc-68834405c9ea",
+        "bankDetails": {
+            "accHolderName": "Tokomo",
+            "accNumber": "1234567890",
+            "IFSC": "IFSC0001234",
+            "cancelledCheque": "Cancelled Cheque Document URL",
+            "bankName": "Bank of Springfield",
+            "branchName": "Main Branch"
+        },
+         "PAN": {
+                "PAN": "ABCDE1234F",
+                "proof": "Example PAN Proof"
+            },
+            "GSTN": {
+                "GSTN": "22AAAAA0000A1Z5",
+                "proof": "Example GSTN Proof"
+            },
+        "FSSAI": "12345678901234"
+    }
+}

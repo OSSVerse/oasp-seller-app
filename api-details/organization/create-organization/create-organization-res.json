@@ -1,0 +1,50 @@
+{
+    "user": {
+        "enabled": true,
+        "isSystemGeneratedPassword": true,
+        "_id": "b8cc3d0d-4eb6-4e47-9e4d-754f267a93a9",
+        "organization": "c09226c0-3cb9-47d8-aca9-24fb6e8aa866",
+        "name": "Tokomo",
+        "mobile": "9000000002",
+        "email": "tokomo@gmail.com",
+        "password": "$2a$10$q9wBnfuvx0jn1hNMHIe6xewSgXm0pCYfcpwXIuQdYL/G4dpcqQFZC",
+        "role": "f1c262c0-fb62-4935-a67e-bc3af80c3ed3",
+        "createdAt": "2024-10-07T10:34:09.154Z",
+        "updatedAt": "2024-10-07T10:34:09.154Z",
+        "__v": 0
+    },
+    "providerDetail": {
+        "name": "Tokomo",
+        "address": "123 Example Street, Example City, Country",
+        "contactEmail": "Tokomo@example.com",
+        "contactMobile": "0987654321",
+        "addressProof": "Example Address Proof",
+        "idProof": "74ffec96-98bd-4275-b1cc-68834405c9ea",
+        "bankDetails": {
+            "accHolderName": "Tokomo",
+            "accNumber": "1234567890",
+            "IFSC": "IFSC0001234",
+            "cancelledCheque": "Cancelled Cheque Document URL",
+            "bankName": "Bank of Springfield",
+            "branchName": "Main Branch"
+        },
+        "fulfillments": [],
+        "PAN": {
+            "PAN": "ABCDE1234F",
+            "proof": "Example PAN Proof"
+        },
+        "GSTN": {
+            "GSTN": "22AAAAA0000A1Z5",
+            "proof": "Example GSTN Proof"
+        },
+        "FSSAI": "12345678901234",
+        "createdAt": 1727957737994,
+        "storeDetails": {
+            "fulfillments": [],
+            "custom_area": []
+        },
+        "_id": "c09226c0-3cb9-47d8-aca9-24fb6e8aa866",
+        "updatedAt": "2024-10-03T12:15:37.994Z",
+        "__v": 0
+    }
+}
