@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
-mongoose.connect('mongodb://strapi:strapi@mongo:27017/?authSource=admin', {
+//mongoose.connect('mongodb://strapi:strapi@mongo:27017/?authSource=admin', {
+mongoose.connect('mongodb://strapi:strapi@localhost:3009/?authSource=admin', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 90000
