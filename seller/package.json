@@ -12,7 +12,6 @@
     "dropall": "babel-node ./bin/dropAllDbs.js",
     "serve": "node ./dist/bin/www",
     "prepare": "cd .. && husky install",
-    "pretest": "cross-env NODE_ENV=test npm run dropall",
     "test": "cross-env NODE_ENV=test nyc --reporter text-summary --reporter json-summary --reporter json --reporter cobertura --reporter lcov mocha --require @babel/register --timeout 10000"
   },
   "dependencies": {

@@ -1,11 +1,11 @@
 import MESSAGES from '../../../../lib/utils/messages';
-import {encryptPIN} from '../../../../lib/utils/utilityFunctions';
-import {getSignedUrlForUpload, getSignedUrlForRead3} from '../../../../lib/utils/s3Utils';
+import { encryptPIN } from '../../../../lib/utils/utilityFunctions';
+import { getSignedUrlForUpload, getSignedUrlForRead3 } from '../../../../lib/utils/s3Utils';
 import {
     NoRecordFoundError,
     DuplicateRecordFoundError,
 } from '../../../../lib/errors/index';
-import {v1 as uuidv1} from 'uuid';
+import { v1 as uuidv1 } from 'uuid';
 import User from '../../models/user.model';
 import Role from '../../models/role.model';
 import LoginAttempts from '../../models/loginAttempts.model';
@@ -24,7 +24,7 @@ class UserService {
 
             console.log('data to bootstrap--->', data);
             // Find user by email or mobile
-            let query = {email: data.email};
+            let query = { email: data.email };
             let userExist = await User.findOne(query);
             if (userExist) {
                 return userExist;
@@ -38,7 +38,7 @@ class UserService {
 
             console.log(`password-${password}`);
 
-            let role = await Role.findOne({name: data.role});
+            let role = await Role.findOne({ name: data.role });
 
             data.password = await encryptPIN('' + password);
             data.enabled = true;
@@ -56,7 +56,7 @@ class UserService {
             user.role = role._id;
             let savedUser = await user.save();
             //const organization = await Organization.findOne({_id:data.organizationId},{name:1});
-            let mailData = {temporaryPassword: password, user: data};
+            let mailData = { temporaryPassword: password, user: data };
 
             console.log('mailData------>', mailData);
             // let notificationData = {
@@ -66,6 +66,7 @@ class UserService {
             // };
 
 
+            /*
             ServiceApi.sendEmail(
                 {
                     receivers: [data.email],
@@ -74,6 +75,7 @@ class UserService {
                 },
                 user, null
             );
+            */
 
 
             return savedUser;
@@ -89,7 +91,7 @@ class UserService {
 
             console.log('data to bootstrap--->', data);
             // Find user by email or mobile
-            let query = {email: data.email};
+            let query = { email: data.email };
             let userExist = await User.findOne(query);
             if (userExist) {
                 return userExist;
@@ -103,7 +105,7 @@ class UserService {
 
             console.log(`password-${password}`);
 
-            let role = await Role.findOne({name: data.role});
+            let role = await Role.findOne({ name: data.role });
 
             data.password = await encryptPIN('' + password);
             data.enabled = true;
@@ -154,7 +156,7 @@ class UserService {
 
             console.log('data to bootstrap--->', data);
             // Find user by email or mobile
-            let query = {email: data.email};
+            let query = { email: data.email };
             let userExist = await User.findOne(query);
             if (userExist) {
                 throw new DuplicateRecordFoundError(MESSAGES.USER_ALREADY_EXISTS);
@@ -163,7 +165,7 @@ class UserService {
                 data.password = Math.floor(100000 + Math.random() * 900000);
 
 
-            let role = await Role.findOne({name: 'Super Admin'});
+            let role = await Role.findOne({ name: 'Super Admin' });
             data.email = data.email.toLowerCase();
             const password = data.password; //FIXME: reset to default random password once SES is activated
             console.log(`password-${password}`);
@@ -182,7 +184,7 @@ class UserService {
             user.role = role._id;
             let savedUser = await user.save();
             //const organization = await Organization.findOne({_id:data.organizationId},{name:1});
-            let mailData = {temporaryPassword: password, user: data};
+            let mailData = { temporaryPassword: password, user: data };
 
             console.log('mailData------>', mailData);
 
@@ -214,13 +216,13 @@ class UserService {
     async update(id, data, currentUser) {
         try {
             const query = {
-                selector: {_id: {$eq: id}},
+                selector: { _id: { $eq: id } },
             };
             let user = await User(currentUser.organizationId).findOne(query);
             if (!user) {
                 throw new NoRecordFoundError(MESSAGES.USER_NOT_EXISTS);
             }
-            const updatedUser = {...user, ...data};
+            const updatedUser = { ...user, ...data };
             const result = await User(currentUser.organizationId).update(
                 updatedUser
             );
@@ -241,7 +243,7 @@ class UserService {
     async get(userId, currentUser) {
         try {
 
-            let user = await User.findOne({_id: userId, organizationId: currentUser.organizationId});
+            let user = await User.findOne({ _id: userId, organizationId: currentUser.organizationId });
             console.log('user');
             console.log(user);
             return user;
@@ -264,10 +266,10 @@ class UserService {
             let user = await User.findOne({
                 _id: currentUser.id,
                 organizationId: currentUser.organizationId
-            }, {password: 0, enabled: 0, isSystemGeneratedPassword: 0});
+            }, { password: 0, enabled: 0, isSystemGeneratedPassword: 0 });
 
             let userOrgs = await Promise.all(user.organizations.map(async (org) => {
-                let orgDetails = await Organization.findOne({_id: org.id});
+                let orgDetails = await Organization.findOne({ _id: org.id });
                 org.name = orgDetails.name;
                 org.organizationId = orgDetails._id;
                 return org;
@@ -285,10 +287,10 @@ class UserService {
     async usersById(userId) {
         try {
 
-            const users = await User.find({_id: userId}, {password: 0}).populate('role');
+            const users = await User.find({ _id: userId }, { password: 0 }).populate('role');
             console.log(users);
             if (!users) {
-                throw  new NoRecordFoundError(MESSAGES.USER_NOT_EXISTS);
+                throw new NoRecordFoundError(MESSAGES.USER_NOT_EXISTS);
             } else {
                 return users;
             }
@@ -300,10 +302,10 @@ class UserService {
     async enable(userId, data) {
         try {
 
-            const users = await User.findOne({_id: userId});
+            const users = await User.findOne({ _id: userId });
             console.log(users);
             if (!users) {
-                throw  new NoRecordFoundError(MESSAGES.USER_NOT_EXISTS);
+                throw new NoRecordFoundError(MESSAGES.USER_NOT_EXISTS);
             } else {
 
                 users.enabled = data.enabled;
@@ -327,23 +329,23 @@ class UserService {
             let query = {};
             if (queryData.storeName || queryData.storeEmail || queryData.storeMobile) {
                 let andQuery = [];
-                if(queryData.storeName){
-                    andQuery.push({name:{ $regex: queryData.storeName, $options: 'i' }});
+                if (queryData.storeName) {
+                    andQuery.push({ name: { $regex: queryData.storeName, $options: 'i' } });
                 }
-                if(queryData.storeEmail){
-                    andQuery.push({contactEmail:{ $regex: queryData.storeEmail, $options: 'i' }});
+                if (queryData.storeEmail) {
+                    andQuery.push({ contactEmail: { $regex: queryData.storeEmail, $options: 'i' } });
                 }
-                if(queryData.storeMobile){
-                    andQuery.push({contactMobile:{ $regex: queryData.storeMobile, $options: 'i' }});
+                if (queryData.storeMobile) {
+                    andQuery.push({ contactMobile: { $regex: queryData.storeMobile, $options: 'i' } });
                 }
                 let orgQuery = {
-                    $and:andQuery
+                    $and: andQuery
                 };
-                const organizations = await Organization.find(orgQuery,{_id:1});
-                const organizationIds = organizations.map((organization)=> {return organization._id})
+                const organizations = await Organization.find(orgQuery, { _id: 1 });
+                const organizationIds = organizations.map((organization) => { return organization._id })
                 query.organization = { $in: organizationIds };
-            }   
-         
+            }
+
             if (queryData.name) {
                 query.name = { $regex: queryData.name, $options: 'i' };
             }
@@ -385,7 +387,7 @@ class UserService {
 
             for (const user of users) { //attach org details
 
-                let organization = await Organization.findOne({ _id: user.organization }, { _id: 1, name: 1 ,contactEmail:1,contactMobile:1});
+                let organization = await Organization.findOne({ _id: user.organization }, { _id: 1, name: 1, contactEmail: 1, contactMobile: 1 });
                 user.organization = organization;
 
                 let bannedUser = await BannedUser.findOne({ user: user._id });
@@ -412,19 +414,19 @@ class UserService {
         if (identity) {
             try {
                 if (identity.aadhaarVerification)
-                    identity.aadhaarVerification = (await getSignedUrlForRead({path: identity.aadhaarVerification}));
+                    identity.aadhaarVerification = (await getSignedUrlForRead({ path: identity.aadhaarVerification }));
             } catch {
                 delete identity.aadhaarVerification;
             }
             try {
                 if (identity.addressProof)
-                    identity.addressProof = (await getSignedUrlForRead({path: identity.addressProof}));
+                    identity.addressProof = (await getSignedUrlForRead({ path: identity.addressProof }));
             } catch {
                 delete identity.addressProof;
             }
             try {
                 if (identity.identityProof)
-                    identity.identityProof = (await getSignedUrlForRead({path: identity.identityProof}));
+                    identity.identityProof = (await getSignedUrlForRead({ path: identity.identityProof }));
             } catch {
                 delete identity.identityProof;
             }
@@ -433,7 +435,7 @@ class UserService {
     }
 
     async upload(currentUser, path, body) {
-        return await s3.getSignedUrlForUpload({path, ...body, currentUser});
+        return await s3.getSignedUrlForUpload({ path, ...body, currentUser });
     }
 
     async grantAccess(userId) {
@@ -443,8 +445,8 @@ class UserService {
                 d2 = new Date(d1.getTime());
             d2.setMinutes(d1.getMinutes());
 
-            let bannedUser = await BannedUser.remove({user: userId});
-            let loginAttempts = await LoginAttempts.remove({user: userId});
+            let bannedUser = await BannedUser.remove({ user: userId });
+            let loginAttempts = await LoginAttempts.remove({ user: userId });
 
             return {};
 
@@ -468,13 +470,13 @@ class UserService {
                     ip: params.ip,
                     consecutive: true
                 }).save();
-                let updateInvalidLoginAttempt = await LoginAttempts.updateMany({user: params.userId}, {consecutive: false});
+                let updateInvalidLoginAttempt = await LoginAttempts.updateMany({ user: params.userId }, { consecutive: false });
 
-                let bannedUser = await BannedUser.findOne({user: params.userId});
+                let bannedUser = await BannedUser.findOne({ user: params.userId });
 
-                if(bannedUser && (bannedUser.expires > new Date())){
+                if (bannedUser && (bannedUser.expires > new Date())) {
                     return true;
-                }else{
+                } else {
                     return false;
                 }
 
@@ -495,17 +497,17 @@ class UserService {
 
                 if (loginAttemptCount > 4) {
 
-                    let bannedUser = await BannedUser.findOne({user: params.userId});
+                    let bannedUser = await BannedUser.findOne({ user: params.userId });
                     if (bannedUser) {
                         bannedUser.expires = d2;
                         bannedUser.save();
                     } else {
-                        await new BannedUser({user: params.userId, expires: d2}).save();
+                        await new BannedUser({ user: params.userId, expires: d2 }).save();
                     }
 
                     //TODO: send notification to user
-                    let user = await User.findOne({_id: params.userId});
-                    let mailData = {receivers: [user.email], data: {user}};
+                    let user = await User.findOne({ _id: params.userId });
+                    let mailData = { receivers: [user.email], data: { user } };
 
                     ServiceApi.sendEmail(
                         {
@@ -518,8 +520,8 @@ class UserService {
 
                     //TODO: send notification  to all org admins
 
-                    let userQuery = {role: {$ne: []}};
-                    let roleQuery = {name: 'Super Admin'};
+                    let userQuery = { role: { $ne: [] } };
+                    let roleQuery = { name: 'Super Admin' };
                     const users = await User.aggregate([
                         {
                             '$lookup': {
@@ -527,16 +529,16 @@ class UserService {
                                 'localField': 'role',
                                 'foreignField': '_id',
                                 'as': 'role',
-                                'pipeline': [{'$match': roleQuery}]
+                                'pipeline': [{ '$match': roleQuery }]
                             },
 
                         }, {
                             '$match': userQuery,
-                        }, {'$project': {'password': 0}}
-                    ]).sort({createdAt: 1});
+                        }, { '$project': { 'password': 0 } }
+                    ]).sort({ createdAt: 1 });
 
                     for (let adminUser of users) {
-                        let mailData = {receivers: [adminUser.email], data: {user}};
+                        let mailData = { receivers: [adminUser.email], data: { user } };
 
                         ServiceApi.sendEmail(
                             {

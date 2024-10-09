@@ -1,5 +1,4 @@
 require('dotenv').config();
-process.env.NODE_ENV = 'test';
 console.log('======Node Environment login test case===========:', process.env.NODE_ENV);
 
 const request = require('supertest');
@@ -29,13 +28,11 @@ describe('Authentication API', () => {
                 .send(validLogin);
 
             expect(response.status).to.equal(200);
-            if (response.body.data.hasOwnProperty('access_token')) {
-                expect(response.body.data).to.have.property('access_token'); // Ensure JWT token is present
-                console.log("========", response.body.data.access_token, "===============");
-                process.env.JWT_TOKEN_TEST = response.body.data.access_token;
-            } else {
-                console.log("=========================")
-            }
+
+            expect(response.body.data).to.have.property('access_token'); // Ensure JWT token is present
+            const jwt_token = response.body.data.access_token;
+            expect(typeof jwt_token).to.be.a('string');
+
 
 
         });
