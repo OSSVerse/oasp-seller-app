@@ -51,7 +51,7 @@ class ProductService {
 
             let httpRequest = new HttpRequest(
                 ``,
-                `http://seller:3008/api/v1/products/search?name=${searchProduct}&category=${searchCategory}`, //TODO: allow $like query
+                `http://localhost:3008/api/v1/products/search?name=${searchProduct}&category=${searchCategory}`, //TODO: allow $like query
                 'get',
                 headers
             );
@@ -394,7 +394,7 @@ class ProductService {
         // headers['Authorization'] = `Bearer ${strapiAccessToken}`;
 
         let httpRequest = new HttpRequest(
-            `http://seller:3008`,
+            `http://localhost:3008`,
             `/api/v1/products/${id}/ondcGet`,
             'get',
             {},
@@ -412,7 +412,7 @@ class ProductService {
         // headers['Authorization'] = `Bearer ${strapiAccessToken}`;
 
         let httpRequest = new HttpRequest(
-            `http://seller:3008`,
+            `http://localhost:3008`,
             `/api/v1/organizations/${id}/ondcGet`,
             'get',
             {},
@@ -534,7 +534,7 @@ class ProductService {
         order_id = order_id.replace(/\//g, '%2F');
         let httpRequest = new HttpRequest(
             // serverUrl,
-            `http://seller:3008`,
+            `http://localhost:3008`,
             `/api/v1/orders/${order_id}/ondcGet`,
             'GET',
             {},
@@ -1029,7 +1029,7 @@ class ProductService {
         logger.log("info", "========= check-point - 8 confirmData ==========", confirmData);
         let confirm = {}
         let httpRequest = new HttpRequest(
-            `http://seller:3008`,
+            `http://localhost:3008`,
             `/api/v1/orders`,
             'POST',
             { data: confirmData },
@@ -1131,7 +1131,7 @@ class ProductService {
 
                 let qouteItemsDetails = {}
                 let httpRequest = new HttpRequest(
-                    `http://seller:3008`,
+                    `http://localhost:3008`,
                     `/api/v1/products/${item.id}/ondcGet`,
                     'get',
                     {},
@@ -1291,7 +1291,7 @@ class ProductService {
                 let itemLevelQtyStatus = true
                 let qouteItemsDetails = {}
                 let httpRequest = new HttpRequest(
-                    `http://seller:3008`,
+                    `http://localhost:3008`,
                     `/api/v1/products/${item.id}/ondcGet`,
                     'get',
                     {},
