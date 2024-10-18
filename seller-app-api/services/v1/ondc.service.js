@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import config from "../../lib/config";
+//import config from "../../lib/config";
 import HttpRequest from "../../utils/HttpRequest";
 import { InitRequest, ConfirmRequest, SelectRequest } from '../../models'
 
@@ -7,11 +7,28 @@ import ProductService from './product.service'
 const productService = new ProductService();
 import logger from '../../lib/logger'
 
+
+const env = process.env.NODE_ENV;
+const path = require('path');
+const configPath = path.join(__dirname, `../../lib/config/${env}_env_config.json`);
+const config = require(configPath);
+
+//const fs = require('fs');
+//const configContent = fs.readFileSync(configPath, 'utf-8');
+
 class OndcService {
 
     async handler(payload = {}, req = {}) {
-        const requestType = payload.context.action;
 
+        // console.log("===========configContent===============", configContent);
+
+        // console.log("=============console.log(__dirname)==============", __dirname)
+        // console.log("============process.env.NODE_ENV==============", process.env.NODE_ENV)
+        // console.log("=======================seller-app-config======================", config);
+        // console.log("=======================seller-app-config-sellerConfig======================", config.sellerConfig);
+
+
+        const requestType = payload.context.action;
         try {
             switch (requestType) {
                 case 'search':
@@ -61,10 +78,10 @@ class OndcService {
     async productSearch(payload = {}, req = {}) {
         try {
 
-            logger.log('info', `[Ondc Service] search logistics payload : param >>:`, payload);
-            logger.log('info', `========== search payload=============`, payload.message.intent);
-            logger.log('info', `========== search payload cat id=============`, payload?.message?.intent?.category?.descriptor?.id || "no id");
-            logger.log('info', `========== search payload cat name=============`, payload?.message?.intent?.category?.descriptor?.name || "no name");
+            // logger.log('info', `[Ondc Service] search logistics payload : param >>:`, payload);
+            // logger.log('info', `========== search payload=============`, payload.message.intent);
+            // logger.log('info', `========== search payload cat id=============`, payload?.message?.intent?.category?.descriptor?.id || "no id");
+            // logger.log('info', `========== search payload cat name=============`, payload?.message?.intent?.category?.descriptor?.name || "no name");
 
             const order = payload;
             const selectMessageId = payload.context.message_id;
@@ -87,14 +104,14 @@ class OndcService {
             // const order = payload.message.order;
             const selectMessageId = payload.context.message_id;
             const logisticsMessageId = uuidv4();
-            logger.log('info', "============ check-point 1 ======================");
+            // logger.log('info', "============ check-point 1 ======================");
             let storeLocationEnd = {}
             let totalProductValue = 0
             for (let items of payload.message.order.items) {
                 const product = await productService.getForOndc(items.id)
                 totalProductValue += product.MRP
             }
-            logger.log('info', "============ check-point 2 ======================");
+            // logger.log('info', "============ check-point 2 ======================");
             /*
                         let org = await productService.getOrgForOndc(payload.message.order.provider.id);
             
@@ -197,7 +214,7 @@ class OndcService {
             //async post request
             setTimeout(() => {
                 logger.log('info', `[Ondc Service] search logistics payload - timeout : param :`, payload);
-                logger.log('info', "============ check-point 3 ======================");
+                // logger.log('info', "============ check-point 3 ======================");
                 this.buildSelectRequest(payload, logisticsMessageId, selectMessageId)
             }, 10000); //TODO move to config
         } catch (e) {
@@ -216,7 +233,7 @@ class OndcService {
             let selectResponse = await productService.productSelect(payload)
             //3. post to protocol layer
 
-            logger.log('info', "============ check-point end ======================");
+            // logger.log('info', "============ check-point end ======================");
             await this.postSelectResponse(selectResponse);
 
         } catch (e) {
@@ -302,7 +319,8 @@ class OndcService {
 
             let headers = {};
             let httpRequest = new HttpRequest(
-                `http://openfort-oasp-client.ossverse.com`,
+                config.sellerConfig.BPP_URI,
+                //`http://openfort-oasp-client.ossverse.com`,
                 `/on_select`,
                 'POST',
                 selectResponse,
@@ -324,12 +342,12 @@ class OndcService {
     async postSearchResponse(searchResponse) {
         try {
 
-            logger.info('info', `[Ondc Service] post http select response : `, searchResponse);
+            // logger.info('info', `[Ondc Service] post http search response : `, searchResponse);
 
             let headers = {};
             let httpRequest = new HttpRequest(
-                // config.get("sellerConfig").BPP_URI,
-                'http://openfort-oasp-client.ossverse.com',
+                config.sellerConfig.BPP_URI,
+                //'http://openfort-oasp-client.ossverse.com',
                 `/on_search`,
                 'POST',
                 searchResponse,
@@ -337,6 +355,8 @@ class OndcService {
             );
 
             let result = await httpRequest.send();
+
+            // console.log("======search response from PS======", result);
 
             return result.data
 
@@ -362,13 +382,13 @@ class OndcService {
                 ]
             })
 
-            logger.log('info', "======== checkpoint 1 - DBO by trn.id ===========", selectRequest);
+            // logger.log('info', "======== checkpoint 1 - DBO by trn.id ===========", selectRequest);
 
             let org = await productService.getOrgForOndc(payload.message.order.provider.id);
 
             const logistics = selectRequest.selectedLogistics;
 
-            logger.log('info', "======== checkpoint 2 - selectedLogistics ===========", logistics);
+            // logger.log('info', "======== checkpoint 2 - selectedLogistics ===========", logistics);
 
             let storeLocationEnd = {}
             if (org?.providerDetail?.storeDetails?.location?.lat) {
@@ -393,7 +413,7 @@ class OndcService {
                 }
             }
 
-            logger.log('info', "======== checkpoint 3 ===========");
+            // logger.log('info', "======== checkpoint 3 ===========");
             // logger.log('info', `[Ondc Service] old selected logistics :`, logistics);
 
             const order = payload.message.order;
@@ -462,7 +482,7 @@ class OndcService {
             //logger.log('info', `[Ondc Service] build init request :`, {logisticsMessageId,initMessageId: initMessageId});
 
             this.postInitRequest(payload, logisticsMessageId, initMessageId)
-            logger.log('info', "======== checkpoint 5 - deliveryType ===========");
+            // logger.log('info', "======== checkpoint 5 - deliveryType ===========");
             return { 'status': 'ACK' }
         } catch (err) {
             logger.error('error', `[Ondc Service] build init request :`, { error: err.stack, message: err.message });
@@ -500,7 +520,7 @@ class OndcService {
             setTimeout(() => {
                 logger.log('info', `[Ondc Service] search logistics payload - timeout : param :`, selectRequest);
                 this.buildInitRequest(selectRequest, logisticsMessageId, selectMessageId)
-                logger.log('info', "============ check-point 6 ======================");
+                // logger.log('info', "============ check-point 6 ======================");
             }, 5000); //TODO move to config
         } catch (e) {
             logger.error('error', `[Ondc Service] post http select response : `, e);
@@ -538,8 +558,8 @@ class OndcService {
 
             let headers = {};
             let httpRequest = new HttpRequest(
-                //config.get("sellerConfig").BPP_URI,
-                `http://openfort-oasp-client.ossverse.com`,
+                config.sellerConfig.BPP_URI,
+                // `http://openfort-oasp-client.ossverse.com`,
                 `/on_init`,
                 'POST',
                 initResponse,
@@ -567,7 +587,7 @@ class OndcService {
             const hash = await bcrypt.hash(orderData, 10); // Adjust the salt rounds as needed
 
             const orderID = `order-${hash}`;
-            console.log("=========orderID-hash===========", orderID);
+            //  console.log("=========orderID-hash===========", orderID);
 
             const selectRequest = await SelectRequest.findOne({
                 where: {
@@ -598,7 +618,7 @@ class OndcService {
 
             let org = await productService.getOrgForOndc(payload.message.order.provider.id);
 
-            console.log("org details ---", org)
+            // console.log("org details ---", org)
             let storeLocationEnd = {}
             if (org?.providerDetail?.storeDetails?.location) {
                 storeLocationEnd = {
@@ -637,7 +657,7 @@ class OndcService {
             let itemDetails = []
             for (const items of payload.message.order.items) {
                 let item = await productService.getForOndc(items.id)
-                logger.log("info", "========= check-point - 1 item details =====", item);
+                // logger.log("info", "========= check-point - 1 item details =====", item);
                 let details = {
                     "descriptor": {
                         "name": item.commonDetails.productName
@@ -647,6 +667,9 @@ class OndcService {
                         "value": "" + item.commonDetails.MRP
                     },
                     "category_id": item.commonDetails.productCategory,
+                    "productSubcategory1": item.commonDetails.productSubcategory1,
+                    "description": item.commonDetails.description,
+                    "longDescription": item.commonDetails.longDescription,
                     "quantity": {
                         "count": 1,
                         "measure": { //TODO: hard coded
@@ -660,7 +683,7 @@ class OndcService {
 
 
             // let deliveryType = selectRequest.selectedLogistics.message.catalog['bpp/providers'][0].items.find((element) => { return element.category_id === config.get("sellerConfig").LOGISTICS_DELIVERY_TYPE });
-            logger.log("info", "========= check-point - 1.1 order ================", order);
+            // logger.log("info", "========= check-point - 1.1 order ================", order);
             const contextTimestamp = new Date()
             //const orderID = uuidv4();
             const confirmRequest = {
@@ -741,7 +764,7 @@ class OndcService {
                 }
 
             }
-            logger.log("info", "========= check-point - 2 confirmRequest ==========", confirmRequest);
+            // logger.log("info", "========= check-point - 2 confirmRequest ==========", confirmRequest);
             logger.info('info', `[Ondc Service] post init request :confirmRequestconfirmRequestconfirmRequestconfirmRequestconfirmRequestconfirmRequest`, confirmRequest);
             this.postConfirmRequest(confirmRequest, logisticsMessageId, selectMessageId)
             //}, 10000); //TODO move to config
@@ -783,7 +806,7 @@ class OndcService {
             //async post request
             setTimeout(() => {
                 logger.log('info', `[Ondc Service] search logistics payload - timeout : param :`, searchRequest);
-                logger.log("info", "========= check-point - 3  ==========");
+                //logger.log("info", "========= check-point - 3  ==========");
                 this.buildConfirmRequest(searchRequest, logisticsMessageId, selectMessageId)
             }, 10000); //TODO move to config
         } catch (e) {
@@ -800,10 +823,10 @@ class OndcService {
             //let logisticsResponse = await this.getLogistics(logisticsMessageId, initMessageId, 'confirm')
             //2. if data present then build select response
 
-            logger.log("info", "========= check-point - 4  ==========");
+            //logger.log("info", "========= check-point - 4  ==========");
             let selectResponse = await productService.productConfirm(searchRequest)
 
-            logger.log("info", "========= check-point - N  ==========");
+            //logger.log("info", "========= check-point - N  ==========");
             //3. post to protocol layer
             await this.postConfirmResponse(selectResponse);
 
@@ -843,8 +866,8 @@ class OndcService {
 
             let headers = {};
             let httpRequest = new HttpRequest(
-                //config.get("sellerConfig").BPP_URI,
-                `http://openfort-oasp-client.ossverse.com`,
+                config.sellerConfig.BPP_URI,
+                //`http://openfort-oasp-client.ossverse.com`,
                 `/on_confirm`,
                 'POST',
                 confirmResponse,
@@ -1001,7 +1024,7 @@ class OndcService {
         try {
             //const {criteria = {}, payment = {}} = req || {};
 
-            console.log("info", "======== check-point 1 ======");
+            // console.log("info", "======== check-point 1 ======");
             const confirmRequest = await ConfirmRequest.findOne({
                 where: {
                     transactionId: payload.context.transaction_id,
@@ -1009,7 +1032,7 @@ class OndcService {
                 }
             })
 
-            console.log("info", "======== check-point 2 confirmRequest:  ======", confirmRequest);
+            // console.log("info", "======== check-point 2 confirmRequest:  ======", confirmRequest);
             // const logistics = confirmRequest.selectedLogistics;
 
             //const order = payload.message.order;
@@ -1788,8 +1811,8 @@ class OndcService {
 
             let headers = {};
             let httpRequest = new HttpRequest(
-                //config.get("sellerConfig").BPP_URI,
-                `http://openfort-oasp-client.ossverse.com`,
+                config.sellerConfig.BPP_URI,
+                //`http://openfort-oasp-client.ossverse.com`,
                 `/on_status`,
                 'POST',
                 statusResponse,

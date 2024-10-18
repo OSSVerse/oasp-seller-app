@@ -4,10 +4,19 @@ import { ConfirmRequest, InitRequest, SelectRequest } from "../../models";
 import logger from "../../lib/logger";
 import { v4 as uuidv4 } from 'uuid';
 
-var config = require('../../lib/config');
-const serverUrl = config.get("seller").serverUrl
-const BPP_ID = config.get("sellerConfig").BPP_ID
-const BPP_URI = config.get("sellerConfig").BPP_URI
+const env = process.env.NODE_ENV;
+const path = require('path');
+const configPath = path.join(__dirname, `../../lib/config/${env}_env_config.json`);
+const config = require(configPath);
+
+//var config = require('../../lib/config');
+const serverUrl = config.seller.serverUrl;
+//const BPP_ID = config.get("sellerConfig").BPP_ID
+//const BPP_URI = config.get("sellerConfig").BPP_URI
+
+
+
+
 
 class ProductService {
 
@@ -30,6 +39,8 @@ class ProductService {
     async search(requestQuery) {
 
         try {
+
+            //console.log("=======================seller-config======================", config);
             logger.log('info', `[Product Service] search product : param :`, requestQuery);
 
             //get search criteria
@@ -38,7 +49,7 @@ class ProductService {
 
             let searchCategoryName = requestQuery.message.intent.category?.descriptor?.name ?? ""
 
-            console.log("=========info======== name, catId, catName", searchProduct, searchCategory, searchCategoryName)
+            // console.log("=========info======== name, catId, catName", searchProduct, searchCategory, searchCategoryName)
 
             if (searchCategory.length <= 0 && searchCategoryName.length > 0)
                 searchCategory = searchCategoryName;
@@ -50,8 +61,8 @@ class ProductService {
             let headers = {};
 
             let httpRequest = new HttpRequest(
-                ``,
-                `http://seller:3008/api/v1/products/search?name=${searchProduct}&category=${searchCategory}`, //TODO: allow $like query
+                serverUrl,
+                `/api/v1/products/search?name=${searchProduct}&category=${searchCategory}`, //TODO: allow $like query
                 'get',
                 headers
             );
@@ -394,7 +405,8 @@ class ProductService {
         // headers['Authorization'] = `Bearer ${strapiAccessToken}`;
 
         let httpRequest = new HttpRequest(
-            `http://seller:3008`,
+            //`http://seller:3008`,
+            serverUrl,
             `/api/v1/products/${id}/ondcGet`,
             'get',
             {},
@@ -412,7 +424,8 @@ class ProductService {
         // headers['Authorization'] = `Bearer ${strapiAccessToken}`;
 
         let httpRequest = new HttpRequest(
-            `http://seller:3008`,
+            //`http://seller:3008`,
+            serverUrl,
             `/api/v1/organizations/${id}/ondcGet`,
             'get',
             {},
@@ -533,8 +546,8 @@ class ProductService {
         let order_id = statusRequest.message.order_id;
         order_id = order_id.replace(/\//g, '%2F');
         let httpRequest = new HttpRequest(
-            // serverUrl,
-            `http://seller:3008`,
+            //`http://seller:3008`,
+            serverUrl,
             `/api/v1/orders/${order_id}/ondcGet`,
             'GET',
             {},
@@ -924,7 +937,7 @@ class ProductService {
 
         let confirmData = confirmRequest.message.order
 
-        logger.log("info", "========= check-point - 5  ==========");
+        //  logger.log("info", "========= check-point - 5  ==========");
         let itemList = []
         let qouteItems = confirmRequest.message.order.items.map((item) => {
             // item.tags={status:logisticData.message.order.fulfillments[0].state?.descriptor?.code};
@@ -956,7 +969,7 @@ class ProductService {
         console.log("qouteItems-->>>>breakup--", breakup)
         //confirmRequest.message.order.items = qouteItems;
 
-        logger.log("info", "========= check-point - 6  ==========");
+        //logger.log("info", "========= check-point - 6  ==========");
         let org = await this.getOrgForOndc(confirmData.provider.id);
 
         let storeLocationEnd = {}
@@ -1007,7 +1020,7 @@ class ProductService {
         // confirmRequest.message.order.fulfillments[0]["@ondc/org/provider_name"] = 'Dummy logistic provider' //TODO: hard coded
         // confirmRequest.message.order.payment["@ondc/org/buyer_app_finder_fee_type"] = 'Percentage' //TODO: hard coded
 
-        logger.log("info", "========= check-point - 7  ==========");
+        // logger.log("info", "========= check-point - 7  ==========");
         let detailedQoute = confirmRequest.message.order.quote
         //confirmData["order_items"] = orderItems
         confirmData.items = qouteItems;
@@ -1026,10 +1039,11 @@ class ProductService {
         */
         delete confirmData.id
 
-        logger.log("info", "========= check-point - 8 confirmData ==========", confirmData);
+        //  logger.log("info", "========= check-point - 8 confirmData ==========", confirmData);
         let confirm = {}
         let httpRequest = new HttpRequest(
-            `http://seller:3008`,
+            //`http://seller:3008`,
+            serverUrl,
             `/api/v1/orders`,
             'POST',
             { data: confirmData },
@@ -1038,7 +1052,7 @@ class ProductService {
 
         let result = await httpRequest.send();
 
-        logger.log("info", "========= check-point - 9 result: ==========", result);
+        // logger.log("info", "========= check-point - 9 result: ==========", result);
 
 
 
@@ -1052,7 +1066,7 @@ class ProductService {
             logisticData: "logisticData  - N/A"
         });
 
-        logger.log("info", "========= check-point - 10 - productData  ==========");
+        //  logger.log("info", "========= check-point - 10 - productData  ==========");
         let savedLogistics = new ConfirmRequest()
 
         savedLogistics.transactionId = confirmRequest.context.transaction_id
@@ -1068,7 +1082,7 @@ class ProductService {
         savedLogistics.logisticsTransactionId = uuidv4()
 
         await savedLogistics.save();
-        logger.log("info", "========= check-point - 11 - savedLogistics to DB  ==========");
+        //logger.log("info", "========= check-point - 11 - savedLogistics to DB  ==========");
 
         return productData
     }
@@ -1088,7 +1102,7 @@ class ProductService {
             let detailedQoute = []
             let totalPrice = 0
 
-            logger.log('info', "============ check-point 7 ======================");
+            // logger.log('info', "============ check-point 7 ======================");
             let org = await this.getOrgForOndc(requestQuery.message.order.provider.id);
 
             let paymentDetails = {
@@ -1109,7 +1123,7 @@ class ProductService {
 
             }
 
-            logger.log('info', "============ check-point 8  ======================");
+            // logger.log('info', "============ check-point 8  ======================");
             //select logistic based on criteria-> for now first one will be picked up
             let deliveryCharges = {
                 "title": "Delivery charges",
@@ -1131,7 +1145,8 @@ class ProductService {
 
                 let qouteItemsDetails = {}
                 let httpRequest = new HttpRequest(
-                    `http://seller:3008`,
+                    // `http://seller:3008`,
+                    serverUrl,
                     `/api/v1/products/${item.id}/ondcGet`,
                     'get',
                     {},
@@ -1139,7 +1154,7 @@ class ProductService {
                 );
 
                 let result = await httpRequest.send();
-                logger.log('info', "============ check-point 9 ======================");
+                // logger.log('info', "============ check-point 9 ======================");
                 if (result?.data) {
 
                     let price
@@ -1150,7 +1165,7 @@ class ProductService {
                         const mrpValue = result.data.commonDetails.MRP;
                         mrpVal = mrpValue;
                         const purchaseValue = result.data.commonDetails.purchasePrice;
-                        console.log("====MRP value=====", mrpValue);
+                        //console.log("====MRP value=====", mrpValue);
                         //logger.log("info", "Common Details: ", JSON.stringify(result.data.commonDetails, null, 2));
 
                     } else {
@@ -1165,7 +1180,7 @@ class ProductService {
 
                 }
 
-                logger.log('info', "============ check-point 10 ======================");
+                // logger.log('info', "============ check-point 10 ======================");
                 qouteItemsDetails = {
                     "@ondc/org/item_id": item.id,
                     "@ondc/org/item_quantity": {
@@ -1179,14 +1194,14 @@ class ProductService {
                     }
                 }
 
-                logger.log('info', "============ check-point 11 -item ===========", item);
+                // logger.log('info', "============ check-point 11 -item ===========", item);
                 item.fulfillment_id = result.data.commonDetails?.fulfilmentId
                 delete item.price
                 qouteItems.push(item)
                 detailedQoute.push(qouteItemsDetails)
             }
 
-            logger.log('info', "============ check-point 12  ===========");
+            // logger.log('info', "============ check-point 12  ===========");
             // totalPrice = parseInt(logisticData.message.order.quote.price.value) + parseInt(totalPrice)
             totalPrice = parseInt(totalPrice)
             let totalPriceObj = { value: "" + totalPrice, currency: "INR" }
@@ -1196,7 +1211,7 @@ class ProductService {
 
 
             requestQuery.message.order.payment = paymentDetails;
-            logger.log('info', "============ check-point 13  ===========");
+            // logger.log('info', "============ check-point 13  ===========");
             const productData = await getInit({
                 qouteItems: qouteItems,
                 totalPrice: totalPriceObj,
@@ -1206,7 +1221,7 @@ class ProductService {
                 logisticData: {}
             });
 
-            logger.log('info', "============ check-point 14  ===========");
+            // logger.log('info', "============ check-point 14  ===========");
             let savedLogistics = new InitRequest()
 
             savedLogistics.transactionId = requestQuery.context.transaction_id
@@ -1218,7 +1233,7 @@ class ProductService {
             savedLogistics.onInitResponse = productData
 
             await savedLogistics.save();
-            logger.log('info', "============ check-point 15  ===========");
+            //logger.log('info', "============ check-point 15  ===========");
             return productData
         } catch (e) {
             console.log(e)
@@ -1229,7 +1244,7 @@ class ProductService {
     async productSelect(requestQuery) {
 
         try {
-            logger.log('info', "============ check-point 4 ======================");
+            // logger.log('info', "============ check-point 4 ======================");
             let savedLogistics = new SelectRequest();
 
             // const selectData = JSON.parse(JSON.stringify(requestQuery.retail_select[0]));//select first select request
@@ -1249,7 +1264,7 @@ class ProductService {
 
 
             const org = await this.getOrgForOndc(requestQuery.message.order.provider.id);
-            logger.log('info', "============ check-point 5 ======================");
+            //  logger.log('info', "============ check-point 5 ======================");
             // let logisticsToSelect = config.get("sellerConfig").LOGISTICS_BAP_ID
             /*
                         if(org.providerDetail.storeDetails.logisticsBppId){
@@ -1291,14 +1306,15 @@ class ProductService {
                 let itemLevelQtyStatus = true
                 let qouteItemsDetails = {}
                 let httpRequest = new HttpRequest(
-                    `http://seller:3008`,
+                    // `http://seller:3008`,
+                    serverUrl,
                     `/api/v1/products/${item.id}/ondcGet`,
                     'get',
                     {},
                     headers
                 );
 
-                logger.log('info', "============ check-point 6 ======================");
+                // logger.log('info', "============ check-point 6 ======================");
                 let result = await httpRequest.send();
                 let itemPrice = 0;
 
@@ -1312,7 +1328,7 @@ class ProductService {
                         const mrpValue = result.data.commonDetails.MRP;
                         const purchaseValue = result.data.commonDetails.purchasePrice;
                         itemMrp = mrpValue;
-                        console.log("====MRP value=====", mrpValue);
+                        // console.log("====MRP value=====", mrpValue);
                         //logger.log("info", "Common Details: ", JSON.stringify(result.data.commonDetails, null, 2));
 
                     } else {
@@ -1349,7 +1365,7 @@ class ProductService {
                     item.price = { value: "" + price, currency: "INR" }
                 }
 
-                logger.log('info', "============ check-point 7 ======================");
+                // logger.log('info', "============ check-point 7 ======================");
                 qouteItemsDetails = {
                     "@ondc/org/item_id": item.id,
                     "@ondc/org/item_quantity": {
@@ -1377,7 +1393,7 @@ class ProductService {
                     }
                 }
 
-                logger.log('info', "============ check-point 8 ======================");
+                //  logger.log('info', "============ check-point 8 ======================");
                 if (isServiceable) {
                     itemObj.fulfillment_id = logisticProvider.message.catalog["bpp/providers"][0].items[0].fulfillment_id //TODO: revisit for item level status
 
@@ -1441,7 +1457,7 @@ class ProductService {
             } else {
 
                 //get org name from provider id
-                logger.log('info', "============ check-point 9 ======================");
+                // logger.log('info', "============ check-point 9 ======================");
                 deliveryCharges = {
                     /* "title": "Delivery charges",
                      "@ondc/org/title_type": "delivery",
@@ -1489,7 +1505,7 @@ class ProductService {
                 isQtyAvailable,
                 isServiceable
             });
-            logger.log('info', "============ check-point 10 ======== product data", productData);
+            //  logger.log('info', "============ check-point 10 ======== product data", productData);
             savedLogistics.transactionId = requestQuery.context.transaction_id;
             //savedLogistics.logisticsTransactionId = logisticProvider?.context?.transaction_id;
             savedLogistics.logisticsTransactionId = uuidv4();
@@ -1501,7 +1517,7 @@ class ProductService {
             savedLogistics.onSelectResponse = productData;
 
             await savedLogistics.save();
-            logger.log('info', "============ check-point 11 ===========================");
+            // logger.log('info', "============ check-point 11 ===========================");
 
             return productData;
 

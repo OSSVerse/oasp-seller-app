@@ -81,7 +81,7 @@
   },
   "sellerConfig": {
     "BPP_ID": "sellerapp-staging.datasyndicate.in",
-    "BPP_URI": "https://7e3b-2401-4900-1c5d-2b13-814b-de08-9df3-b44e.ngrok-free.app",
+    "BPP_URI": "http://openfort-oasp-client.ossverse.com",
     "BAP_ID": "sellerapp-staging.datasyndicate.in",
     "BAP_URI": "https://7e3b-2401-4900-1c5d-2b13-814b-de08-9df3-b44e.ngrok-free.app",
     "storeOpenSchedule": {
