@@ -1052,7 +1052,7 @@ class ProductService {
 
         let result = await httpRequest.send();
 
-        // logger.log("info", "========= check-point - 9 result: ==========", result);
+        logger.log("info", "========= check-point - 9 result: ==========", result);
 
 
 

@@ -1,5 +1,6 @@
 import path from 'path';
 import nconf from 'nconf';
+require('dotenv').config();
 
 const env = process.env.NODE_ENV || 'development' // By default development environment is picked
 
@@ -21,13 +22,13 @@ nconf.set('express:apiUrl', apiUrl)
 //
 if (env !== 'development') {
 
-//    console.log("in check");
-//
-//     nconf.set('express:protocol', process.env.PROTOCOL);
-//     nconf.set('express:useFqdnForApis', process.env.USE_FQDN_FOR_APIS);
-//     nconf.set('express:fqdn', process.env.FQDN);
-//     nconf.set('express:ipAddress', process.env.HOST);
-//     nconf.set('express:port', process.env.PORT);
+    //    console.log("in check");
+    //
+    //     nconf.set('express:protocol', process.env.PROTOCOL);
+    //     nconf.set('express:useFqdnForApis', process.env.USE_FQDN_FOR_APIS);
+    //     nconf.set('express:fqdn', process.env.FQDN);
+    //     nconf.set('express:ipAddress', process.env.HOST);
+    //     nconf.set('express:port', process.env.PORT);
 
     nconf.set('firebase:account', process.env.FIREBASE_SERVICE_ACCOUNT_JSON_PATH);
     nconf.set('sellerConfig:BPP_URI', process.env.BPP_URI);
@@ -44,11 +45,11 @@ if (env !== 'development') {
     nconf.set('database:name', process.env.DATABASE_NAME_SELLER_CLIENT);
     nconf.set('database:port', process.env.DATABASE_PORT);
 
-   // const apiUrl = process.env.PROTOCOL + process.env.HOST + ':' + process.env.PORT + '/';
-   // nconf.set('express:apiUrl', apiUrl);
-   //
-   //  const apiUrl = nconf.get('express').protocol + (nconf.get('express').useFqdnForApis ? nconf.get('express').fqdn : nconf.get('express').ipAddress) + ':' + nconf.get('express').port + '/'
-   //  nconf.set('express:apiUrl', apiUrl)
+    // const apiUrl = process.env.PROTOCOL + process.env.HOST + ':' + process.env.PORT + '/';
+    // nconf.set('express:apiUrl', apiUrl);
+    //
+    //  const apiUrl = nconf.get('express').protocol + (nconf.get('express').useFqdnForApis ? nconf.get('express').fqdn : nconf.get('express').ipAddress) + ':' + nconf.get('express').port + '/'
+    //  nconf.set('express:apiUrl', apiUrl)
 
 
 }
