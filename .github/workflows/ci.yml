@@ -36,11 +36,15 @@ jobs:
       - name: Start Docker containers
         run: |
           docker compose up --build -d
+          
+      - name: Check containers status/ build status
+        run: |
+          docker ps
 
       # Step 5: Run tests for seller module (Stop unnecessary services: postgres, strapi)
       - name: Run tests for seller module
         run: |
-          docker compose stop postgres strapi
+          docker compose stop oasp-seller-app-seller-1
           cd seller
           npm install
           npm test
@@ -49,8 +53,7 @@ jobs:
       # Step 6: Run tests for seller-app-api module (Stop unnecessary service: seller)
       - name: Run tests for seller-app-api module
         run: |
-          docker compose start postgres strapi
-          docker compose stop seller
+          docker compose start oasp-seller-app-seller-1
           cd seller-app-api
           npm install
           npm test
@@ -58,4 +61,5 @@ jobs:
       # Step 7: Stop and remove Docker containers
       - name: Stop and remove Docker containers
         run: |
+          cd ..
           docker compose down
