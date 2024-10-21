@@ -1,0 +1,61 @@
+# .github/workflows/ci.yml
+
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Check Docker and Docker Compose versions
+      - name: Check Docker and Docker Compose versions
+        run: |
+          docker --version
+          docker-compose --version
+
+      # Step 3: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Step 4: Build and start all the Docker containers
+      - name: Start Docker containers
+        run: |
+          docker-compose up --build -d
+
+      # Step 5: Run tests for seller module (Stop unnecessary services: postgres, strapi)
+      - name: Run tests for seller module
+        run: |
+          docker-compose stop postgres strapi
+          cd seller
+          npm install
+          npm test
+          cd ..
+
+      # Step 6: Run tests for seller-app-api module (Stop unnecessary service: seller)
+      - name: Run tests for seller-app-api module
+        run: |
+          docker-compose start postgres strapi
+          docker-compose stop seller
+          cd seller-app-api
+          npm install
+          npm test
+
+      # Step 7: Stop and remove Docker containers
+      - name: Stop and remove Docker containers
+        run: |
+          docker-compose down
