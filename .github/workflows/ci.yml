@@ -44,7 +44,7 @@ jobs:
       # Step 5: Run tests for seller module (Stop unnecessary services: postgres, strapi)
       - name: Run tests for seller module
         run: |
-          docker compose stop oasp-seller-app-seller-1
+          docker compose stop seller
           cd seller
           npm install
           npm test
@@ -53,7 +53,7 @@ jobs:
       # Step 6: Run tests for seller-app-api module (Stop unnecessary service: seller)
       - name: Run tests for seller-app-api module
         run: |
-          docker compose start oasp-seller-app-seller-1
+          docker compose start seller
           cd seller-app-api
           npm install
           npm test
