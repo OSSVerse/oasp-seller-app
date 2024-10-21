@@ -1,3 +1,4 @@
+require('dotenv').config();
 // Global variable and config setup
 global.__basedir = __dirname;
 /**
@@ -17,7 +18,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 
 
-require('dotenv').config();
+
 
 global.myCache = new NodeCache();
 /**
