@@ -2,10 +2,16 @@ import fs from 'fs';
 import path from 'path';
 import Sequelize from 'sequelize';
 import config from '../lib/config';
+require('dotenv').config();
+
+//require('dotenv').config();
+//console.log('======Node Environment product test case===========:', process.env.NODE_ENV);
 
 const dbConfig = config.get('database');
 let basename = path.basename(__filename);
 let db = {};
+
+console.log("======postgres DB connection==============", dbConfig)
 
 const sequelize = new Sequelize(dbConfig.name, dbConfig.username, dbConfig.password, {
     host: dbConfig.host,
@@ -16,7 +22,7 @@ const sequelize = new Sequelize(dbConfig.name, dbConfig.username, dbConfig.passw
     timezone: '+05:30',
     charset: 'utf8',
     collate: 'utf8_general_ci',
-    logging:true
+    logging: true
 });
 
 // Or you can simply use a connection uri
@@ -41,7 +47,7 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 //
 sequelize
-    .sync({alter: true})
+    .sync({ alter: true })
     .then(() => console.log('Completed!'))
 
 
