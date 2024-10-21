@@ -47,7 +47,7 @@ jobs:
           docker compose stop seller
           cd seller
           npm install
-          timeout 240s npm test || echo "Seller tests timed out"
+          timeout 180s npm test || echo "Seller tests timed out"
           cd ..
 
       # Step 6: Run tests for seller-app-api module (Stop unnecessary service: seller)
