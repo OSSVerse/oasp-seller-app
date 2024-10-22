@@ -309,18 +309,56 @@
     },
     "/api/v1/auth/updatePassword": {
       "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          }
+        ],
         "tags": [
           "oasp-apis > authentication"
         ],
         "summary": "updatePassword",
         "requestBody": {
-          "content": {}
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "email": "openfort@gmail.com",
+                  "currentPassword": "Openfort@1234",
+                  "password": "Openfort@12345"
+                }
+              }
+            }
+          }
         },
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "data": {
+                      "message": "Password Update Successfull"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -328,18 +366,54 @@
     },
     "/api/v1/auth/resetPassword": {
       "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "accessTokenAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer {{JWT_Token}}"
+          }
+        ],
         "tags": [
           "oasp-apis > authentication"
         ],
         "summary": "resetPassword",
         "requestBody": {
-          "content": {}
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "password": "Openfort@1234"
+                }
+              }
+            }
+          }
         },
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "data": {
+                      "message": "reset Password successfull"
+                    }
+                  }
+                }
+              }
             }
           }
         }
