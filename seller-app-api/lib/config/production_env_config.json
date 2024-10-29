@@ -58,6 +58,8 @@
   },
   "cors": {
     "whitelistUrls": [
+      "http://ec2-3-90-151-99.compute-1.amazonaws.com:3000",
+      "http://ec2-3-90-151-99.compute-1.amazonaws.com:8080",
       "http://localhost:3000",
       "http://strapi:3001"
     ]
