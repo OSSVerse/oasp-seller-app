@@ -12,7 +12,8 @@
     "dropall": "babel-node ./bin/dropAllDbs.js",
     "serve": "node ./dist/bin/www",
     "prepare": "cd .. && husky install",
-    "test": "cross-env NODE_ENV=test nyc --reporter text-summary --reporter json-summary --reporter json --reporter cobertura --reporter lcov mocha --require @babel/register --timeout 10000"
+    "test": "cross-env NODE_ENV=test nyc --reporter text-summary --reporter json-summary --reporter json --reporter cobertura --reporter lcov mocha --require @babel/register --timeout 10000",
+    "test:unit": "cross-env NODE_ENV=test nyc mocha 'test/unit-test/**/*.test.js' --require @babel/register --timeout 10000"
   },
   "dependencies": {
     "@jsreport/jsreport-chrome-pdf": "^3.1.0",
